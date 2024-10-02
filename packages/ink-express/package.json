@@ -1,0 +1,28 @@
+{
+  "name": "@stackpress/ink-express",
+  "version": "0.1.8",
+  "description": "Ink plugin for Express and native HTTP.",
+  "license": "Apache-2.0",
+  "author": "Chris <chris@incept.asia>",
+  "homepage": "https://github.com/stackpress/ink",
+  "bugs": "https://github.com/stackpress/ink/issues",
+  "repository": "stackpress/ink",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@stackpress/ink": "0.1.8",
+    "@stackpress/ink-dev": "0.1.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.4",
+    "typescript": "5.6.2"
+  }
+}

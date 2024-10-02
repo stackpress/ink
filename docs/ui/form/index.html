@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ink UI - Web Components Meets Atomic Styles.</title>
+  <meta name="description" content="Ink UI atomically generates CSS styles and provides out of box web components." />
+  <meta property="og:title" content="Ink UI - Web Components Meets Atomic Styles." />
+  <meta property="og:description" content="Ink UI atomically generates CSS styles and provides out of box web components." />
+  <meta property="og:image" content="https://stackpress.github.io/ink/ink-logo.png" />
+  <meta property="og:url" content="https://stackpress.github.io/ink/ink/panel.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@stackpress" />
+  <meta name="twitter:title" content="Ink UI - Web Components Meets Atomic Styles." />
+  <meta name="twitter:description" content="Ink UI atomically generates CSS styles and provides out of box web components." />
+  <meta name="twitter:image" content="https://stackpress.github.io/ink/ink-logo.png" />
+  <link rel="favicon" href="/ink/favicon.ico" />
+  <link rel="shortcut icon" type="image/png" href="/ink/favicon.png" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link rel="stylesheet" media="(prefers-color-scheme:light)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css" />
+  <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css" />
+  <link rel="stylesheet" type="text/css" href="/ink/styles/global.css" />
+  <link rel="stylesheet" type="text/css" href="/ink/build/client/5b0064b8e058fcd88a3c.css" />
+  
+  <script data-app="eyJwcm9wcyI6eyJ0aXRsZSI6IkluayBEb2N1bWVudGF0aW9uIn0sImVudiI6eyJCVUlMRF9JRCI6IjViMDA2NGI4ZTA1OGZjZDg4YTNjIn19" src="/ink/build/client/5b0064b8e058fcd88a3c.js"></script>
+  
+</head>
+  <body class="light bg-t-0 tx-t-1 tx-arial">
+    <panel-layout>
+      <header><menu class="flex flex-center-y px-20 py-15 m-0 bg-t-1">
+  
+    <i class="fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1" ></i>
+    <div class="flex-grow"></div>
+  
+  <nav class="flex flex-center-y">
+    <a class="tx-primary" href="/ink/docs/index.html">Docs</a>
+    <a class="tx-t-1 tx-5xl ml-10" href="https://github.com/stackpress/ink" target="_blank">
+      <i class="fab fa-github"></i>
+    </a>
+    <a class="bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center" href="https://www.npmjs.com/package/@stackpress/ink" target="_blank">
+      <i class="fab fa-npm tx-white"></i>
+    </a>
+  </nav>
+</menu></header>
+      <aside left><header class="flex flex-center-y bg-t-2 py-15 pr-5 pl-10">
+  <a href="/ink">
+    <img class="h-26 mr-10" src="/ink/ink-icon.png" alt="Ink Logo" />
+  </a>
+  <h3 class="flex-grow m-0 tx-upper">
+    <a class="tx-primary" href="/ink">Ink</a>
+  </h3>
+  <i class="fas fa-fw fa-chevron-left cursor-pointer none md-inline-block" ></i>
+</header>
+<nav class="bg-t-1 scroll-auto h-calc-full-60">
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper">
+    Introduction
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/index.html">
+      Documentation
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/getting-started.html">
+      Getting Started
+    </a>
+  
+
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper">
+    Features
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/markup-syntax.html">
+      Markup Syntax
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/state-management.html">
+      State Management
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/component-strategy.html">
+      Component Strategy
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/compiler-api.html">
+      Compiler API
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/client-api.html">
+      Client API
+    </a>
+  
+
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper">
+    Usage
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/template-engine.html">
+      Template Engine
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/single-page.html">
+      Single Page App
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/static-site.html">
+      Static Site Generator
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/component-publisher.html">
+      Component Publisher
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10 mb-100" href="/ink/docs/developer-tools.html">
+      Developer Tools
+    </a>
+  
+</nav></aside>
+      <main>
+        <api-docs>
+          <h1 class="tx-primary tx-upper tx-30 py-20">
+            Form
+          </h1>
+          <form method="get" action="/ink/ui/form/index.html">
+            <section class="flex flex-wrap gap-10">
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <form-button class="mr-5" md success curved solid>
+                    Submit
+                  </form-button>
+                  <form-button md warning rounded transparent href="#">
+                    Submit
+                  </form-button>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/button.html">
+                  Buttons
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <form-control class="py-5" label="First Name*" error="Some Error">
+                    <field-input name="first" placeholder="Enter your first name" error></field-input>
+                  </form-control>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/control.html">
+                  Control
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <form-fieldset legend="Fieldset %s" name="fieldset1" >
+                    <field-input name="first1" placeholder="Enter your first name"></field-input>
+                  </form-fieldset>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/fieldset.html">
+                  Fieldset
+                </a>
+              </div>
+            </section>
+            <h1 class="tx-primary tx-upper tx-30 py-20">
+              Fields
+            </h1>
+            <section class="flex flex-wrap gap-10">
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-checkbox name="checkbox" label="Active?" value="yes" checked orange ></field-checkbox>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/checkbox.html">
+                  Checkbox
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-color name="color" placeholder="Enter color"></field-color>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/color.html">
+                  Color
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-country name="country" class="w-200 relative z-1" placeholder="Choose Country" value="US"         ></field-country>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/country.html">
+                  Country
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-currency name="currency" class="w-200" placeholder="Choose Currency" value="PHP"         ></field-currency>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/currency.html">
+                  Currency
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-date name="date" placeholder="Enter date" value="2020-01-01" ></field-date>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/date.html">
+                  Date
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-datetime name="datetime" placeholder="Enter datetime" value="2020-01-01 13:20:10" ></field-datetime>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/datetime.html">
+                  Datetime
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-editor lang="javascript" class="w-200 h-80 scroll-auto" numbers name="editor" value="ink.render(true);" ></field-editor>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/editor.html">
+                  Editor
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-file name="file" class="block w-250"  ></field-file>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/file.html">
+                  File
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-filelist image name="filelist" class="block w-250"  ></field-filelist>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/filelist.html">
+                  Filelist
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-input name="first" placeholder="Enter your first name" value="test"></field-input>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/input.html">
+                  Input
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center"></div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/knob.html">
+                  Knob
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-markdown class="w-200 h-80 block" numbers name="markdown" value="**I AM BOLD**" ></field-markdown>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/markdown.html">
+                  Markdown
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-mask mask="999-999-9999" placeholder="999-999-9999"></field-mask>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/mask.html">
+                  Mask
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-metadata class="w-250" name="metadata" placeholder="Enter text"  ></field-metadata>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/metadata.html">
+                  Metadata
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center tx-black">
+                  <field-number name="number" min="0" max="10000" step="0.01" value="1234.56" ></field-number>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/number.html">
+                  Number
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-password name="password" placeholder="Enter password" ></field-password>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/password.html">
+                  Password
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-radio name="radio" label="Yes" value="yes" checked rounded  class="mr-10"></field-radio>
+                  <field-radio name="radio" label="No" value="no" rounded ></field-radio>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/radio.html">
+                  Radio
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-range name="range" min="0" max="100" step="10" value="0"></field-range>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/range.html">
+                  Range
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-rating name="rating" value="0" primary xl2 ></field-rating>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/rating.html">
+                  Rating
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-select class="w-200 relative z-1" name="select" placeholder="Choose" value="1" search custom multiple         >
+                    <option value="1" keyword="option 1">Option 1</option>
+                    <option  keyword="option 2"><strong>Option 2</strong></option>
+                    <option  keyword="option 3">Option 3</option>
+                    <option  keyword="option 3">Option 4</option>
+                  </field-select>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/select.html">
+                  Select
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-slug name="slug" placeholder="Enter slug" value="I AM A SLUG" ></field-slug>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/slug.html">
+                  Slug
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-switch name="switch" label="Active?" value="yes" checked ></field-switch>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/switch.html">
+                  Switch
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-taglist name="taglist" class="w-250" placeholder="Enter Value" ></field-taglist>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/taglist.html">
+                  Taglist
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-textarea name="textarea" placeholder="Enter text" >Some Text</field-textarea>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/textarea.html">
+                  Textarea
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-textlist name="textlist[]" placeholder="Enter text"  ></field-textlist>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/textlist.html">
+                  Textlist
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center">
+                  <field-time name="time" placeholder="Enter time"  ></field-time>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/time.html">
+                  Time
+                </a>
+              </div>
+              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+                <div class="bg-t-3 h-120 flex flex-center scroll-hidden">
+                  <field-wysiwyg class="w-200 h-100" name="wysiwyg" value="I am ironman." size color ></field-wysiwyg>
+                </div>
+                <a class="block tx-center tx-white p-10 b-solid b-t-3 b-1" href="/ink/ui/form/wysiwyg.html">
+                  WYSIWYG
+                </a>
+              </div>
+            </section>
+          </form>
+        </api-docs>
+      </main>
+    </panel-layout>
+  </body>
+</html>

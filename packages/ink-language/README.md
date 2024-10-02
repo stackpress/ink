@@ -1,17 +1,6 @@
-<div align="center">
-  <img src="https://stackpress.github.io/ink/ink-icon.png" width="100" />
-  <h1>Ink</h1>
-  <p>The reactive web component template engine.</p>
-  <a href="https://www.npmjs.com/package/@stackpress/ink"><img src="https://img.shields.io/npm/v/%40ossph%2Fink.svg?style=flat" /></a>
-  <a href="https://github.com/stackpress/ink/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat" /></a>
-  <a href="https://github.com/stackpress/ink/commits/main/"><img src="https://img.shields.io/github/last-commit/stackpress/ink" /></a>
-  <a href="https://github.com/stackpress/ink/blob/main/README.md#contributing"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
-  <br />
-  <br />
-  <a href="https://stackpress.github.io/ink">Documentation</a>
-  <br />
-  <hr />
-</div>
+# 💧 Ink
+
+The reactive web component template engine.
 
 ## Install
 

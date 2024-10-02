@@ -1,0 +1,40 @@
+<script>
+  import StyleSet from '@stackpress/ink/dist/style/StyleSet';
+  import setBold from '../utilities/style/bold';
+  import setColor from '../utilities/style/color';
+  import setDisplay from '../utilities/style/display';
+  import setSize from '../utilities/style/size';
+  //extract props
+  const { value, max, remainder, round, spacing } = this.props;
+  //override default styles
+  const styles = new StyleSet();
+  this.styles = () => styles.toString();
+  //determine display
+  setDisplay(this.props, styles, 'inline-block');
+  //determine color
+  setColor(this.props, styles, false, ':host', 'color');
+  //determine size
+  setSize(this.props, styles, false, ':host', 'font-size');
+  //determine font weight
+  setBold(this.props, styles, ':host');
+  //determine spacing
+  styles.add('span', 'display', 'inline-block');
+  if (spacing) {
+    styles.add('span', 'letter-spacing', `${spacing}px`);
+  }
+  const rating = round === 'round' ? Math.round(Number(value)) 
+    : round === 'ceil' ? Math.ceil(Number(value))
+    : round === 'floor' ? Math.floor(Number(value))
+    : Math.round(Number(value));
+  const stars: string[] = [];
+  for (let i = 0; i < (max || rating); i++) {
+    if (i < rating) {
+      stars.push('★');
+    } else if(remainder) {
+      stars.push('☆');
+    }
+  }
+</script>
+<each value=count from=stars>
+  <span>{count}</span>
+</each>

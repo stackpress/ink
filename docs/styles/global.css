@@ -1,0 +1,44 @@
+/* Default Theme
+---------------------------------*/
+:root {
+  --primary: #004080;
+  --secondary: #008071;
+}
+
+body.dark {
+  --bg-0: #000912;
+  --bg-1: #00152B;
+  --bg-2: #001F41;
+  --bg-3: #00254D;
+  --bg-4: #003268;
+  --bd-0: #000912;
+  --bd-1: #00152B;
+  --bd-2: #001F41;
+  --bd-3: #00254D;
+  --bd-4: #003268;
+  --bg-inverse: #242424;
+  --tx-0: #EFEFEF;
+  --tx-1: #D3D3D3;
+  --tx-inverse: #CFCFCF;
+}
+
+body.light {
+  --bg-0: #E5F2FF;
+  --bg-1: #CDD9E4;
+  --bg-2: #B3BFC9;
+  --bg-3: #A4AFB9;
+  --bg-4: #99A3AB;
+  --bd-0: #000912;
+  --bd-1: #00152B;
+  --bd-2: #001F41;
+  --bd-3: #00254D;
+  --bd-4: #003268;
+  --bg-inverse: #242424;
+  --tx-0: #000912;
+  --tx-1: #001F41;
+  --tx-inverse: #CFCFCF;
+}
+
+i18n-translate {
+  display: block;
+}

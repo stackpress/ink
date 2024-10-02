@@ -1,0 +1,17 @@
+<script>
+  import StyleSet from '@stackpress/ink/dist/style/StyleSet';
+  import setDisplay from '../utilities/style/display';
+  //extract props
+  const { 
+    value, 
+    //displays
+    flex, none, inline, block, 
+    'inline-block': iblock, 'inline-flex': iflex
+  } = this.props;
+  //override default styles
+  const styles = new StyleSet();
+  this.styles = () => styles.toString();
+  //determine display
+  setDisplay(this.props, styles, 'block');
+</script>
+<pre>{JSON.stringify(value, null, 2)}</pre>

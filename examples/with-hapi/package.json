@@ -1,0 +1,19 @@
+{
+  "name": "with-hapi",
+  "version": "1.0.0",
+  "description": "A simple boilerplate for building web components with Ink",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@hapi/hapi": "21.3.9",
+    "@hapi/inert": "7.1.0",
+    "@stackpress/ink": "0.1.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.1.0",
+    "ts-node": "10.9.2",
+    "typescript": "5.4.5"
+  }
+}

@@ -1,0 +1,32 @@
+<script>
+  import StyleSet from '@stackpress/ink/dist/style/StyleSet';
+  import setDisplay from '../utilities/style/display';
+  //extract props
+  const { value, ordered, indent, spacing } = this.props;
+  //override default styles
+  const styles = new StyleSet();
+  this.styles = () => styles.toString();
+  //determine display
+  setDisplay(this.props, styles, 'block');
+  //determine indent
+  if (indent) {
+    styles.add('ol,ul', 'padding-left', `${indent}px`);
+  }
+  //determine spacing
+  if (spacing) {
+    styles.add('li', 'padding', `${spacing}px 0`);
+  }
+</script>
+<if true={ordered}>
+  <ol>
+    <each value=li from=value>
+      <li>{li}</li>
+    </each>
+  </ol>
+<else />
+  <ul>
+    <each value=li from=value>
+      <li>{li}</li>
+    </each>
+  </ul>
+</if>

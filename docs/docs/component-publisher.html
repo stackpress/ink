@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Component Publisher - Ink reactive web component template engine.</title>
+  <meta name="description" content="How to use Ink to publish web components." />
+  <meta property="og:title" content="Component Publisher - Ink reactive web component template engine." />
+  <meta property="og:description" content="How to use Ink to publish web components." />
+  <meta property="og:image" content="https://stackpress.github.io/ink/ink-logo.png" />
+  <meta property="og:url" content="https://stackpress.github.io/ink/docs/component-publisher.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@stackpress" />
+  <meta name="twitter:title" content="Component Publisher - Ink reactive web component template engine." />
+  <meta name="twitter:description" content="How to use Ink to publish web components." />
+  <meta name="twitter:image" content="https://stackpress.github.io/ink/ink-logo.png" />
+  <link rel="favicon" href="/ink/favicon.ico" />
+  <link rel="shortcut icon" type="image/png" href="/ink/favicon.png" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link rel="stylesheet" media="(prefers-color-scheme:light)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css" />
+  <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css" />
+  <link rel="stylesheet" type="text/css" href="/ink/styles/global.css" />
+  <link rel="stylesheet" type="text/css" href="/ink/build/client/c1fe9c8143f6abad8224.css" />
+  
+  <script data-app="eyJwcm9wcyI6eyJ0aXRsZSI6IkluayBEb2N1bWVudGF0aW9uIn0sImVudiI6eyJCVUlMRF9JRCI6ImMxZmU5YzgxNDNmNmFiYWQ4MjI0In19" src="/ink/build/client/c1fe9c8143f6abad8224.js"></script>
+  
+</head>
+  <body class="light bg-t-0 tx-t-1 tx-arial">
+    <panel-layout>
+      <header><menu class="flex flex-center-y px-20 py-15 m-0 bg-t-1">
+  
+    <i class="fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1" ></i>
+    <div class="flex-grow"></div>
+  
+  <nav class="flex flex-center-y">
+    <a class="tx-primary" href="/ink/docs/index.html">Docs</a>
+    <a class="tx-t-1 tx-5xl ml-10" href="https://github.com/stackpress/ink" target="_blank">
+      <i class="fab fa-github"></i>
+    </a>
+    <a class="bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center" href="https://www.npmjs.com/package/@stackpress/ink" target="_blank">
+      <i class="fab fa-npm tx-white"></i>
+    </a>
+  </nav>
+</menu></header>
+      <aside left><header class="flex flex-center-y bg-t-2 py-15 pr-5 pl-10">
+  <a href="/ink">
+    <img class="h-26 mr-10" src="/ink/ink-icon.png" alt="Ink Logo" />
+  </a>
+  <h3 class="flex-grow m-0 tx-upper">
+    <a class="tx-primary" href="/ink">Ink</a>
+  </h3>
+  <i class="fas fa-fw fa-chevron-left cursor-pointer none md-inline-block" ></i>
+</header>
+<nav class="bg-t-1 scroll-auto h-calc-full-60">
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper">
+    Introduction
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/index.html">
+      Documentation
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/getting-started.html">
+      Getting Started
+    </a>
+  
+
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper">
+    Features
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/markup-syntax.html">
+      Markup Syntax
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/state-management.html">
+      State Management
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/component-strategy.html">
+      Component Strategy
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/compiler-api.html">
+      Compiler API
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/client-api.html">
+      Client API
+    </a>
+  
+
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper">
+    Usage
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/template-engine.html">
+      Template Engine
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/single-page.html">
+      Single Page App
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/static-site.html">
+      Static Site Generator
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10 tx-bold" href="/ink/docs/component-publisher.html">
+      Component Publisher
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10 mb-100" href="/ink/docs/developer-tools.html">
+      Developer Tools
+    </a>
+  
+</nav></aside>
+      <main>
+        <api-docs>
+          <h1 class="tx-primary tx-upper tx-30 py-20">
+            Component Publisher
+          </h1>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            Web components are a set of web platform APIs that allow you 
+            to create new custom, reusable, encapsulated HTML tags to use 
+            in web pages and web apps. Custom components and widgets build 
+            on the Web Component standards, will work across modern 
+            browsers, and can be used with any JavaScript library or 
+            framework that works with HTML.
+          </i18n-translate>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            Web components are based on existing web standards. Features 
+            to support web components are currently being added to the 
+            HTML and DOM specs, letting web developers easily extend HTML 
+            with new elements with encapsulated styling and custom behavior.
+          </i18n-translate>
+
+          <element-alert solid curved info>
+            <element-icon name="info-circle"></element-icon>
+            <strong>Note:</strong> Web components even work in React 
+            projects.
+          </element-alert>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            First, create a project with the following structure and files.
+          </i18n-translate>
+          <ide-app  title="My Project">
+            <app-head>
+              <div class="flex scroll-x-auto pt-5 pl-5">
+                <element-tab on class="relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0" active="bg-black tx-white" inactive="bg-t-1 tx-t-1" group="publisher" selector="#build-ts">
+                  src/build.ts
+                </element-tab>
+                <element-tab class="relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0" active="bg-black tx-white" inactive="bg-t-1 tx-t-1" group="publisher" selector="#component-ink">
+                  src/component.ink
+                </element-tab>
+                <element-tab class="relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0" active="bg-black tx-white" inactive="bg-t-1 tx-t-1" group="publisher" selector="#package-json">
+                  package.json
+                </element-tab>
+              </div>
+            </app-head>
+            <app-left>
+              <h5 class="p-5">
+                <element-icon name="chevron-down"></element-icon>
+                <span>src</span>
+              </h5>
+              <element-tab on class="pl-15 pt-10 block" active="tx-white" inactive="tx-muted" group="publisher" selector="#build-ts">
+                <element-icon name="file"></element-icon>
+                build.ts
+              </element-tab>
+              <element-tab class="pl-15 pt-10 block" active="tx-white" inactive="tx-muted" group="publisher" selector="#component-ink">
+                <element-icon name="file"></element-icon>
+                component.ink
+              </element-tab>
+              <element-tab class="pt-10 block" active="tx-white" inactive="tx-muted" group="publisher" selector="#package-json">
+                <element-icon name="file"></element-icon>
+                package.json
+              </element-tab>
+            </app-left>
+            <app-main>
+              <ide-code id="build-ts" lang="js" numbers trim >
+                import http from 'http';
+                import ink from '@stackpress/ink/compiler';
+
+                //create ink compiler
+                const compiler = ink({ cwd: __dirname });
+                //load component, and render
+                const component = compiler
+                  .fromSource('./component.ink')
+                  .component();
+                
+                //save component
+                compiler.fs.writeFileSync('/path/to/component.js', component);
+              </ide-code>
+              <ide-code id="component-ink" style="display:none" numbers trim >
+                &lt;style&gt;
+                  .title { text-align: center; }
+                &lt;/style&gt;
+                &lt;script&gt;
+                  const title = 'Hello';
+                &lt;/script&gt;
+                &lt;h1 class="title"&gt;{title}&lt;/h1&gt;
+              </ide-code>
+              <ide-code id="package-json" style="display:none" lang="js" numbers trim >
+                {
+                  "name": "my-project",
+                  "version": "1.0.0",
+                  "private": true,
+                  "scripts": {
+                    "build": "ts-node ./src/build.ts"
+                  },
+                  "dependencies": {
+                    "@stackpress/ink": "0.1.8"
+                  },
+                  "devDependencies": {
+                    "@stackpress/ink-dev": "0.1.8",
+                    "@types/node": "22.1.0",
+                    "ts-node": "10.9.2",
+                    "typescript": "5.5.4"
+                  }
+                }
+              </ide-code>
+            </app-main>
+          </ide-app>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            To test the build script and see the results, run the 
+            following command in terminal.
+          </i18n-translate>
+          <ide-code lang="bash">
+            npm run build
+          </ide-code>
+          
+          <nav class="flex">
+            <a class="tx-primary py-40" href="/ink/docs/static-site.html">
+              <element-icon name="chevron-left" theme="tx-1"></element-icon>
+              Static Site Generator
+            </a>
+            <a class="flex-grow tx-right tx-primary py-40" href="/ink/docs/developer-tools.html">
+              Developer Tools
+              <element-icon name="chevron-right" theme="tx-1"></element-icon>
+            </a>
+          </nav>
+          <footer class="foot"></footer>
+        </api-docs>
+      </main>
+    </panel-layout>
+  </body>
+</html>

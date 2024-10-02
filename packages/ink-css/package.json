@@ -1,0 +1,21 @@
+{
+  "name": "@stackpress/ink-css",
+  "version": "0.1.8",
+  "description": "Ink atomic css framework",
+  "license": "Apache-2.0",
+  "author": "Chris <chris@incept.asia>",
+  "homepage": "https://github.com/stackpress/ink",
+  "bugs": "https://github.com/stackpress/ink/issues",
+  "repository": "stackpress/ink",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+     "@stackpress/ink": "0.1.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.4",
+    "typescript": "5.6.2"
+  }
+}

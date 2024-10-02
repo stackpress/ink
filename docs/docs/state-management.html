@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>State Management - Ink reactive web component template engine.</title>
+  <meta name="description" content="Learn how to manage states in Ink." />
+  <meta property="og:title" content="State Management - Ink reactive web component template engine." />
+  <meta property="og:description" content="Learn how to manage states in Ink." />
+  <meta property="og:image" content="https://stackpress.github.io/ink/ink-logo.png" />
+  <meta property="og:url" content="https://stackpress.github.io/ink/docs/state-management.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@stackpress" />
+  <meta name="twitter:title" content="State Management - Ink reactive web component template engine." />
+  <meta name="twitter:description" content="Learn how to manage states in Ink." />
+  <meta name="twitter:image" content="https://stackpress.github.io/ink/ink-logo.png" />
+  <link rel="favicon" href="/ink/favicon.ico" />
+  <link rel="shortcut icon" type="image/png" href="/ink/favicon.png" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link rel="stylesheet" media="(prefers-color-scheme:light)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css" />
+  <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css" />
+  <link rel="stylesheet" type="text/css" href="/ink/styles/global.css" />
+  <link rel="stylesheet" type="text/css" href="/ink/build/client/82c040caab27f511cc51.css" />
+  
+  <script data-app="eyJwcm9wcyI6eyJ0aXRsZSI6IkluayBEb2N1bWVudGF0aW9uIn0sImVudiI6eyJCVUlMRF9JRCI6IjgyYzA0MGNhYWIyN2Y1MTFjYzUxIn19" src="/ink/build/client/82c040caab27f511cc51.js"></script>
+  
+</head>
+  <body class="light bg-t-0 tx-t-1 tx-arial">
+    <panel-layout>
+      <header><menu class="flex flex-center-y px-20 py-15 m-0 bg-t-1">
+  
+    <i class="fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1" ></i>
+    <div class="flex-grow"></div>
+  
+  <nav class="flex flex-center-y">
+    <a class="tx-primary" href="/ink/docs/index.html">Docs</a>
+    <a class="tx-t-1 tx-5xl ml-10" href="https://github.com/stackpress/ink" target="_blank">
+      <i class="fab fa-github"></i>
+    </a>
+    <a class="bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center" href="https://www.npmjs.com/package/@stackpress/ink" target="_blank">
+      <i class="fab fa-npm tx-white"></i>
+    </a>
+  </nav>
+</menu></header>
+      <aside left><header class="flex flex-center-y bg-t-2 py-15 pr-5 pl-10">
+  <a href="/ink">
+    <img class="h-26 mr-10" src="/ink/ink-icon.png" alt="Ink Logo" />
+  </a>
+  <h3 class="flex-grow m-0 tx-upper">
+    <a class="tx-primary" href="/ink">Ink</a>
+  </h3>
+  <i class="fas fa-fw fa-chevron-left cursor-pointer none md-inline-block" ></i>
+</header>
+<nav class="bg-t-1 scroll-auto h-calc-full-60">
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper">
+    Introduction
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/index.html">
+      Documentation
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/getting-started.html">
+      Getting Started
+    </a>
+  
+
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper">
+    Features
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/markup-syntax.html">
+      Markup Syntax
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10 tx-bold" href="/ink/docs/state-management.html">
+      State Management
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/component-strategy.html">
+      Component Strategy
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/compiler-api.html">
+      Compiler API
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/client-api.html">
+      Client API
+    </a>
+  
+
+  <h6 class="bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper">
+    Usage
+  </h6>
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/template-engine.html">
+      Template Engine
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/single-page.html">
+      Single Page App
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/static-site.html">
+      Static Site Generator
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10" href="/ink/docs/component-publisher.html">
+      Component Publisher
+    </a>
+  
+  
+    <a class="block tx-info py-10 pl-10 mb-100" href="/ink/docs/developer-tools.html">
+      Developer Tools
+    </a>
+  
+</nav></aside>
+      <aside right>
+        <menu class="m-0 px-10 py-20 h-calc-full-40 bg-t-2 scroll-auto">
+          <h6 class="tx-muted tx-14 mb-0 mt-0 pb-10 tx-upper">
+            On this page
+          </h6>
+          <nav class="tx-14 tx-lh-32">
+            <a class="block tx-t-0" href="#props">Props</a>
+            <a class="block tx-t-0" href="#signals">Signals</a>
+            <a class="block tx-t-0" href="#events">Events</a>
+            <a class="block tx-t-0" href="#classnames">Class Names</a>
+            <a class="block tx-t-0" href="#children">Children</a>
+            <a class="block tx-t-0" href="#component">Component</a>
+            <a class="block tx-t-0" href="#env">Env Variables</a>
+            <a class="block tx-t-0" href="#this">this</a>
+          </nav>
+        </menu>
+      </aside>
+      <main>
+        <api-docs>
+          <h1 class="tx-primary tx-upper tx-30 py-20">
+            State Management
+          </h1>
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            Ink provides several ways to manage properties and states 
+            in your components.
+          </i18n-translate>
+
+          <a name="props"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            Props
+          </h2>
+
+          <ide-code lang="js" trim >
+            import { props } from '@stackpress/ink';
+            const { title, description } = props();
+          </ide-code>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            The <code>props</code> function can be used to access the 
+            properties of a component.
+          </i18n-translate>
+
+          <a name="signals"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            Signals
+          </h2>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            Ink provides a reactive state management system that allows 
+            you to manage states in your components. The system is based 
+            on signals, which are reactive variables that can be used to 
+            store and update data. Signals can be used to store any type 
+            of data, including numbers, strings, objects, arrays, and even 
+            functions.
+          </i18n-translate>
+
+          <div class="scroll-auto bg-black">
+            <ide-code trim >
+              &lt;script&gt;
+                import { signal } from '@stackpress/ink';
+                const count = signal&lt;number&gt;(1);
+              &lt;/script&gt;
+              &lt;em class=classlist&gt;Count #{count.value}&lt;/em&gt;
+            </ide-code>
+          </div>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            To create a signal, you can use the 
+            <ide-code type="javascript" inline>signal()</ide-code> 
+            function, which takes an initial value as an argument. Signals 
+            can be read and updated using the <code>value</code> property. 
+            Setting the value will trigger a re-render of the component.
+          </i18n-translate>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            Signals can be used in your components to manage states and 
+            trigger updates when the state changes. You can use signals to 
+            store data that needs to be shared between components, or to 
+            trigger side effects when the state changes. Signals can also 
+            be used to store data that needs to be persisted across page 
+            reloads, such as form data or user preferences.
+          </i18n-translate>
+
+          <a name="events"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            Events
+          </h2>
+
+          <div class="scroll-auto bg-black">
+            <ide-code trim number >
+              &lt;script&gt;
+                import { signal } from '@stackpress/ink';
+                const count = signal&lt;number&gt;(1);
+                const add = e =&gt; count.value++;
+              &lt;/script&gt;
+
+              &lt;button click=add&gt;{count.value}&lt;/button&gt;
+
+              &lt;button dblclick=add&gt;{count.value}&lt;/button&gt;
+              &lt;button mousedown=add&gt;{count.value}&lt;/button&gt;
+              &lt;button mouseup=add&gt;{count.value}&lt;/button&gt;
+              &lt;button mousemove=add&gt;{count.value}&lt;/button&gt;
+              &lt;button mouseover=add&gt;{count.value}&lt;/button&gt;
+              &lt;button mouseout=add&gt;{count.value}&lt;/button&gt;
+              &lt;button wheel=add&gt;{count.value}&lt;/button&gt;
+              &lt;button keydown=add&gt;{count.value}&lt;/button&gt;
+              &lt;button keypress=add&gt;{count.value}&lt;/button&gt;
+              &lt;button keyup=add&gt;{count.value}&lt;/button&gt;
+            </ide-code>
+          </div>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            For example, you can use the <ide-code inline>click</ide-code> 
+            attribute assigned to a function to trigger a function when 
+            the element is clicked. In combination with updating a signal, 
+            can trigger a re-render of the component. The following event 
+            attributes are supported.
+          </i18n-translate>
+
+          <div class="col-2">
+            <div>
+              <h3>Mouse Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>click</ide-code></li>
+                <li><ide-code inline>dblclick</ide-code></li>
+                <li><ide-code inline>mousedown</ide-code></li>
+                <li><ide-code inline>mouseup</ide-code></li>
+                <li><ide-code inline>mousemove</ide-code></li>
+                <li><ide-code inline>mouseover</ide-code></li>
+                <li><ide-code inline>mouseout</ide-code></li>
+                <li><ide-code inline>wheel</ide-code></li>
+              </ul>
+              <h3>Keyboard Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>keydown</ide-code></li>
+                <li><ide-code inline>keypress</ide-code></li>
+                <li><ide-code inline>keyup</ide-code></li>
+              </ul>
+              <h3>Form Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>blur</ide-code></li>
+                <li><ide-code inline>change</ide-code></li>
+                <li><ide-code inline>contextmenu</ide-code></li>
+                <li><ide-code inline>focus</ide-code></li>
+                <li><ide-code inline>input</ide-code></li>
+                <li><ide-code inline>submit</ide-code></li>
+                <li><ide-code inline>invalid</ide-code></li>
+                <li><ide-code inline>reset</ide-code></li>
+                <li><ide-code inline>search</ide-code></li>
+                <li><ide-code inline>select</ide-code></li>
+              </ul>
+              <h3>Clipboard Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>copy</ide-code></li>
+                <li><ide-code inline>cut</ide-code></li>
+                <li><ide-code inline>paste</ide-code></li>
+              </ul>
+              <h3>Transition Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>transitionend</ide-code></li>
+              </ul>
+            </div>
+            <div>
+              <h3>Drag Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>drag</ide-code></li>
+                <li><ide-code inline>dragstart</ide-code></li>
+                <li><ide-code inline>dragend</ide-code></li>
+                <li><ide-code inline>dragover</ide-code></li>
+                <li><ide-code inline>dragenter</ide-code></li>
+                <li><ide-code inline>dragleave</ide-code></li>
+                <li><ide-code inline>drop</ide-code></li>
+                <li><ide-code inline>scroll</ide-code></li>
+              </ul>
+              <h3>Media Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>durationchange</ide-code></li>
+                <li><ide-code inline>ended</ide-code></li>
+                <li><ide-code inline>error</ide-code></li>
+                <li><ide-code inline>loadeddata</ide-code></li>
+                <li><ide-code inline>loadedmetadata</ide-code></li>
+                <li><ide-code inline>loadstart</ide-code></li>
+                <li><ide-code inline>pause</ide-code></li>
+                <li><ide-code inline>play</ide-code></li>
+                <li><ide-code inline>playing</ide-code></li>
+                <li><ide-code inline>progress</ide-code></li>
+                <li><ide-code inline>ratechange</ide-code></li>
+                <li><ide-code inline>seeked</ide-code></li>
+                <li><ide-code inline>seeking</ide-code></li>
+                <li><ide-code inline>stalled</ide-code></li>
+                <li><ide-code inline>suspend</ide-code></li>
+                <li><ide-code inline>timeupdate</ide-code></li>
+                <li><ide-code inline>volumechange</ide-code></li>
+                <li><ide-code inline>waiting</ide-code></li>
+              </ul>
+              <h3>Animation Events</h3>
+              <ul class="tx-lh-36">
+                <li><ide-code inline>animationstart</ide-code></li>
+                <li><ide-code inline>animationend</ide-code></li>
+                <li><ide-code inline>animationiteration</ide-code></li>
+              </ul>
+            </div>
+          </div>
+
+          <a name="classnames"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            Class Names
+          </h2>
+
+          <div class="scroll-auto bg-black">
+            <ide-code lang="js" trim >
+              import { classnames } from '@stackpress/ink';
+              const classlist = classnames(); //--&gt; 'class1 class2 class3'
+            </ide-code>
+          </div>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            The <code>classnames</code> function can be used to generate 
+            a list of class names based on the properties of an object.
+          </i18n-translate>
+
+          <a name="children"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            Children
+          </h2>
+
+          <div class="scroll-auto bg-black">
+            <ide-code lang="js" trim >
+              import { children } from '@stackpress/ink';
+              const childlist = children(); //--&gt; Node[]
+            </ide-code>
+          </div>
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            The <code>children</code> function can be used to render 
+            child components in a parent component.
+          </i18n-translate>
+
+          <a name="component"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            Component
+          </h2>
+
+          <div class="scroll-auto bg-black">
+            <ide-code lang="js" trim >
+              import { component } from '@stackpress/ink';
+              const button = component(); //--&gt; HTMLElement
+              console.log(button.querySelector('span'));
+            </ide-code>
+          </div>
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            For other edge cases, the <code>component</code> function 
+            can be used to get raw access to the component's 
+            functionality.
+          </i18n-translate>
+
+          <a name="env"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            Environment Variables
+          </h2>
+
+          <ide-code trim >
+            &lt;script&gt;
+              import { env } from '@stackpress/ink';
+              const { BUILD_ID, NODE_ENV } = env();
+            &lt;/script&gt;
+            &lt;if true={NODE_ENV === 'development'}&gt;
+              &lt;p&gt;Development mode&lt;/p&gt;
+            &lt;/if&gt;
+          </ide-code>
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            The <code>env</code> function can be used to access environment 
+            variables in a component.
+          </i18n-translate>
+
+          <a name="this"></a>
+          <h2 class="tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0">
+            this
+          </h2>
+
+          <ide-app title="What's this" class="py-20">
+            <ide-code numbers >
+              &lt;script&gt;
+                this.props;
+                this.style;
+                this.classList;
+                this.parentNode;
+                this.innerHTML;
+                this.appendChild();
+                this.querySelector('p');
+              &lt;/script&gt;
+            </ide-code>
+          </ide-app>
+
+          <i18n-translate p trim class="tx-lh-36 py-20">
+            <ide-code inline>this</ide-code> refers to the 
+            <ide-code inline>InkComponent</ide-code> that extends 
+            <ide-code inline>HTMLElement</ide-code>. This means all
+            components in Ink are in fact are HTML elements and has
+            access to the common functionality like 
+            <ide-code inline>innerHTML</ide-code> and
+            <ide-code inline>querySelector()</ide-code> to name a 
+            few. <ide-code inline>InkComponent</ide-code> has the
+            additional following properties and methods that you can access
+            using <ide-code inline>this</ide-code>.
+          </i18n-translate>
+
+          <api-ui start="InkComponent"></api-ui>
+
+          <element-alert curved info class="py-20 tx-lh-24">
+            <element-icon name="info-circle"></element-icon>
+            <strong>Info:</strong> You can discover more methods and properties
+            of the <code>HTMLElement</code> class on the
+            <a target="_blank" class="tx-white tx-underline" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">
+              MDN Web Docs
+            </a>.
+          </element-alert>
+
+          <nav class="flex">
+            <a class="tx-primary py-40" href="/ink/docs/markup-syntax.html">
+              <element-icon name="chevron-left" theme="tx-1"></element-icon>
+              Markup Syntax
+            </a>
+            <a class="flex-grow tx-right tx-primary py-40" href="/ink/docs/component-strategy.html">
+              Component Strategy
+              <element-icon name="chevron-right" theme="tx-1"></element-icon>
+            </a>
+          </nav>
+          <footer class="foot"></footer>
+        </api-docs>
+      </main>
+    </panel-layout>
+  </body>
+</html>

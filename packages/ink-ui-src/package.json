@@ -1,0 +1,32 @@
+{
+  "name": "@stackpress/ink-ui-src",
+  "version": "0.1.8",
+  "private": true,
+  "scripts": {
+    "build": "yarn build:tsc && yarn build:element && yarn build:field && yarn build:form && yarn build:format && yarn build:layout && yarn build:intl && yarn build:files && yarn build:package",
+    "build:files": "cp README.md LICENSE ../ink-ui",
+    "build:package": "cp ./package.live.json ../ink-ui/package.json",
+    "build:intl": "cp ./src/utilities/intl.json ../ink-ui/utilities/intl.json",
+    "build:element": "cp -rf ./src/element ../ink-ui",
+    "build:field": "cp -rf ./src/field ../ink-ui",
+    "build:form": "cp -rf ./src/form ../ink-ui",
+    "build:format": "cp -rf ./src/format ../ink-ui",
+    "build:layout": "cp -rf ./src/layout ../ink-ui",
+    "build:tsc": "tsc"
+  },
+  "devDependencies": {
+    "@stackpress/ink": "0.1.8",
+    "@types/dompurify": "3.0.5",
+    "@types/inputmask": "5.0.7",
+    "@types/node": "22.7.4",
+    "@types/prismjs": "1.26.4",
+    "codemirror": "5.65.17",
+    "dayjs": "1.11.13",
+    "dompurify": "3.1.6",
+    "inputmask": "5.0.9",
+    "marked": "14.1.2",
+    "prismjs": "1.29.0",
+    "suneditor": "2.47.0",
+    "typescript": "5.6.2"
+  }
+}

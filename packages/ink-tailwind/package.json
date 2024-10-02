@@ -1,0 +1,37 @@
+{
+  "name": "@stackpress/ink-tailwind",
+  "version": "0.1.8",
+  "description": "Webpack support for the Ink markup language.",
+  "license": "Apache-2.0",
+  "author": "Chris <chris@incept.asia>",
+  "homepage": "https://github.com/stackpress/ink",
+  "bugs": "https://github.com/stackpress/ink/issues",
+  "repository": "stackpress/ink",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "index.d.ts",
+    "index.js",
+    "LICENSE",
+    "README.md",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@stackpress/ink": "0.1.8"
+  },
+  "peerDependencies": {
+    "autoprefixer": "^10",
+    "postcss": "^8",
+    "tailwindcss": "^3"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.4",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.47",
+    "tailwindcss": "3.4.13",
+    "typescript": "5.6.2"
+  }
+}
