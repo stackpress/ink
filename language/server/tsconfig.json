@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+    "esModuleInterop": true,
+    "lib": [ "es2021", "es7", "es6", "dom" ],
+    "module": "commonjs",
+    "noUnusedLocals": true,
+    "outDir": "out",
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6",
+    "skipLibCheck": true,
+		"moduleResolution": "node",
+		"rootDir": "src",
+		"types": []
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}

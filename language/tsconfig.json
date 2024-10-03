@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+    "esModuleInterop": true,
+    "lib": [ "es2021", "es7", "es6", "dom" ],
+    "module": "commonjs",
+    "noUnusedLocals": true,
+    "outDir": "out",
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6",
+    "skipLibCheck": true,
+		"rootDir": "src"
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"archives",
+		"node_modules",
+		".vscode-test"
+	],
+	"references": [
+		{ "path": "./client" },
+		{ "path": "./server" }
+	]
+}

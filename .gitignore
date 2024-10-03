@@ -132,6 +132,14 @@ dist
 archives
 .ink
 .DS_Store
-
 .build
+
+language/client/out
+language/client/package-lock.json
+language/server/out
+language/server/package-lock.json
+language/tests/out
+language/tests/package-lock.json
+language/package-lock.json
+
 packages/ink-ui

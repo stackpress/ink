@@ -1,4 +1,4 @@
-import type http from 'http';
+import type { IncomingMessage, ServerResponse } from 'http';
 import type EventEmitter from './EventEmitter';
 import type { Event as InkEvent } from './EventEmitter';
 import type { PluginBuild } from 'esbuild';
@@ -26,8 +26,8 @@ export type Data = Scalar|Data[]|{ [key: string]: Data };
 export type Constructor<T> = { new (): T };
 
 //standard http request and response types
-export type Request = http.IncomingMessage;
-export type Response = http.ServerResponse<Request> & {
+export type Request = IncomingMessage;
+export type Response = ServerResponse<Request> & {
   req: Request;
 };
 
