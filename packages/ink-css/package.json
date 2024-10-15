@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-css",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Ink atomic css framework",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -8,11 +8,19 @@
   "bugs": "https://github.com/stackpress/ink/issues",
   "repository": "stackpress/ink",
   "main": "index.js",
+  "files": [
+    "dist",
+    "index.d.ts",
+    "index.js",
+    "LICENSE",
+    "README.md",
+    "tsconfig.json"
+  ],
   "scripts": {
     "build": "tsc"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.9"
+    "@stackpress/ink": "0.1.10"
   },
   "devDependencies": {
     "@types/node": "22.7.4",

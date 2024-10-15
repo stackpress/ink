@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-dev",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Ink developer mode with hot page reload",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@blanquera/types": "1.0.2",
-    "@stackpress/ink": "0.1.9",
+    "@stackpress/ink": "0.1.10",
     "chokidar": "3.6.0",
     "ws": "8.17.0"
   },

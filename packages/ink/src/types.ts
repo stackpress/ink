@@ -588,7 +588,7 @@ export type InkCompiler = {
   client: (sourceFile: string) => Promise<string>,
   import: (sourceFile: string) => Promise<BuildResults>,
   markup: (sourceFile: string) => Promise<string>,
-  render: (sourceFile: string, props: Hash) => Promise<string>,
+  render: (sourceFile: string, props?: Hash) => Promise<string>,
   server: (sourceFile: string) => Promise<string>,
   styles: (sourceFile: string) => Promise<string>
 };
