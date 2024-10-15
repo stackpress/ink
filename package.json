@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build:packages": "yarn build:ink && yarn build:css && yarn build:esbuild && yarn build:loader && yarn build:dev && yarn build:express && yarn build:tailwind && yarn build:ui && yarn build:web",
+    "build": "yarn build:ink && yarn build:css && yarn build:esbuild && yarn build:loader && yarn build:dev && yarn build:express && yarn build:tailwind && yarn build:ui",
     "build:ink": "yarn --cwd packages/ink build",
     "build:css": "yarn --cwd packages/ink-css build",
     "build:dev": "yarn --cwd packages/ink-dev build",
