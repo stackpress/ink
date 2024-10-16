@@ -142,7 +142,7 @@ export default class Transpiler extends ComponentTranspiler {
     //import __APP_DATA__ from '@stackpress/ink/dist/client/data';
     source.addImportDeclaration({
       moduleSpecifier: '@stackpress/ink/dist/client/data',
-      defaultImport: '__APP_DATA__' 
+      defaultImport: '__CLIENT_DATA__' 
     });
     //import Counter_abc123 from './Counter_abc123'
     registry.forEach(component => {
@@ -194,17 +194,17 @@ export default class Transpiler extends ComponentTranspiler {
         const data = atob(script.getAttribute('data-app'));
         window.__APP_DATA__ = JSON.parse(data);
         Object.entries(window.__APP_DATA__).forEach(([key, value]) => {
-          __APP_DATA__.set(key, value);
+          __CLIENT_DATA__.set(key, value);
         });
       } catch (error) {
         throw InkException.for('APP_DATA is not a valid JSON');
       }
       //set the current component
-      __APP_DATA__.set('current', 'document');
+      __CLIENT_DATA__.set('current', 'document');
       //run the user entry script
       ${scripts.join('\n')}
       //reset the current component
-      __APP_DATA__.delete('current');
+      __CLIENT_DATA__.delete('current');
       //now serialize the props
       //this is predicting the order rendered on the server
       //with the order determined by doc.body.querySelectorAll
@@ -244,17 +244,16 @@ export default class Transpiler extends ComponentTranspiler {
       emitter.emit('mounted', document.body);
     });`);
 
-    //export { InkRegistry, emitter, __APP_DATA__ as data };
+    //export { InkRegistry, emitter, __CLIENT_DATA__ as data };
     source.addExportDeclaration({
       namedExports: [
         'InkException',
         'InkRegistry',
-        'emitter',
-        { name: 'data', alias: '__APP_DATA__' }
+        'emitter'
       ]
     });
 
-    // export const components = { ... }
+    // export const components = { ... };
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
@@ -268,7 +267,17 @@ export default class Transpiler extends ComponentTranspiler {
       }]
     });
 
-    // export const BUILD_ID = { ... }
+    // export const data = __CLIENT_DATA__;
+    source.addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
+      declarations: [{
+        name: 'data',
+        initializer: '__CLIENT_DATA__'
+      }]
+    });
+
+    // export const BUILD_ID = 'abc123';
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,

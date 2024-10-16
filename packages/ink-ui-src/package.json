@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-ui-src",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "scripts": {
     "build": "yarn build:tsc && yarn build:element && yarn build:field && yarn build:form && yarn build:format && yarn build:layout && yarn build:intl && yarn build:files && yarn build:package",
@@ -15,7 +15,7 @@
     "build:tsc": "tsc"
   },
   "devDependencies": {
-    "@stackpress/ink": "0.1.10",
+    "@stackpress/ink": "0.1.11",
     "@types/dompurify": "3.0.5",
     "@types/inputmask": "5.0.7",
     "@types/node": "22.7.4",
