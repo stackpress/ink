@@ -137,6 +137,8 @@ export default class InkRegistry {
     
     // Create a template for the inner component
     const component = document.createElement(tagname) as InkComponent;
+    //@ts-ignore set the component 
+    component.definition = definition;
     //copy the prototype
     Object.setPrototypeOf(component, definition.prototype);
     //set the constructor
@@ -157,20 +159,38 @@ export default class InkRegistry {
   /**
    * Clones an element, adds to registry and returns it
    */
-  public static cloneElement(node: Element, andChildren = false) {
-    const element = this.register(node);
-    const clone = element.clone();
-    if (andChildren) {
-      element.element.childNodes.forEach(child => {
-        if (child instanceof Text) {
-          clone.element.appendChild(child.cloneNode());
-          return;
-        }
-        const cloneChild = this.cloneElement(child as Element, true);
-        clone.element.appendChild(cloneChild.element);
-      });
+  public static cloneElement(node: Node, andChildren = false): Node {
+    const component = node as InkComponent | HTMLElement & {
+      definition?: InkComponentClass,
+      props?: Record<string, any>,
+      originalChildren?: Node[]
+    };
+    if (component.definition) {
+      const children = component.originalChildren || [];
+      return this.createComponent(
+        component.nodeName.toLowerCase(), 
+        component.definition, 
+        component.props || {}, 
+        andChildren 
+          ? children.map(element => this.cloneElement(element, andChildren))
+          : []
+      ).element;
+    } else if (node instanceof HTMLElement) {
+      const children = Array.from(node.childNodes);
+      return InkRegistry.createElement(
+        node.nodeName.toLowerCase(), 
+        InkRegistry.has(node)
+          ? InkRegistry.get(node)?.attributes as Record<string, any>
+          : Object.fromEntries(Array
+            .from(node.attributes)
+            .map(attribute => [ attribute.name, attribute.value ])
+          ), 
+        andChildren 
+          ? children.map(element => this.cloneElement(element, andChildren))
+          : []
+      ).element;
     }
-    return clone;
+    return node.cloneNode(andChildren);
   }
 
   /**

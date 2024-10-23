@@ -1,8 +1,8 @@
 import type { MouseEvent } from '@stackpress/ink/dist/types';
-import type InkComponent from '@stackpress/ink/dist/client/InkComponent';
 import type StyleSet from '@stackpress/ink/dist/style/StyleSet';
 
 import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
+import InkComponent from '@stackpress/ink/dist/client/InkComponent';
 import setColor from './style/color';
 import setCurve from './style/curve';
 import setPadding from './style/padding';
@@ -94,22 +94,26 @@ export function getHandlers(host: InkComponent, template: Node[]) {
       return { fieldset, slot };
     },
     clone: (index: number, valueset: Record<string, any> = {}) => {
-      return template.map(element => {
+      return template.map(
+        element => InkRegistry.cloneElement(element, true)
+      ).map(element => {
         if (element instanceof HTMLElement) {
-          const field = InkRegistry.cloneElement(element, true).element;
           //find names
-          const key = field.getAttribute('name');
+          const key = element.getAttribute('name');
           if (name && key) {
-            field.setAttribute('data-key', key);
-            field.setAttribute('name', `${name}[${index}][${key}]`);
+            element.setAttribute('data-key', key);
+            element.setAttribute('name', `${name}[${index}][${key}]`);
           }
           if (key && typeof valueset[key] !== 'undefined') {
             //@ts-ignore
-            field.value = valueset[key];
-            field.setAttribute('value', valueset[key]);
+            element.value = valueset[key];
+            element.setAttribute('value', valueset[key]);
           }
-          Array.from(field.querySelectorAll('[name]')).forEach(element => {
-            const key = element.getAttribute('name');
+          const fields = new Map<Element, string>();
+          Array.from(element.querySelectorAll('[name]')).forEach(element => {
+            fields.set(element, element.getAttribute('name') || '');
+          });
+          for (const [ element, key ] of fields.entries()) {
             if (name && key) {
               element.setAttribute('data-key', key);
               element.setAttribute('name', `${name}[${index}][${key}]`);
@@ -119,10 +123,9 @@ export function getHandlers(host: InkComponent, template: Node[]) {
               element.value = valueset[key];
               element.setAttribute('value', valueset[key]);
             }
-          });
-          return field;
+          }
         }
-        return element.cloneNode();
+        return element;
       });
     },
     remove: (fieldset: HTMLElement, slot: HTMLElement) => {
@@ -151,6 +154,44 @@ export function getHandlers(host: InkComponent, template: Node[]) {
           span.textContent = legend.replace('%s', index + 1);
         });
       }
+    },
+    set: (valueset: Record<string, any> = {}) => {
+      const fields = template.map(element => {
+        if (element instanceof HTMLElement) {
+          //find names
+          const key = element.getAttribute('name');
+          if (name && key) {
+            element.setAttribute('name', `${name}[${key}]`);
+          }
+          if (key && typeof valueset[key] !== 'undefined') {
+            //@ts-ignore
+            field.value = valueset[key];
+            element.setAttribute('value', valueset[key]);
+          }
+          const fields = new Map<Element, string>();
+          Array.from(element.querySelectorAll('[name]')).forEach(element => {
+            fields.set(element, element.getAttribute('name') || '');
+          });
+          for (const [ element, key ] of fields.entries()) {
+            if (name && key) {
+              element.setAttribute('name', `${name}[${key}]`);
+            }
+            if (key && typeof valueset[key] !== 'undefined') {
+              //@ts-ignore
+              element.value = valueset[key];
+              element.setAttribute('value', valueset[key]);
+            }
+          }
+        }
+        return element;
+      });
+      const slot = InkRegistry.createElement(
+        'div', {}, fields
+      ).element as HTMLElement;
+      const fieldset = InkRegistry.createElement('fieldset', {}, [
+        InkRegistry.createElement('slot').element
+      ]).element as HTMLElement;
+      return { fieldset, slot };
     }
   };
   return handlers;

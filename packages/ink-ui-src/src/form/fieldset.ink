@@ -27,28 +27,38 @@
   import setDisplay from '../utilities/style/display';
   import { buttonStyles, getHandlers } from '../utilities/fieldset';
   //extract props
-  const { add = 'Add', value = [] } = this.props;
+  const { multiple, value, add = 'Add' } = this.props;
   //override default styles
   const styles = new StyleSet();
   const css = this.styles();
   this.styles = () => css + styles.toString();
   //determine display
   setDisplay(this.props, styles, 'block', ':host');
-  //determine button styles
-  buttonStyles(this.props, styles);
+  if (multiple) {
+    //determine button styles
+    buttonStyles(this.props, styles);
+  }
   //get the row template
   const template = this.originalChildren;
   //set handlers
   const handlers = getHandlers(this, template);
   //make initial rows
-  const rows = value.map(
-    (valueset, index) => handlers.create(index, valueset)
-  );
+  const type = Array.isArray(value) ? 'array' 
+    : value?.constructor.name === 'Object' ? 'object'
+    : value === null ? 'null'
+    : typeof value;
+  const rows = multiple && type === 'array' 
+    ? value.map((valueset, index) => handlers.create(index, valueset)) 
+    : !multiple
+    ? [ handlers.set(type === 'object' ? value : {}) ] 
+    : [];
 </script>
 <template type="light">
   {rows.map(row => row.slot)}
 </template>
 <template type="shadow">
   {rows.map(row => row.fieldset)}
-  <button type="button" click={handlers.add}>{add}</button>
+  <if true={multiple}>
+    <button type="button" click={handlers.add}>{add}</button>
+  </if>
 </template>

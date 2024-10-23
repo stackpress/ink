@@ -68,15 +68,6 @@ export default class InkElement {
   }
 
   /**
-   * Clones the element
-   */
-  public clone(andChildren = false) {
-    const element = this._element.cloneNode(andChildren) as Element;
-    const attributes = { ...this._attributes };
-    return new InkElement(element, attributes);
-  }
-
-  /**
    * Returns the attribute value
    */
   public getAttribute<T = any>(key: string) {

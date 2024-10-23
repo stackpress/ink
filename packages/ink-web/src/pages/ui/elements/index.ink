@@ -4,25 +4,25 @@
 <link rel="import" type="component" href="@/components/api/docs.ink" name="api-docs" />
 <link rel="import" type="component" href="@/components/i18n/translate.ink" name="i18n-translate" />
 <link rel="import" type="component" href="@stackpress/ink-ui/layout/panel.ink" name="panel-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table.ink" name="interface-table" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table.ink" name="table-layout" />
 <link rel="import" type="component" href="@stackpress/ink-ui/layout/table/head.ink" name="table-head" />
 <link rel="import" type="component" href="@stackpress/ink-ui/layout/table/foot.ink" name="table-foot" />
 <link rel="import" type="component" href="@stackpress/ink-ui/layout/table/row.ink" name="table-row" />
 <link rel="import" type="component" href="@stackpress/ink-ui/layout/table/col.ink" name="table-col" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="interface-button" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/control.ink" name="interface-control" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/input.ink" name="interface-input" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/textarea.ink" name="interface-textarea" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/alert.ink" name="interface-alert" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/tab.ink" name="interface-tab" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/icon.ink" name="interface-icon" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/badge.ink" name="interface-badge" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/loader.ink" name="interface-loader" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/tooltip.ink" name="interface-tip" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/pager.ink" name="interface-pager" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/crumbs.ink" name="interface-crumbs" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/progress.ink" name="interface-progress" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/notify.ink" name="interface-notify" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="element-button" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/control.ink" name="element-control" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/input.ink" name="element-input" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/textarea.ink" name="element-textarea" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/alert.ink" name="element-alert" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/tab.ink" name="element-tab" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/icon.ink" name="element-icon" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/badge.ink" name="element-badge" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/loader.ink" name="element-loader" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/tooltip.ink" name="element-tip" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/pager.ink" name="element-pager" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/crumbs.ink" name="element-crumbs" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/progress.ink" name="element-progress" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/notify.ink" name="element-notify" />
 <style>
   @ink theme;
   @ink reset;
@@ -59,10 +59,10 @@
           <section class="flex flex-wrap gap-10">
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-alert success>
-                  <interface-icon name="check-circle" />
+                <element-alert success>
+                  <element-icon name="check-circle" />
                   Good News!
-                </interface-alert>
+                </element-alert>
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -73,7 +73,7 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-badge warning curved class="mb-10">999</interface-badge>
+                <element-badge warning curved class="mb-10">999</element-badge>
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -84,7 +84,7 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-crumbs 
+                <element-crumbs 
                   crumbs={crumbs} 
                   block 
                   bold 
@@ -104,10 +104,10 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-icon name="info-circle" class="tx-info" />
-                <interface-icon name="exclamation-triangle" class="tx-warning" />
-                <interface-icon name="times-circle" class="tx-error" />
-                <interface-icon name="check-circle" class="tx-success" />
+                <element-icon name="info-circle" class="tx-info" />
+                <element-icon name="exclamation-triangle" class="tx-warning" />
+                <element-icon name="times-circle" class="tx-error" />
+                <element-icon name="check-circle" class="tx-success" />
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -118,10 +118,10 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-loader success size={5} thickness={5} dotted />
-                <interface-loader info slice={2} />
-                <interface-loader warning dashed />
-                <interface-loader error dashed thickness={10} size={10} speed={1500} />
+                <element-loader success size={5} thickness={5} dotted />
+                <element-loader info slice={2} />
+                <element-loader warning dashed />
+                <element-loader error dashed thickness={10} size={10} speed={1500} />
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -132,10 +132,10 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-alert error>
-                  <interface-icon name="times-circle" />
+                <element-alert error>
+                  <element-icon name="times-circle" />
                   Errors on Submit
-                </interface-alert>
+                </element-alert>
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -146,7 +146,7 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-pager 
+                <element-pager 
                   total={500} 
                   range={100} 
                   start={90} 
@@ -189,7 +189,7 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-progress width={50} info class="bg-muted rounded tx-13 h-20 tx-lh-20 w-full-20" />
+                <element-progress width={50} info class="bg-muted rounded tx-13 h-20 tx-lh-20 w-full-20" />
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -200,7 +200,7 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-tab 
+                <element-tab 
                   on
                   class="relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0"
                   active="bg-black tx-white"
@@ -209,8 +209,8 @@
                   selector="#http-index-ts"
                 >
                   Tab 1
-                </interface-tab>
-                <interface-tab 
+                </element-tab>
+                <element-tab 
                   class="relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0"
                   active="bg-black tx-white"
                   inactive="bg-t-1 tx-muted"  
@@ -218,8 +218,8 @@
                   selector="#http-page-ink"
                 >
                   Tab 2
-                </interface-tab>
-                <interface-tab 
+                </element-tab>
+                <element-tab 
                   class="relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0"
                   active="bg-black tx-white"
                   inactive="bg-t-1 tx-muted"  
@@ -227,7 +227,7 @@
                   selector="#http-package-json"
                 >
                   Tab 3
-                </interface-tab>
+                </element-tab>
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -238,7 +238,7 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-table 
+                <table-layout 
                   class="h-90 w-250"
                   top left
                   head="py-16 px-12 bg-t-1 b-solid b-black bt-1 bb-0 bx-0" 
@@ -256,12 +256,12 @@
                       sollicitudin.
                     </table-col>
                     <table-col nowrap>
-                      <interface-icon name="eye" class="mr-5 tx-info" />
-                      <interface-icon name="edit" class="mr-5 tx-warning" />
-                      <interface-icon name="trash" class="tx-error" />
+                      <element-icon name="eye" class="mr-5 tx-info" />
+                      <element-icon name="edit" class="mr-5 tx-warning" />
+                      <element-icon name="trash" class="tx-error" />
                     </table-col>
                   </table-row>
-                </interface-table>
+                </table-layout>
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
@@ -272,13 +272,13 @@
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
-                <interface-tip 
+                <element-tip 
                   background-info 
                   curved 
                   top="-15"
                   left="50" 
                   padding="5"
-                >This is the first and last name</interface-tip>
+                >This is the first and last name</element-tip>
               </div>
               <a 
                 class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 

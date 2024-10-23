@@ -93,7 +93,7 @@
         );
         bar.style.width = `${state.progress}%`;
         if (state.time >= timeout) {
-          handlers.remove();
+          remove();
         }
       }, smooth);
 

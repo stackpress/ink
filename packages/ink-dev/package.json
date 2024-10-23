@@ -21,10 +21,8 @@
     "build": "tsc && npx ../../node_modules/esbuild/bin/esbuild ./src/client.ts --global-name=ink_dev --format=iife --bundle --outfile=client.js"
   },
   "dependencies": {
-    "@blanquera/types": "1.0.2",
     "@stackpress/ink": "0.1.11",
-    "chokidar": "3.6.0",
-    "ws": "8.17.0"
+    "chokidar": "3.6.0"
   },
   "devDependencies": {
     "@types/node": "22.7.4",

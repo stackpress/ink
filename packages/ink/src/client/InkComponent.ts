@@ -38,6 +38,9 @@ export default abstract class InkComponent extends HTMLElement {
 
   //the initial children
   protected _children: Node[]|undefined = undefined;
+  //Since components can be virtual, we need to 
+  //allow the definition to be attached.
+  protected _definition: InkComponentClass|null = null;
   //whether the component has initiated this is a flag 
   //used by signals to check the number of signals that 
   //exists in this component as logic to determine
@@ -75,6 +78,13 @@ export default abstract class InkComponent extends HTMLElement {
   }
 
   /**
+   * Returns the class definition
+   */
+  public get definition() {
+    return this._definition || this.constructor as InkComponentClass;
+  }
+
+  /**
    * Returns the component's element registry
    */
   public get element(): InkElement {
@@ -90,6 +100,13 @@ export default abstract class InkComponent extends HTMLElement {
   }
 
   /**
+   * Returns whether the component has initiated
+   */
+  public get initiated() {
+    return this._initiated;
+  }
+
+  /**
    * Returns the component's metadata
    */
   public get metadata() {
@@ -99,7 +116,7 @@ export default abstract class InkComponent extends HTMLElement {
       //@ts-ignore some components might 
       //not have observed attributes...
       observedAttributes: observed = [] 
-    } = this.constructor as typeof InkComponent;
+    } = this.definition;
     //extract more names from component
     const [ tagname, classname ] = component;
     //return all the static data collected
@@ -117,13 +134,6 @@ export default abstract class InkComponent extends HTMLElement {
    */
   public get originalChildren(): Node[]|undefined {
     return this._children;
-  }
-
-  /**
-   * Returns whether the component has initiated
-   */
-  public get initiated() {
-    return this._initiated;
   }
 
   /**
@@ -161,6 +171,15 @@ export default abstract class InkComponent extends HTMLElement {
    */
   public set props(props: Hash) {
     this.setAttributes(props);
+  }
+
+  /**
+   * Sets the class definition. Since components can be virtual, 
+   * we need to allow the definition to be attached. This is useful 
+   * for cloning purposes for example.
+   */
+  public set definition(definition: InkComponentClass) {
+    this._definition = definition;
   }
 
   /**
@@ -510,7 +529,7 @@ export default abstract class InkComponent extends HTMLElement {
     //get children by modes
     const { light, shadow } = this._getChildren(children, mode);
     //if no styles, just set the innerHTML
-    if (shadow.length === 0) {
+    if (shadow.length === 0 && mode === 'light') {
       //empty the current text content
       //the old data is captured in originalChildren
       //NOTE: We might want to version the children based 

@@ -111,7 +111,7 @@
               </div>
               <div class="basis-third-10 lg-basis-half-10 md-basis-full">
                 <div class="bg-t-3 h-120 flex flex-center">
-                  <form-fieldset legend="Fieldset %s" name="fieldset1" value={fieldset}>
+                  <form-fieldset legend="Fieldset %s" name="fieldset1" value={fieldset} multiple>
                     <field-input name="first1" placeholder="Enter your first name" />
                   </form-fieldset>
                 </div>
