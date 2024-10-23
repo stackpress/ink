@@ -289,7 +289,7 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.1.11"
+                    "@stackpress/ink": "0.1.12"
                   },
                   "devDependencies": {
                     "@types/node": "22.1.0",
@@ -546,10 +546,10 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.1.11"
+                    "@stackpress/ink": "0.1.12"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.1.11",
+                    "@stackpress/ink-dev": "0.1.12",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
@@ -1018,11 +1018,11 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.1.11"
+                    "@stackpress/ink": "0.1.12"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.1.11",
-                    "@stackpress/ink-tailwind": "0.1.11",
+                    "@stackpress/ink-dev": "0.1.12",
+                    "@stackpress/ink-tailwind": "0.1.12",
                     "@types/node": "22.1.0",
                     "autoprefixer": "10.4.20",
                     "postcss": "8.4.44",
