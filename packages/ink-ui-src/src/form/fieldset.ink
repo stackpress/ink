@@ -26,8 +26,9 @@
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import setDisplay from '../utilities/style/display';
   import { buttonStyles, getHandlers } from '../utilities/fieldset';
+
   //extract props
-  const { multiple, value, add = 'Add' } = this.props;
+  const { multiple, inputs, errors, add = 'Add' } = this.props;
   //override default styles
   const styles = new StyleSet();
   const css = this.styles();
@@ -43,15 +44,24 @@
   //set handlers
   const handlers = getHandlers(this, template);
   //make initial rows
-  const type = Array.isArray(value) ? 'array' 
-    : value?.constructor.name === 'Object' ? 'object'
-    : value === null ? 'null'
-    : typeof value;
-  const rows = multiple && type === 'array' 
-    ? value.map((valueset, index) => handlers.create(index, valueset)) 
-    : !multiple
-    ? [ handlers.set(type === 'object' ? value : {}) ] 
-    : [];
+  const initial = {
+    inputs: (Array.isArray(inputs) ? inputs : [ inputs ]).map(
+      input => input?.constructor.name === 'Object' ? input : {}
+    ),
+    errors: (Array.isArray(errors) ? errors : [ errors ]).map(
+      errors => errors?.constructor.name === 'Object' ? errors : {}
+    )
+  };
+  const rows = multiple ? initial.inputs.map(
+    (input, index) => handlers.create(
+      index, 
+      input || {}, 
+      initial.errors[index] || {}
+    )
+  ) : [ handlers.set(
+    initial.inputs[0] || {}, 
+    initial.errors[0] || {}
+  ) ];
 </script>
 <template type="light">
   {rows.map(row => row.slot)}

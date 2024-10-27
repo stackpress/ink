@@ -207,7 +207,10 @@ export function getHandlers(
       show = false
     ) => {
       //determine values
-      const values = Array.isArray(value) ? Array.from(value) : [ value ];
+      const values = (Array.isArray(value) 
+        ? Array.from(value) 
+        : [ value ]
+      ).filter(Boolean);
       //safe bind...
       options.forEach(option => {
         if (!(option instanceof HTMLElement)) return;

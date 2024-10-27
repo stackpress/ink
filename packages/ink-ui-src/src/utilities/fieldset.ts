@@ -1,4 +1,4 @@
-import type { MouseEvent } from '@stackpress/ink/dist/types';
+import type { MouseEvent, InkComponentClass } from '@stackpress/ink/dist/types';
 import type StyleSet from '@stackpress/ink/dist/style/StyleSet';
 
 import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
@@ -62,6 +62,44 @@ export function buttonStyles(props: Record<string, any>, styles: StyleSet) {
   }
 }
 
+/**
+   * Clones an element, adds to registry and returns it
+   */
+export function cloneElement(
+  node: Node, 
+  prepare: Function,
+  andChildren = false
+): Node {
+  const component = node as InkComponent | HTMLElement & {
+    definition?: InkComponentClass,
+    props?: Record<string, any>,
+    originalChildren?: Node[]
+  };
+  if (component.definition) {
+    const children = component.originalChildren || [];
+    const attributes = prepare(component);
+    return InkRegistry.createComponent(
+      component.nodeName.toLowerCase(), 
+      component.definition, 
+      attributes || {}, 
+      andChildren ? children.map(
+        element => cloneElement(element, prepare, andChildren)
+      ) : []
+    ).element;
+  } else if (node instanceof HTMLElement) {
+    const children = Array.from(node.childNodes);
+    const attributes = prepare(component);
+    return InkRegistry.createElement(
+      node.nodeName.toLowerCase(), 
+      attributes || {}, 
+      andChildren 
+        ? children.map(element => cloneElement(element, prepare, andChildren))
+        : []
+    ).element;
+  }
+  return node.cloneNode(andChildren);
+}
+
 export function getHandlers(host: InkComponent, template: Node[]) {
   const { name, legend } = host.props;
   const handlers = {
@@ -74,8 +112,45 @@ export function getHandlers(host: InkComponent, template: Node[]) {
       button.before(fieldset);
       host.appendChild(slot);
     },
-    create: (index: number, valueset: Record<string, any> = {}) => {
-      const fields = handlers.clone(index, valueset);
+    create: (
+      index: number, 
+      input: Record<string, any> = {}, 
+      errors: Record<string, any> = {}
+    ) => {
+      input = input?.constructor.name === 'Object' ? input : {};
+      errors = errors?.constructor.name === 'Object' ? errors : {};
+      const fields = template.map(
+        element => cloneElement(element, (node: HTMLElement) => {
+          const component = node as InkComponent | HTMLElement & {
+            definition?: InkComponentClass,
+            props?: Record<string, any>,
+            originalChildren?: Node[]
+          };
+
+          const attributes = component.definition ? component.props || {}
+            : node instanceof HTMLElement && InkRegistry.has(node)
+            ? InkRegistry.get(node)?.attributes || {}
+            : node instanceof HTMLElement
+            ? Object.fromEntries(Array
+              .from(node.attributes)
+              .map(attribute => [ attribute.name, attribute.value ])
+            ): {};
+          if (attributes.field) {
+            attributes.name = `${name}[${index}][${attributes.field}]`;
+            if (typeof input[attributes.field] !== 'undefined') {
+              attributes.value = input[attributes.field];
+            }
+            if (typeof errors[attributes.field] === 'string') {
+              attributes.error = errors[attributes.field];
+            }
+          } else if (attributes.control 
+            && typeof errors[attributes.control] === 'string'
+          ) {
+            attributes.error = errors[attributes.control];
+          }
+          return attributes;
+        }, true)
+      );
       const slot = InkRegistry.createElement(
         'div', { slot: `row-${index}`}, fields
       ).element as HTMLElement;
@@ -92,41 +167,6 @@ export function getHandlers(host: InkComponent, template: Node[]) {
       ]).element as HTMLElement;
       remove.addEventListener('click', () => handlers.remove(fieldset, slot));
       return { fieldset, slot };
-    },
-    clone: (index: number, valueset: Record<string, any> = {}) => {
-      return template.map(
-        element => InkRegistry.cloneElement(element, true)
-      ).map(element => {
-        if (element instanceof HTMLElement) {
-          //find names
-          const key = element.getAttribute('name');
-          if (name && key) {
-            element.setAttribute('data-key', key);
-            element.setAttribute('name', `${name}[${index}][${key}]`);
-          }
-          if (key && typeof valueset[key] !== 'undefined') {
-            //@ts-ignore
-            element.value = valueset[key];
-            element.setAttribute('value', valueset[key]);
-          }
-          const fields = new Map<Element, string>();
-          Array.from(element.querySelectorAll('[name]')).forEach(element => {
-            fields.set(element, element.getAttribute('name') || '');
-          });
-          for (const [ element, key ] of fields.entries()) {
-            if (name && key) {
-              element.setAttribute('data-key', key);
-              element.setAttribute('name', `${name}[${index}][${key}]`);
-            }
-            if (key && typeof valueset[key] !== 'undefined') {
-              //@ts-ignore
-              element.value = valueset[key];
-              element.setAttribute('value', valueset[key]);
-            }
-          }
-        }
-        return element;
-      });
     },
     remove: (fieldset: HTMLElement, slot: HTMLElement) => {
       const shadow = host.shadowRoot;
@@ -155,36 +195,44 @@ export function getHandlers(host: InkComponent, template: Node[]) {
         });
       }
     },
-    set: (valueset: Record<string, any> = {}) => {
-      const fields = template.map(element => {
-        if (element instanceof HTMLElement) {
-          //find names
-          const key = element.getAttribute('name');
-          if (name && key) {
-            element.setAttribute('name', `${name}[${key}]`);
-          }
-          if (key && typeof valueset[key] !== 'undefined') {
-            //@ts-ignore
-            field.value = valueset[key];
-            element.setAttribute('value', valueset[key]);
-          }
-          const fields = new Map<Element, string>();
-          Array.from(element.querySelectorAll('[name]')).forEach(element => {
-            fields.set(element, element.getAttribute('name') || '');
-          });
-          for (const [ element, key ] of fields.entries()) {
-            if (name && key) {
-              element.setAttribute('name', `${name}[${key}]`);
+    set: (
+      input: Record<string, any> = {}, 
+      errors: Record<string, any> = {}
+    ) => {
+      input = input?.constructor.name === 'Object' ? input : {};
+      errors = errors?.constructor.name === 'Object' ? errors : {};
+      const fields = template.map(
+        element => cloneElement(element, (node: HTMLElement) => {
+          const component = node as InkComponent | HTMLElement & {
+            definition?: InkComponentClass,
+            props?: Record<string, any>,
+            originalChildren?: Node[]
+          };
+
+          const attributes = component.definition ? component.props || {}
+            : node instanceof HTMLElement && InkRegistry.has(node)
+            ? InkRegistry.get(node)?.attributes || {}
+            : node instanceof HTMLElement
+            ? Object.fromEntries(Array
+              .from(node.attributes)
+              .map(attribute => [ attribute.name, attribute.value ])
+            ): {};
+          if (attributes.field) {
+            attributes.name = `${name}[${attributes.field}]`;
+            if (typeof input[attributes.field] !== 'undefined') {
+              attributes.value = input[attributes.field];
             }
-            if (key && typeof valueset[key] !== 'undefined') {
-              //@ts-ignore
-              element.value = valueset[key];
-              element.setAttribute('value', valueset[key]);
+            if (typeof errors[attributes.field] === 'string') {
+              attributes.error = errors[attributes.field];
             }
+          } else if (attributes.control 
+            && typeof errors[attributes.control] === 'string'
+          ) {
+            attributes.error = errors[attributes.control];
           }
-        }
-        return element;
-      });
+          return attributes;
+        }, true)
+      );
       const slot = InkRegistry.createElement(
         'div', {}, fields
       ).element as HTMLElement;
