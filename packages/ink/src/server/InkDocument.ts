@@ -22,7 +22,25 @@ export default abstract class InkDocument {
   /**
    * Returns the document bindings for client
    */
-  public bindings() {
+  public bindings(props: Record<string, any> = {}) {
+    //set server props (this is so template() can read it using props())
+    data.set('props', props || {});
+    //set environment variables (this is so template() can read it using env())
+    data.set('env', {
+      ...(process.env || {}),
+      BUILD_ID: this.id(),
+      APP_DATA: btoa(JSON.stringify({
+        ...Object.fromEntries(data.entries()),
+        env: {
+          ...Object.fromEntries(
+            Object.entries(process.env || {}).filter(
+              entry => entry[0].startsWith('PUBLIC_')
+            )
+          ),
+          BUILD_ID: this.id()
+        }
+      }))
+    });
     const registry = InkRegistry.registry(this.template());
     const bindings = Array.from(registry.values()).map((element, id) => {
       return element.props !== '{ }' ? `'${id}': ${element.props}`: '';

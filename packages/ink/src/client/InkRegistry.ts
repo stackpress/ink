@@ -1,6 +1,7 @@
 import type { AnyChild, InkComponentClass, RegistryIterator } from '../types';
 import InkComponent from './InkComponent';
 import InkElement from './InkElement';
+import api from './api';
 
 //this is used to convert HTML entities to their respective characters
 const decoder = document.createElement('textarea');
@@ -36,7 +37,7 @@ export default class InkRegistry {
     const { registered } = definition;
     //if the component being created is not a
     //registered component in customElements
-    if (!registered) {
+    if (!registered && !api().registered[tagname]) {
       //we need to pseudo create the component instead.
       return this.createVirtualComponent(
         tagname, 
@@ -53,7 +54,7 @@ export default class InkRegistry {
     //change the tagname if the component is registered
     //this is to avoid confusion with different tag names 
     //using the same component.
-    const component = document.createElement(registered);
+    const component = document.createElement(registered || tagname);
     //uhh, wait for this to be registered in customElements?
     customElements.upgrade(component);
     //a registered component will self register itself in the constructor
@@ -177,10 +178,10 @@ export default class InkRegistry {
       ).element;
     } else if (node instanceof HTMLElement) {
       const children = Array.from(node.childNodes);
-      return InkRegistry.createElement(
+      return this.createElement(
         node.nodeName.toLowerCase(), 
-        InkRegistry.has(node)
-          ? InkRegistry.get(node)?.attributes as Record<string, any>
+        this.has(node)
+          ? this.get(node)?.attributes as Record<string, any>
           : Object.fromEntries(Array
             .from(node.attributes)
             .map(attribute => [ attribute.name, attribute.value ])

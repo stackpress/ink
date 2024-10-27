@@ -23,7 +23,9 @@ export default abstract class InkComponent extends HTMLElement {
    * if it doesn't exist, it will return null
    */
   public static get registered() {
-    return customElements.getName(this as unknown as CustomElementConstructor);
+    return customElements.getName(
+      this as unknown as CustomElementConstructor
+    );
   }
 
   /**

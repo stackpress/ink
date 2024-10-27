@@ -1,4 +1,5 @@
 <link rel="import" type="component" href="@/components/form.ink" name="sample-form" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="form-button" />
 <style>
   @ink theme;
   @ink reset;
@@ -28,5 +29,6 @@
   </head>
   <body class="light bg-t-0 tx-t-1 tx-arial">
     <sample-form action={url} />
+    <form-button md warning>Outside</form-button>
   </body>
 </html>

@@ -29,6 +29,7 @@ import InkRegistry from './client/InkRegistry';
 import InkElement from './client/InkElement';
 import emitter, { InkEmitter } from './client/InkEmitter';
 import component from './client/component';
+import api from './client/api';
 import data, { InkDataMap } from './client/data';
 import env from './client/env';
 import props from './client/props';
@@ -42,6 +43,7 @@ import StyleSheet, { stylesheet, breakpoints } from './style/StyleSheet';
 
 export {
   component,
+  api,
   data,
   env,
   props,

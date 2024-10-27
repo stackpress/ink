@@ -185,6 +185,62 @@ export default class Transpiler extends ComponentTranspiler {
       }
     });
 
+    //export { InkRegistry, emitter, __CLIENT_DATA__ as data };
+    source.addExportDeclaration({
+      namedExports: [
+        'InkException',
+        'InkRegistry',
+        'emitter'
+      ]
+    });
+
+    // export const components = { ... };
+    source.addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
+      declarations: [{
+        name: 'components',
+        initializer: `{
+          ${registry.map(
+            component => `'${component.classname}': ${component.classname}`
+          ).join(',\n')}
+        }`
+      }]
+    });
+    // export const registered = { ... };
+    source.addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
+      declarations: [{
+        name: 'registered',
+        initializer: `{
+          ${components.map(
+            component => `'${component.tagname}': ${component.classname}`
+          ).join(',\n')}
+        }`
+      }]
+    });
+
+    // export const data = __CLIENT_DATA__;
+    source.addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
+      declarations: [{
+        name: 'data',
+        initializer: '__CLIENT_DATA__'
+      }]
+    });
+
+    // export const BUILD_ID = 'abc123';
+    source.addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
+      declarations: [{
+        name: 'BUILD_ID',
+        initializer: `'${this._component.id}'`
+      }]
+    });
+
     source.addStatements(`emitter.once('ready', () => {
       const script = document.querySelector('script[data-app]');
       if (!script) {
@@ -243,49 +299,6 @@ export default class Transpiler extends ComponentTranspiler {
       //emit the mounted event
       emitter.emit('mounted', document.body);
     });`);
-
-    //export { InkRegistry, emitter, __CLIENT_DATA__ as data };
-    source.addExportDeclaration({
-      namedExports: [
-        'InkException',
-        'InkRegistry',
-        'emitter'
-      ]
-    });
-
-    // export const components = { ... };
-    source.addVariableStatement({
-      declarationKind: VariableDeclarationKind.Const,
-      isExported: true,
-      declarations: [{
-        name: 'components',
-        initializer: `{
-          ${registry.map(
-            component => `'${component.classname}': ${component.classname}`
-          ).join(',\n')}
-        }`
-      }]
-    });
-
-    // export const data = __CLIENT_DATA__;
-    source.addVariableStatement({
-      declarationKind: VariableDeclarationKind.Const,
-      isExported: true,
-      declarations: [{
-        name: 'data',
-        initializer: '__CLIENT_DATA__'
-      }]
-    });
-
-    // export const BUILD_ID = 'abc123';
-    source.addVariableStatement({
-      declarationKind: VariableDeclarationKind.Const,
-      isExported: true,
-      declarations: [{
-        name: 'BUILD_ID',
-        initializer: `'${this._component.id}'`
-      }]
-    });
 
     return source;
   }
