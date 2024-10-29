@@ -10,6 +10,7 @@ import Component from './compiler/Component';
 import DocumentBuilder from './document/Builder';
 import EventEmitter from './EventEmitter';
 import DocumentManifest from './document/Manifest';
+import DocumentException from './document/Exception';
 import FileSystem from './filesystem/FileSystem';
 import NodeFS from './filesystem/NodeFS';
 import Exception from './Exception';
@@ -55,7 +56,7 @@ export default function ink(options: InkOptions = {}) {
     },
     fromCache(cacheFile: string) {
       const source = compiler.fs.readFileSync(cacheFile, 'utf8');
-      return DocumentBuilder.load(source);
+      return DocumentBuilder.load(source, options.fs as FileSystem);
     },
     fromSource(sourceFile: string) {
       //make component
@@ -144,14 +145,23 @@ export default function ink(options: InkOptions = {}) {
         'render', 
         { builder, build, props }
       );
-      //render the document
-      const html = pre.data || build.document.render(props);
-      //emit view rendered event
-      const post = await compiler.emitter.waitFor<string>(
-        'rendered', 
-        { builder, build, props, html }
-      );
-      return post.data || html;
+      try {
+        //render the document
+        const html = pre.data || build.document.render(props);
+        //emit view rendered event
+        const post = await compiler.emitter.waitFor<string>(
+          'rendered', 
+          { builder, build, props, html }
+        );
+        return post.data || html;
+      } catch (e) {
+        const error = e as Error;
+        const exception = new DocumentException(error.message, 500);
+        exception.stack = error.stack || '';
+        exception.withFS(options.fs as FileSystem);
+        exception.withSource(build.source);
+        throw exception;
+      }
     }
   };
   return compiler;

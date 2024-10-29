@@ -37,7 +37,7 @@ export default class InkRegistry {
     const { registered } = definition;
     //if the component being created is not a
     //registered component in customElements
-    if (!registered && !api().registered[tagname]) {
+    if (!registered && !api().elements[tagname]) {
       //we need to pseudo create the component instead.
       return this.createVirtualComponent(
         tagname, 
@@ -52,11 +52,14 @@ export default class InkRegistry {
     //registered in InkRegistry yet. 
     
     //change the tagname if the component is registered
+    const name = registered || tagname;
     //this is to avoid confusion with different tag names 
     //using the same component.
-    const component = document.createElement(registered || tagname);
+    const component = document.createElement(name);
     //uhh, wait for this to be registered in customElements?
-    customElements.upgrade(component);
+    customElements.whenDefined(name).then(() => {
+      customElements.upgrade(component);
+    });
     //a registered component will self register itself in the constructor
     //but we need to update the attributes and children
     //try to register it

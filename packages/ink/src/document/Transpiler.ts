@@ -207,16 +207,19 @@ export default class Transpiler extends ComponentTranspiler {
         }`
       }]
     });
-    // export const registered = { ... };
+    // export const elements = { ... };
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
       declarations: [{
-        name: 'registered',
+        name: 'elements',
         initializer: `{
-          ${components.map(
-            component => `'${component.tagname}': ${component.classname}`
-          ).join(',\n')}
+          ${components.map(component => {
+            const { brand, tagname, classname } = component;
+            return brand 
+              ? `'${brand}-${tagname}': ${classname}`
+              : `'${tagname}': ${classname}`
+          }).join(',\n')}
         }`
       }]
     });
@@ -288,14 +291,11 @@ export default class Transpiler extends ComponentTranspiler {
       }
       //after we registered all the elements, we can now register the 
       //components and let it manip the HTML further if it wants to
-      ${components.map(component => {
-        const { brand, tagname, classname } = component;
-        return `if (!customElements.getName(${classname})) {
-          ${brand 
-            ? `customElements.define('${brand}-${tagname}', ${classname});` 
-            : `customElements.define('${tagname}', ${classname});`}
-        }`
-      }).join('\n')}
+      for (const [ tagname, definition ] of Object.entries(elements)) {
+        if (!customElements.getName(definition)) {
+          customElements.define(tagname, definition);
+        }
+      }
       //emit the mounted event
       emitter.emit('mounted', document.body);
     });`);

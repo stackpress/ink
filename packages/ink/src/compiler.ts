@@ -41,6 +41,7 @@ import {
 import DocumentBuilder from './document/Builder';
 import DocumentManifest from './document/Manifest';
 import DocumentTranspiler from './document/Transpiler';
+import DocumentException from './document/Exception';
 import { 
   esAliasPlugin, 
   esComponentPlugin, 
@@ -71,6 +72,7 @@ export {
   DocumentBuilder,
   DocumentManifest,
   DocumentTranspiler,
+  DocumentException,
   EventEmitter,
   FileSystem,
   FileLoader,

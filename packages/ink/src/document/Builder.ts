@@ -1,4 +1,5 @@
 //types
+import type FileSystem from '../filesystem/FileSystem';
 import type { 
   BuilderOptions, 
   ServerDocumentClass, 
@@ -8,7 +9,6 @@ import type {
 import path from 'path';
 import EventEmitter from '../EventEmitter';
 import Component from '../compiler/Component';
-import Transpiler from './Transpiler';
 import { load, build } from '../helpers';
 import {
   esInkPlugin,
@@ -16,22 +16,32 @@ import {
   esComponentPlugin,
   esWorkspacePlugin
 } from '../plugins';
+import Exception from './Exception';
+import Transpiler from './Transpiler';
 
 export default class Builder {
   /**
    * Loads a source code string into the runtime
    */
-  public static load(source: string) {
-    const context = load(source);
-    //get the Document
-    const Document = context.InkAPI.default as ServerDocumentClass;
-    //instantiate document
-    const document = new Document();
-    return {
-      source,
-      InkDocument: Document,
-      document: document
-    };
+  public static load(source: string, fs: FileSystem) {
+    try {
+      const context = load(source);
+      //get the Document
+      const Document = context.InkAPI.default as ServerDocumentClass;
+      //instantiate document
+      const document = new Document();
+      return {
+        source,
+        InkDocument: Document,
+        document: document
+      };
+    } catch (e) {
+      const error = e as Error;
+      const exception = new Exception(error.message, 500);
+      exception.withFS(fs);
+      exception.withSource(source);
+      throw exception;
+    }
   }
 
   //document component
@@ -118,7 +128,7 @@ export default class Builder {
     });
     const source = pre.data || await this.server();
     //run server script and get the context
-    const results: BuildResults = Builder.load(source);
+    const results: BuildResults = Builder.load(source, this._document.fs);
     //emit built event
     const post = await this._emitter.waitFor<BuildResults>('built', { 
       builder: this, 
@@ -174,7 +184,7 @@ export default class Builder {
    */
   public async component() {
     const { tagname, classname } = this._document;
-    const code = build(
+    const code = await build(
       this._document.absolute,
       {
         bundle: true,

@@ -12,7 +12,7 @@ declare global {
       emitter: InkEmitter,
       data: InkDataMap,
       components: Record<string, InkComponentClass>,
-      registered: Record<string, InkComponentClass>
+      elements: Record<string, InkComponentClass>
     }
   }
 }
