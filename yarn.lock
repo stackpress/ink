@@ -331,11 +331,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blanquera/types@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@blanquera/types/-/types-1.0.2.tgz#22126dd03fbd7ae4495370b1b8c7aebfe4e47ac1"
-  integrity sha512-oFGYwb6yuhjgHlVhzGm6uVAlnRMlX3PVrJawGtArIf0Rar6glqqKaAS3Sj7v5nuu0qyv2SEVzztwucyws5WvjA==
-
 "@codexteam/icons@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@codexteam/icons/-/icons-0.0.4.tgz#8b72dcd3f3a1b0d880bdceb2abebd74b46d3ae13"
@@ -1529,6 +1524,11 @@
   integrity sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==
   dependencies:
     "@sinonjs/commons" "^3.0.0"
+
+"@stackpress/types@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@stackpress/types/-/types-0.1.4.tgz#f391171ed2377bf9ad06895158df67a2a64ece9a"
+  integrity sha512-0tyTDqvPFnE7HackC4kshNxLsc4JRAiZy8BdI/oan8AzWTFYWvl2Yh5GFDGDffWs/pmPuQjdIOuBf6TLpalhGQ==
 
 "@ts-morph/common@~0.24.0":
   version "0.24.0"
@@ -9171,11 +9171,6 @@ write-file-atomic@^4.0.2:
   dependencies:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
-
-ws@8.17.0:
-  version "8.17.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.17.0.tgz#d145d18eca2ed25aaf791a183903f7be5e295fea"
-  integrity sha512-uJq6108EgZMAl20KagGkzCKfMEjxmKvZHG7Tlq0Z6nOky7YF7aq4mOx6xK8TJ/i1LeK4Qus7INktacctDgY8Ow==
 
 ws@^8.16.0:
   version "8.18.0"
