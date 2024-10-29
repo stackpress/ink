@@ -3,7 +3,7 @@
   import setDisplay from '../utilities/style/display';
   import { getProps, setStyles, getHandlers } from '../utilities/option';
   //get ptops
-  const { label, change, update, attributes } = getProps(this);
+  const { label = '', change, update, attributes } = getProps(this);
   //override default styles
   const styles = new StyleSet();
   this.styles = () => styles.toString();

@@ -78,11 +78,11 @@ input:checked + span::after {
   import { getHandlers } from '../utilities/option';
   //get props
   const {   
-    label,   error,  rounded,
-    onoff,   yesno,  checkex,
-    sunmoon, ridge,  smooth,
-    blue,    orange, green, 
-    change,  update,
+    error,  rounded, onoff,
+    yesno,  checkex, sunmoon,
+    ridge,  smooth,  blue,
+    orange, green,   change,
+    update, label = '',
     //we dont need these
     'class': _, style,
     ...attributes 
