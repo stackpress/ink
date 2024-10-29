@@ -3,7 +3,11 @@ import type { InkEvent, DocumentBuilder } from '@stackpress/ink/compiler';
 
 import path from 'path';
 import express from 'express';
-import ink, { cache } from '@stackpress/ink/compiler';
+import ink, { 
+  cache, 
+  Exception, 
+  DocumentException 
+} from '@stackpress/ink/compiler';
 import { view, dev } from '@stackpress/ink-express';
 import { plugin as css } from '@stackpress/ink-css';
 
@@ -113,9 +117,23 @@ app.get('/ink/**', (req, res) => {
 //error handling
 app.use((error: Error, req: Request, res: Response, next: Next) => {
   if (error) {
-    console.log(error);
+    const exception = error instanceof Exception ? error 
+      : error instanceof DocumentException ? error 
+      : (() => {
+        const exception = new Exception(error.message, 500);
+        exception.name = error.name;
+        exception.stack = error.stack;
+        return exception;
+      })();
+
+    const response = exception.toResponse();
+
+    if (process.env.NODE_ENV === 'production') {
+      delete response.stack;
+    }
+    
     res.status(500);
-    res.render('500', { error: error.message });
+    res.render('500', exception.toResponse());
     return;
   }
   next();

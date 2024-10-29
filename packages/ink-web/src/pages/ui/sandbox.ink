@@ -1,5 +1,8 @@
-<link rel="import" type="component" href="@/components/form.ink" name="sample-form" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/icon.ink" name="element-icon" />
 <link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="form-button" />
+<link rel="import" type="template" href="@/components/html/head.ink" name="html-head" />
+<link rel="import" type="component" href="@/components/sandbox/filters.ink" name="profile-filters" />
+<link rel="import" type="component" href="@/components/sandbox/app.ink" name="admin-app" />
 <style>
   @ink theme;
   @ink reset;
@@ -7,28 +10,43 @@
   @ink utilities;
 </style>
 <script>
-  import env from '@stackpress/ink/dist/client/env';
-  import { _ } from '@/components/i18n';
+  import { env, props } from '@stackpress/ink';
 
-  const url = '/ink/panel.html';
-  const title = _('Ink UI - Web Components Meets Atomic Styles.');
-  const description = _('Ink UI atomically generates CSS styles and provides out of box web components.');
+  const { 
+    q,
+    code = 200, 
+    status = 'OK',
+    span = {}, 
+    filter = {},
+    results = [],
+    settings = { menu: [] },
+    total = 0,
+    skip = 0,
+    take = 50
+  } = props('document');
+  
+  const url = '/ink/index.html';
+  const title = 'Profile Search';
+  const description = 'Search for profiles in the system.';
+
+  const crumbs = [
+    { icon: 'home', label: 'Home', href: '/admin' },
+    { icon: 'user', label: 'Profiles' }
+  ];
 </script>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <link rel="stylesheet" type="text/css" href="/ink/styles/global.css" />
-    <link rel="stylesheet" type="text/css" href={`/ink/build/client/${env('BUILD_ID')}.css`} />
-    
-    <script data-app={env('APP_DATA')} src={`/ink/build/client/${env('BUILD_ID')}.js`}></script>
-    <if true={env('NODE_ENV') === 'development'}>
-      <script src="/dev.js"></script>
-    </if>
-  </head>
-  <body class="light bg-t-0 tx-t-1 tx-arial">
-    <sample-form action={url} />
-    <form-button md warning>Outside</form-button>
+  <html-head />
+  <body class="relative dark bg-t-0 tx-t-1 tx-arial">
+    <admin-app {settings} {url} {title} {code} {status}>
+      <aside class="absolute z-5 bottom-0 top-0 right-0 w-360 flex flex-col">
+        <header class="flex flex-center-y bg-t-0 px-5 py-8">
+          <element-icon name="chevron-left" class="pr-10" />
+          <h3 class="tx-upper">Filters</h3>
+        </header>
+        <main class="flex-grow bg-t-1">
+          <profile-filters {filter} {span} />
+        </main>
+      </aside>
+    </admin-app>
   </body>
 </html>

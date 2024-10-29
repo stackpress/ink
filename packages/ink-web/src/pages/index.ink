@@ -26,7 +26,7 @@
   <body class="light bg-t-0 tx-t-1 tx-arial">
     <panel-layout>
       <header><html-header /></header>
-      <main class="scroll-auto">
+      <main class="scroll-auto" click=dosomething>
         <section class="bg-t-1 py-40 tx-center w-full">
           <img class="h-100" src="/ink/ink-logo.png" alt="Ink Logo" />
           <i18n-translate p trim class="tx-30 py-30 tx-lh-36">
