@@ -21,13 +21,17 @@
   //set default styles
   setDefaultStyles(props, styles);
   //set the input value
-  attributes.value = attributes.value instanceof Date 
-    ? attributes.value.toISOString() 
-    : attributes.value 
-    ? new Date(attributes.value).toISOString()
-    : new Date().toISOString();
-  const [ date, min ] = attributes.value.split(':')
-  attributes.value = [ date.split('T')[1], min ].join(':');
+  if (attributes.value) {
+    attributes.value = attributes.value instanceof Date 
+      ? attributes.value.toISOString() 
+      : new Date(attributes.value).toISOString()
+    if (isNaN(attributes.value.getTime())) {
+      delete attributes.value;
+    } else {
+      const [ date, min ] = attributes.value.split(':')
+      attributes.value = [ date.split('T')[1], min ].join(':');
+    }
+  }
   //get handlers
   const handlers = getHandlers(this, change, update);
 </script>

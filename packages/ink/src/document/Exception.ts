@@ -28,7 +28,7 @@ export default class DocumentException extends InkException {
         const source = this._fs.readFileSync(file, 'utf8');
         return { ...trace, source };
       }
-      return { ...trace, snippet: '' };
+      return { ...trace, source: '' };
     });
   }
 

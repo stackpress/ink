@@ -17,12 +17,16 @@
   //set default styles
   setDefaultStyles(props, styles);
   //set the input value
-  attributes.value = attributes.value instanceof Date 
-    ? attributes.value.toISOString() 
-    : attributes.value 
-    ? new Date(attributes.value).toISOString()
-    : new Date().toISOString();
-  attributes.value = attributes.value.replace('Z', '');
+  if (attributes.value) {
+    attributes.value = attributes.value instanceof Date 
+      ? attributes.value.toISOString() 
+      : new Date(attributes.value).toISOString()
+    if (isNaN(attributes.value.getTime())) {
+      delete attributes.value;
+    } else {
+      attributes.value = attributes.value.replace('Z', '');
+    }
+  }
   //get handlers
   const handlers = {
     change(e: ChangeEvent<HTMLInputElement>) {
