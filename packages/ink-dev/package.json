@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-dev",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Ink developer mode with hot page reload",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -21,7 +21,7 @@
     "build": "tsc && npx ../../node_modules/esbuild/bin/esbuild ./src/client.ts --global-name=ink_dev --format=iife --bundle --outfile=client.js"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.17",
+    "@stackpress/ink": "0.1.18",
     "chokidar": "3.6.0"
   },
   "devDependencies": {

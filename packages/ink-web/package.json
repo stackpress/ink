@@ -1,6 +1,6 @@
 {
   "name": "ink-web",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Ink Website",
   "private": true,
   "scripts": {
@@ -10,12 +10,12 @@
     "dev": "NODE_ENV=development ts-node ./src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.17",
+    "@stackpress/ink": "0.1.18",
     "@shoelace-style/shoelace": "2.16.0",
     "express": "4.19.2"
   },
   "devDependencies": {
-    "@stackpress/ink-dev": "0.1.17",
+    "@stackpress/ink-dev": "0.1.18",
     "@types/express": "4.17.21",
     "@types/node": "22.7.4",
     "fast-glob": "3.3.2",
