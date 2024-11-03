@@ -279,10 +279,10 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
                     "build": "ts-node ./src/build.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.1.18"
+                    "@stackpress/ink": "0.1.19"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.1.18",
+                    "@stackpress/ink-dev": "0.1.19",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
