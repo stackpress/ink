@@ -1,5 +1,5 @@
 //types
-import type FileSystem from '../filesystem/FileSystem';
+import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
 import type { 
   BuilderOptions, 
   ServerDocumentClass, 

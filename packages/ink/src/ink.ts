@@ -6,13 +6,14 @@ import type {
 } from './types';
 
 import path from 'path';
+import FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
+import NodeFS from '@stackpress/types/dist/filesystem/NodeFS';
+
 import Component from './compiler/Component';
 import DocumentBuilder from './document/Builder';
 import EventEmitter from './EventEmitter';
 import DocumentManifest from './document/Manifest';
 import DocumentException from './document/Exception';
-import FileSystem from './filesystem/FileSystem';
-import NodeFS from './filesystem/NodeFS';
 import Exception from './Exception';
 
 /**

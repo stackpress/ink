@@ -8,8 +8,9 @@ import type {
 } from './types';
 
 import path from 'path';
-import FileSystem from './filesystem/NodeFS';
-import FileLoader from './filesystem/FileLoader';
+import FileSystem from '@stackpress/types/dist/filesystem/NodeFS';
+import FileLoader from '@stackpress/types/dist/filesystem/FileLoader';
+
 import Component from './compiler/Component';
 import ComponentTranspiler from './compiler/Transpiler';
 import DocumentTranspiler from './document/Transpiler';

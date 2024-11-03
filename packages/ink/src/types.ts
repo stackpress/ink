@@ -1,9 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'http';
+import type { PluginBuild } from 'esbuild';
+import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
+
 import type EventEmitter from './EventEmitter';
 import type { Event as InkEvent } from './EventEmitter';
-import type { PluginBuild } from 'esbuild';
 
-import type FileSystem from './filesystem/FileSystem';
 import type DocumentBuilder from './document/Builder';
 import type DocumentManifest from './document/Manifest';
 import type Component from './compiler/Component';
@@ -56,13 +57,6 @@ export type Response = ServerResponse<Request> & {
 //dev-update-component
 
 export type InkEventMap = Record<string, [ InkEvent<any> ]>;
-
-//--------------------------------------------------------------------//
-// Filesystem Types
-
-export type FileStat = { isFile(): boolean };
-export type FileRecursiveOption = { recursive?: boolean };
-export type FileStream = { pipe: (res: Response) => void };
 
 //--------------------------------------------------------------------//
 // Lexer/Tokenizer Types

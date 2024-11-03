@@ -49,9 +49,6 @@ import {
   esWorkspacePlugin,
   esInkPlugin
 } from './plugins';
-import FileSystem from './filesystem/FileSystem';
-import FileLoader from './filesystem/FileLoader';
-import NodeFS from './filesystem/NodeFS';
 
 import EventEmitter, { Event as InkEvent } from './EventEmitter';
 import Exception from './Exception';
@@ -74,9 +71,6 @@ export {
   DocumentTranspiler,
   DocumentException,
   EventEmitter,
-  FileSystem,
-  FileLoader,
-  NodeFS,
   Lexer,
   Parser,
   Tokenizer,

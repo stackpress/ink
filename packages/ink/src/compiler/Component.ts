@@ -1,10 +1,10 @@
 //types
-import type FileSystem from '../filesystem/FileSystem';
+import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
 import type { AST, ComponentType, ComponentOptions } from '../types';
 //filesystem
 import path from 'path';
-import FileLoader from '../filesystem/FileLoader';
-import NodeFS from '../filesystem/NodeFS';
+import FileLoader from '@stackpress/types/dist/filesystem/FileLoader';
+import NodeFS from '@stackpress/types/dist/filesystem/NodeFS';
 //parsers/compilers
 import Tokenizer from './Tokenizer';
 //helpers
