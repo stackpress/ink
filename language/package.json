@@ -1,6 +1,6 @@
 {
   "name": "ink-language",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Adds syntax highlighting, formatting, auto-completion, jump-to-definition and linting for .ink files.",
   "license": "Apache-2.0",
 	"icon": "ink.png",
