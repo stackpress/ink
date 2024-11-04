@@ -44,7 +44,7 @@ export default class Component {
    */
   public get absolute() {
     const pwd: string = this._parent ? this._parent.dirname : this._cwd;
-    return this._loader.absolute(this._source, pwd);
+    return this._loader.absolute(this._source, pwd, true);
   }
   
   /**
@@ -153,7 +153,7 @@ export default class Component {
       return [];
     }
     const imports = this.imports.map(token => ({
-      path: this._loader.absolute(token.source, this.dirname),
+      path: this._loader.absolute(token.source, this.dirname, true),
       type: 'file'
     }));
     const components = this.components.map(component => ({
