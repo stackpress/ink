@@ -55,13 +55,21 @@ export default class InkRegistry {
     const name = registered || tagname;
     //this is to avoid confusion with different tag names 
     //using the same component.
-    const component = document.createElement(name);
+    const component = document.createElement(name) as InkComponent;
     //uhh, wait for this to be registered in customElements?
     customElements.whenDefined(name).then(() => {
       customElements.upgrade(component);
+      //for some reason, upgrade does not work
+      //on elements that have not rendered yet
+      //so we need to do a check here
+      //if render was not called yet, call it
+      if (!component.initiated) {
+        component.connectedCallback();
+      }
     });
-    //a registered component will self register itself in the constructor
-    //but we need to update the attributes and children
+    //a registered component should(?) self register itself 
+    //in the constructor but we need to update the attributes 
+    //and children
     //try to register it
     const element = InkRegistry.register(component, attributes);
     //set the attributes again to include non-string values

@@ -23,6 +23,7 @@
   import setCurve from '../utilities/style/curve';
   import setDisplay from '../utilities/style/display';
   import setPadding from '../utilities/style/padding';
+  import { removeEvents } from '../utilities/events';
   //extract props
   const { 
     //display
@@ -96,12 +97,13 @@
     setColor(this.props, styles, 'var(--muted)', ':host', 'background-color');
   }
   const children = this.getChildren(false);
+  const attr = removeEvents(attributes);
 </script>
 <template type="light">
   <if true={href}>
-    <a {...attributes} {href}>{children}</a>
+    <a {...attr} {href}>{children}</a>
   <else />
-    <button {...attributes}>{children}</button>
+    <button {...attr}>{children}</button>
   </if>
 </template>
 <template type="shadow">

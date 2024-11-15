@@ -25,7 +25,11 @@
   import type { MouseEvent } from '@stackpress/ink/dist/types';
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import setDisplay from '../utilities/style/display';
-  import { buttonStyles, getHandlers } from '../utilities/fieldset';
+  import { 
+    buttonStyles, 
+    borderStyles,
+    getHandlers 
+  } from '../utilities/fieldset';
 
   //extract props
   const { multiple, inputs, errors, add = 'Add' } = this.props;
@@ -35,6 +39,8 @@
   this.styles = () => css + styles.toString();
   //determine display
   setDisplay(this.props, styles, 'block', ':host');
+  //determine border
+  borderStyles(this.propsTree, styles);
   if (multiple) {
     //determine button styles
     buttonStyles(this.props, styles);
@@ -52,6 +58,9 @@
       errors => errors?.constructor.name === 'Object' ? errors : {}
     )
   };
+  if (multiple && typeof inputs === 'undefined') {
+    initial.inputs = [];
+  }
   const rows = multiple ? initial.inputs.map(
     (input, index) => handlers.create(
       index, 

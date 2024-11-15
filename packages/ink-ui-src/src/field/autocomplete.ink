@@ -80,13 +80,13 @@
   }
 </style>
 <script observe="name,value">
-  import { getHandlers, makeOptions } from '../utilities/select';
+  import { getHandlers, makeOptions } from '../utilities/autocomplete';
   //extract props
-  const { placeholder = 'Choose Option', custom, search, name } = this.props;
+  const { placeholder, name } = this.props;
   //format initial options from the original children
   const options = makeOptions(this.getChildren(false));
   //get handlers
-  const { state, clear, toggle, filter, add } = getHandlers(this, options);
+  const { state, clear, toggle, filter } = getHandlers(this, options);
 </script>
 <template type="light">
   <if true={name}>
@@ -124,22 +124,12 @@
         </if>
       </if>
     </div>
-    <if true={state.value.show && (state.value.filtered.length > 0 || state.value.query.length > 0)}>
+    <if true={state.value.show}>
       <div class="dropdown">
-        <if true={search || custom}>
-          <div class="form">
-            <if true={search}>
-              <input class="input" value={state.value.query} keyup={filter} />
-            <else />
-              <input class="input" value={state.value.query} />
-            </if>
-            <if true={custom}>
-              <i class="add fas fa-fw fa-plus" click={add}></i>
-            <else />
-              <i class="search fas fa-fe fa-search"></i>
-            </if>
-          </div>
-        </if>
+        <div class="form">
+          <input class="input" value={state.value.query} keyup={filter} />
+          <i class="search fas fa-fe fa-search"></i>
+        </div>
         <div class="options"><slot name="filtered"></slot></div>
       </div>
     </if>

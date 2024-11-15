@@ -62,9 +62,22 @@ export function buttonStyles(props: Record<string, any>, styles: StyleSet) {
   }
 }
 
+export function borderStyles(props: Record<string, any>, styles: StyleSet) {
+  const { border = {} } = props;
+  const color = setColor(border, styles, 'transparent', 'fieldset', 'border-color');
+  if (color === 'initial') {
+    styles.add('fieldset', 'border', '0');
+    styles.add('fieldset', 'padding', '0');
+    styles.add('fieldset', 'margin', '0');
+  } else {
+    styles.add('fieldset', 'border-style', 'solid');
+    styles.add('fieldset', 'border-width', '1px');
+  }
+}
+
 /**
-   * Clones an element, adds to registry and returns it
-   */
+ * Clones an element, adds to registry and returns it
+ */
 export function cloneElement(
   node: Node, 
   prepare: Function,
