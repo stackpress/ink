@@ -1658,10 +1658,10 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@stackpress/types@0.1.23":
-  version "0.1.23"
-  resolved "https://registry.yarnpkg.com/@stackpress/types/-/types-0.1.23.tgz#df02f8155bf7c40a5951acb7e1e6e63f5f30c9ec"
-  integrity sha512-/f4Mlt8V7mWXDqsRj4/rdJXkJjMZMm+dnCJqTilOfBICAn7s3dIAPpIgr4rrM2/VIWDY6lVAl76uBR7qfVJSRg==
+"@stackpress/types@0.1.25":
+  version "0.1.25"
+  resolved "https://registry.yarnpkg.com/@stackpress/types/-/types-0.1.25.tgz#daf230037fde6d14cbc502f0c599663e06ce1703"
+  integrity sha512-BdeERypmj7QIdiib+nc7V46ioXqwabjlru9ikPgu4wg5esB0QkspCM7FdyoWEydIvXvekyu9BF/I1Dm6pC1qWg==
   dependencies:
     "@inquirer/prompts" "7.0.1"
 

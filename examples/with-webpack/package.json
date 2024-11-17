@@ -8,8 +8,8 @@
     "build": "webpack --mode production"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.23",
-    "@stackpress/ink-loader": "0.1.23"
+    "@stackpress/ink": "0.1.25",
+    "@stackpress/ink-loader": "0.1.25"
   },
   "devDependencies": {
     "@types/node": "22.1.0",
