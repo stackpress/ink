@@ -9,7 +9,7 @@
   "dependencies": {
     "@hapi/hapi": "21.3.9",
     "@hapi/inert": "7.1.0",
-    "@stackpress/ink": "0.1.25"
+    "@stackpress/ink": "0.1.26"
   },
   "devDependencies": {
     "@types/node": "22.1.0",
