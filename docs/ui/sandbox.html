@@ -3,17 +3,17 @@
   <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ink UI - Web Components Meets Atomic Styles.</title>
-  <meta name="description" content="Ink UI atomically generates CSS styles and provides out of box web components." />
-  <meta property="og:title" content="Ink UI - Web Components Meets Atomic Styles." />
-  <meta property="og:description" content="Ink UI atomically generates CSS styles and provides out of box web components." />
+  <title>Profile Search</title>
+  <meta name="description" content="Search for profiles in the system." />
+  <meta property="og:title" content="Profile Search" />
+  <meta property="og:description" content="Search for profiles in the system." />
   <meta property="og:image" content="https://stackpress.github.io/ink/ink-logo.png" />
-  <meta property="og:url" content="https://stackpress.github.io/ink/ink/panel.html" />
+  <meta property="og:url" content="https://stackpress.github.io/ink/ink/index.html" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@stackpress" />
-  <meta name="twitter:title" content="Ink UI - Web Components Meets Atomic Styles." />
-  <meta name="twitter:description" content="Ink UI atomically generates CSS styles and provides out of box web components." />
+  <meta name="twitter:title" content="Profile Search" />
+  <meta name="twitter:description" content="Search for profiles in the system." />
   <meta name="twitter:image" content="https://stackpress.github.io/ink/ink-logo.png" />
   <link rel="favicon" href="/ink/favicon.ico" />
   <link rel="shortcut icon" type="image/png" href="/ink/favicon.png" />
@@ -26,27 +26,17 @@
   <script data-app="eyJwcm9wcyI6eyJ0aXRsZSI6IkluayBEb2N1bWVudGF0aW9uIn0sImVudiI6eyJCVUlMRF9JRCI6ImUyZWQxZDg4MWE3MzRjNDY4NGI5In19" src="/ink/build/client/e2ed1d881a734c4684b9.js"></script>
   
 </head>
-  <body class="light sl-theme-dark bg-t-0 tx-t-1 tx-arial">
-    <panel-layout>
-      <header><menu class="flex flex-center-y px-20 py-15 m-0 bg-t-1">
-  
-    <i class="fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1" ></i>
-    <div class="flex-grow"></div>
-  
-  <nav class="flex flex-center-y">
-    <a class="tx-primary" href="/ink/docs/index.html">Docs</a>
-    <a class="tx-t-1 tx-5xl ml-10" href="https://github.com/stackpress/ink" target="_blank">
-      <i class="fab fa-github"></i>
-    </a>
-    <a class="bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center" href="https://www.npmjs.com/package/@stackpress/ink" target="_blank">
-      <i class="fab fa-npm tx-white"></i>
-    </a>
-  </nav>
-</menu></header>
-      <main class="p-20">
-        <h1>Sandbox</h1>
-        <field-input name="first" placeholder="Enter your first name" error></field-input>
-      </main>
-    </panel-layout>
+  <body class="relative dark bg-t-0 tx-t-1 tx-arial">
+    <admin-app  url="/ink/index.html" title="Profile Search"  status="OK">
+      <aside class="absolute z-5 bottom-0 top-0 right-0 w-360 flex flex-col">
+        <header class="flex flex-center-y bg-t-0 px-5 py-8">
+          <element-icon name="chevron-left" class="pr-10"></element-icon>
+          <h3 class="tx-upper">Filters</h3>
+        </header>
+        <main class="flex-grow bg-t-1">
+          <profile-filters  ></profile-filters>
+        </main>
+      </aside>
+    </admin-app>
   </body>
 </html>

@@ -7,13 +7,13 @@
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
-    "@hapi/hapi": "21.3.9",
+    "@hapi/hapi": "21.3.12",
     "@hapi/inert": "7.1.0",
-    "@stackpress/ink": "0.1.26"
+    "@stackpress/ink": "0.2.5"
   },
   "devDependencies": {
-    "@types/node": "22.1.0",
+    "@types/node": "22.9.3",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.7.2"
   }
 }

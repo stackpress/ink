@@ -1,6 +1,6 @@
 {
   "name": "ink-web",
-  "version": "0.1.26",
+  "version": "0.2.5",
   "description": "Ink Website",
   "private": true,
   "scripts": {
@@ -10,18 +10,18 @@
     "dev": "NODE_ENV=development ts-node ./src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.26",
-    "@shoelace-style/shoelace": "2.16.0",
+    "@stackpress/ink": "0.2.5",
+    "@shoelace-style/shoelace": "2.18.0",
     "express": "4.19.2"
   },
   "devDependencies": {
-    "@stackpress/ink-dev": "0.1.26",
+    "@stackpress/ink-dev": "0.2.5",
     "@types/express": "4.17.21",
-    "@types/node": "22.7.4",
+    "@types/node": "22.9.3",
     "fast-glob": "3.3.2",
     "nodemon": "3.1.2",
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
-    "typescript": "5.6.2"
+    "typescript": "5.7.2"
   }
 }

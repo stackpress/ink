@@ -7,14 +7,14 @@
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.26",
+    "@stackpress/ink": "0.2.5",
     "restify": "11.1.0",
     "restify-router": "0.6.2"
   },
   "devDependencies": {
-    "@types/node": "22.1.0",
+    "@types/node": "22.9.3",
     "@types/restify": "8.5.12",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.7.2"
   }
 }

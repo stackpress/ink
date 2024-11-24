@@ -8,12 +8,12 @@
   },
   "dependencies": {
     "@fastify/static": "7.0.4",
-    "@stackpress/ink": "0.1.26",
+    "@stackpress/ink": "0.2.5",
     "fastify": "4.27.0"
   },
   "devDependencies": {
-    "@types/node": "22.1.0",
+    "@types/node": "22.9.3",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.7.2"
   }
 }

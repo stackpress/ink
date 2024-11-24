@@ -1,7 +1,6 @@
 <style>
   ::slotted(button), ::slotted(a) {
     cursor: pointer;
-    text-align: center;
     background: transparent;
     border: 0;
     box-sizing: border-box;
@@ -78,6 +77,8 @@
   }
   //determine curve
   setCurve(this.props, styles, false, ':host');
+  //center
+  styles.add(':host', 'text-align', 'center');
   //determine width
   if (full) {
     styles.add(':host', 'width', '100%');

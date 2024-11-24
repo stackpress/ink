@@ -1,1179 +1,240 @@
-var InkAPI = (() => {
-  var __create = Object.create;
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key) && key !== except)
-          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-    }
-    return to;
-  };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-    mod
-  ));
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-  // ../ink/dist/Exception.js
-  var require_Exception = __commonJS({
-    "../ink/dist/Exception.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var InkException = class extends Error {
-        static for(message, ...values) {
-          values.forEach(function(value) {
-            message = message.replace("%s", value);
-          });
-          return new this(message);
-        }
-        static forErrorsFound(errors) {
-          const exception = new this("Invalid Parameters");
-          exception.errors = errors;
-          return exception;
-        }
-        static require(condition, message, ...values) {
-          if (!condition) {
-            for (const value of values) {
-              message = message.replace("%s", value);
-            }
-            throw new this(message);
-          }
-        }
-        constructor(message, code = 500) {
-          super();
-          this.errors = {};
-          this.start = 0;
-          this.end = 0;
-          this.message = message;
-          this.name = this.constructor.name;
-          this.code = code;
-        }
-        withCode(code) {
-          this.code = code;
-          return this;
-        }
-        withPosition(start, end) {
-          this.start = start;
-          this.end = end;
-          return this;
-        }
-        toJSON() {
-          return {
-            error: true,
-            code: this.code,
-            message: this.message
-          };
-        }
-      };
-      exports.default = InkException;
-    }
-  });
-
-  // ../ink/dist/server/InkCollection.js
-  var require_InkCollection = __commonJS({
-    "../ink/dist/server/InkCollection.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var InkCollection = class {
-        get length() {
-          return this._elements.size;
-        }
-        constructor(elements = []) {
-          this._elements = /* @__PURE__ */ new Set();
-          elements.forEach((element) => this._elements.add(element));
-        }
-        add(element) {
-          this._elements.add(element);
-        }
-        toArray() {
-          return Array.from(this._elements);
-        }
-        toString() {
-          return Array.from(this._elements).filter(Boolean).map((child) => child.toString()).join("");
-        }
-      };
-      exports.default = InkCollection;
-    }
-  });
-
-  // ../ink/dist/server/data.js
-  var require_data = __commonJS({
-    "../ink/dist/server/data.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var data = /* @__PURE__ */ new Map();
-      exports.default = data;
-    }
-  });
-
-  // ../ink/dist/server/InkText.js
-  var require_InkText = __commonJS({
-    "../ink/dist/server/InkText.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var InkText = class {
-        get value() {
-          return this._escape ? this._value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : this._value;
-        }
-        constructor(value, escape = false) {
-          this._escape = escape;
-          this._value = value;
-        }
-        toString() {
-          return this.value;
-        }
-      };
-      exports.default = InkText;
-    }
-  });
-
-  // ../ink/dist/server/InkElement.js
-  var require_InkElement = __commonJS({
-    "../ink/dist/server/InkElement.js"(exports) {
-      "use strict";
-      var __importDefault = exports && exports.__importDefault || function(mod) {
-        return mod && mod.__esModule ? mod : { "default": mod };
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var InkCollection_1 = __importDefault(require_InkCollection());
-      var selfClosingTags = [
-        "area",
-        "base",
-        "br",
-        "col",
-        "embed",
-        "hr",
-        "img",
-        "input",
-        "link",
-        "meta",
-        "param",
-        "source",
-        "track",
-        "wbr"
-      ];
-      var InkElement2 = class {
-        get attributes() {
-          return this._attributes;
-        }
-        get children() {
-          return this._children;
-        }
-        get name() {
-          return this._name;
-        }
-        get props() {
-          return this._props;
-        }
-        constructor(name, attributes = {}, props = "", children = []) {
-          this._attributes = {};
-          this._name = name;
-          this._attributes = attributes;
-          this._props = props;
-          this._children = new InkCollection_1.default(children);
-        }
-        toString() {
-          const entries = Object.entries(this._attributes);
-          const attributes = entries.length > 0 ? " " + entries.map(([key, value]) => {
-            if (typeof value === "string" && !/["<>\n]/.test(value)) {
-              return `${key}="${value}"`;
-            } else if (typeof value === "boolean") {
-              return value ? key : "";
-            }
-          }).join(" ") : "";
-          if (selfClosingTags.includes(this._name)) {
-            return `<${this._name}${attributes} />`;
-          }
-          const children = this._children.toString();
-          return `<${this._name}${attributes}>${children}</${this._name}>`;
-        }
-      };
-      exports.default = InkElement2;
-    }
-  });
-
-  // ../ink/dist/server/InkRegistry.js
-  var require_InkRegistry = __commonJS({
-    "../ink/dist/server/InkRegistry.js"(exports) {
-      "use strict";
-      var __importDefault = exports && exports.__importDefault || function(mod) {
-        return mod && mod.__esModule ? mod : { "default": mod };
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var InkText_1 = __importDefault(require_InkText());
-      var InkElement_1 = __importDefault(require_InkElement());
-      var InkRegistry2 = class {
-        static render(markup) {
-          return markup.filter(Boolean).map((child) => child.toString()).join("");
-        }
-        static registry(markup, registry = /* @__PURE__ */ new Set()) {
-          markup.forEach((node) => {
-            if (node instanceof InkElement_1.default) {
-              if (!["html", "head", "body"].includes(node.name)) {
-                registry.add(node);
-              }
-              if (node.name !== "head" && node.children.length > 0) {
-                this.registry(node.children.toArray(), registry);
-              }
-            }
-          });
-          return registry;
-        }
-        static createElement(name, attributes, props, children = []) {
-          return new InkElement_1.default(name, attributes, props, children);
-        }
-        static createText(value, escape = true) {
-          return new InkText_1.default(value, escape);
-        }
-      };
-      exports.default = InkRegistry2;
-    }
-  });
-
-  // ../ink/dist/server/InkDocument.js
-  var require_InkDocument = __commonJS({
-    "../ink/dist/server/InkDocument.js"(exports) {
-      "use strict";
-      var __importDefault = exports && exports.__importDefault || function(mod) {
-        return mod && mod.__esModule ? mod : { "default": mod };
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var Exception_1 = __importDefault(require_Exception());
-      var data_1 = __importDefault(require_data());
-      var InkRegistry_1 = __importDefault(require_InkRegistry());
-      var InkDocument2 = class {
-        bindings() {
-          const registry = InkRegistry_1.default.registry(this.template());
-          const bindings = Array.from(registry.values()).map((element, id) => {
-            return element.props !== "{ }" ? `'${id}': ${element.props}` : "";
-          }).filter((binding) => binding !== "").join(", ");
-          return `{ ${bindings} }`;
-        }
-        render(props = {}) {
-          data_1.default.set("props", props || {});
-          data_1.default.set("env", Object.assign(Object.assign({}, process.env || {}), { BUILD_ID: this.id(), APP_DATA: btoa(JSON.stringify(Object.assign(Object.assign({}, Object.fromEntries(data_1.default.entries())), { env: Object.assign(Object.assign({}, Object.fromEntries(Object.entries(process.env || {}).filter((entry) => entry[0].startsWith("PUBLIC_")))), { BUILD_ID: this.id() }) }))) }));
-          const children = this.template();
-          let document2 = InkRegistry_1.default.render(children).trim();
-          if (!document2.toLowerCase().startsWith("<html")) {
-            throw Exception_1.default.for("Document must start with an <html> tag.");
-          }
-          return `<!DOCTYPE html>
-${document2}`;
-        }
-        _toNodeList(value) {
-          if (typeof value === "object" && typeof value.nodeType === "number") {
-            return [value];
-          }
-          if (Array.isArray(value)) {
-            if (value.every((item) => typeof item === "object" && typeof item.nodeType === "number")) {
-              return value;
-            }
-          }
-          return [InkRegistry_1.default.createText(String(value))];
-        }
-      };
-      exports.default = InkDocument2;
-    }
-  });
-
-  // ../ink/dist/server/InkEmitter.js
-  var require_InkEmitter = __commonJS({
-    "../ink/dist/server/InkEmitter.js"(exports) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.InkEmitter = void 0;
-      var InkEmitter = class {
-        emit(event, target) {
-          return this;
-        }
-        on(event, callback) {
-          return this;
-        }
-        once(event, callback) {
-          return this;
-        }
-        unbind(event, callback) {
-          return this;
-        }
-      };
-      exports.InkEmitter = InkEmitter;
-      var emitter = new InkEmitter();
-      exports.default = emitter;
-    }
-  });
-
-  // ../ink/dist/server/env.js
-  var require_env = __commonJS({
-    "../ink/dist/server/env.js"(exports) {
-      "use strict";
-      var __importDefault = exports && exports.__importDefault || function(mod) {
-        return mod && mod.__esModule ? mod : { "default": mod };
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      var data_1 = __importDefault(require_data());
-      function env2(name) {
-        const env3 = data_1.default.get("env") || {};
-        if (name) {
-          return env3[name] || null;
-        }
-        return env3;
-      }
-      exports.default = env2;
-    }
-  });
-
-  // ../ink/dist/server/props.js
-  var require_props = __commonJS({
-    "../ink/dist/server/props.js"(exports) {
-      "use strict";
-      var __importDefault = exports && exports.__importDefault || function(mod) {
-        return mod && mod.__esModule ? mod : { "default": mod };
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.default = props;
-      var data_1 = __importDefault(require_data());
-      function props() {
-        return data_1.default.get("props") || {};
-      }
-    }
-  });
-
-  // ../ink/dist/server.js
-  var require_server = __commonJS({
-    "../ink/dist/server.js"(exports) {
-      "use strict";
-      var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        var desc = Object.getOwnPropertyDescriptor(m, k);
-        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-          desc = { enumerable: true, get: function() {
-            return m[k];
-          } };
-        }
-        Object.defineProperty(o, k2, desc);
-      } : function(o, m, k, k2) {
-        if (k2 === void 0) k2 = k;
-        o[k2] = m[k];
-      });
-      var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
-        Object.defineProperty(o, "default", { enumerable: true, value: v });
-      } : function(o, v) {
-        o["default"] = v;
-      });
-      var __importStar = exports && exports.__importStar || function(mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) {
-          for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-        }
-        __setModuleDefault(result, mod);
-        return result;
-      };
-      var __importDefault = exports && exports.__importDefault || function(mod) {
-        return mod && mod.__esModule ? mod : { "default": mod };
-      };
-      Object.defineProperty(exports, "__esModule", { value: true });
-      exports.InkText = exports.InkException = exports.InkEmitter = exports.InkElement = exports.InkRegistry = exports.InkDocument = exports.InkCollection = exports.props = exports.emitter = exports.env = exports.data = void 0;
-      var Exception_1 = __importDefault(require_Exception());
-      exports.InkException = Exception_1.default;
-      var InkCollection_1 = __importDefault(require_InkCollection());
-      exports.InkCollection = InkCollection_1.default;
-      var InkDocument_1 = __importDefault(require_InkDocument());
-      exports.InkDocument = InkDocument_1.default;
-      var InkRegistry_1 = __importDefault(require_InkRegistry());
-      exports.InkRegistry = InkRegistry_1.default;
-      var InkElement_1 = __importDefault(require_InkElement());
-      exports.InkElement = InkElement_1.default;
-      var InkEmitter_1 = __importStar(require_InkEmitter());
-      exports.emitter = InkEmitter_1.default;
-      Object.defineProperty(exports, "InkEmitter", { enumerable: true, get: function() {
-        return InkEmitter_1.InkEmitter;
-      } });
-      var InkText_1 = __importDefault(require_InkText());
-      exports.InkText = InkText_1.default;
-      var data_1 = __importDefault(require_data());
-      exports.data = data_1.default;
-      var env_1 = __importDefault(require_env());
-      exports.env = env_1.default;
-      var props_1 = __importDefault(require_props());
-      exports.props = props_1.default;
-    }
-  });
-
-  // ../ink/server.js
-  var require_server2 = __commonJS({
-    "../ink/server.js"(exports, module) {
-      module.exports = { ...require_server() };
-    }
-  });
-
-  // ink-document-server-resolver:/Users/cblanquera/server/projects/stackpress/ink/packages/ink-web/src/pages/docs/getting-started.ink
-  var getting_started_exports = {};
-  __export(getting_started_exports, {
-    default: () => GettingStarted_e06f4d82f045144e41f0
-  });
-  var import_server = __toESM(require_server2());
-  var import_server2 = __toESM(require_server2());
-
-  // src/components/i18n/index.ts
-  var _ = function(phrase, ...variables) {
-    let translation = translate(phrase);
-    for (let i = 0; i < variables.length; i++) {
-      translation = translation.replace("%s", String(variables[i]));
-    }
-    return translation;
-  };
-  var translate = function(phrase) {
-    return phrase;
-  };
-
-  // ink-document-server-resolver:/Users/cblanquera/server/projects/stackpress/ink/packages/ink-web/src/pages/docs/getting-started.ink
-  var GettingStarted_e06f4d82f045144e41f0 = class extends import_server.InkDocument {
-    id() {
-      return "e06f4d82f045144e41f0";
-    }
-    styles() {
-      return `@ink theme;
+var InkAPI=(()=>{var oe=Object.create;var v=Object.defineProperty;var pe=Object.getOwnPropertyDescriptor;var de=Object.getOwnPropertyNames;var me=Object.getPrototypeOf,ue=Object.prototype.hasOwnProperty;var o=(a,t)=>()=>(t||a((t={exports:{}}).exports,t),t.exports),fe=(a,t)=>{for(var s in t)v(a,s,{get:t[s],enumerable:!0})},J=(a,t,s,r)=>{if(t&&typeof t=="object"||typeof t=="function")for(let l of de(t))!ue.call(a,l)&&l!==s&&v(a,l,{get:()=>t[l],enumerable:!(r=pe(t,l))||r.enumerable});return a};var V=(a,t,s)=>(s=a!=null?oe(me(a)):{},J(t||!a||!a.__esModule?v(s,"default",{value:a,enumerable:!0}):s,a)),xe=a=>J(v({},"__esModule",{value:!0}),a);var z=o(E=>{"use strict";Object.defineProperty(E,"__esModule",{value:!0});E.status=he;var Y={CONTINUE:{code:100,status:"Continue"},PROCESSING:{code:102,status:"Processing"},OK:{code:200,status:"OK"},CREATED:{code:201,status:"Created"},ACCEPTED:{code:202,status:"Accepted"},EMPTY:{code:204,status:"No Content"},RESET:{code:205,status:"Reset Content"},PARTIAL:{code:206,status:"Partial Content"},MOVED:{code:301,status:"Moved Permanently"},FOUND:{code:302,status:"Found"},REDIRECT:{code:303,status:"See Other"},CACHE:{code:304,status:"Not Modified"},TEMPORARY:{code:307,status:"Temporary Redirect"},PERMANENT:{code:308,status:"Permanent Redirect"},ABORT:{code:309,status:"Aborted"},BAD_REQUEST:{code:400,status:"Bad Request"},UNAUTHORIZED:{code:401,status:"Unauthorized"},FORBIDDEN:{code:403,status:"Forbidden"},NOT_FOUND:{code:404,status:"Not Found"},BAD_METHOD:{code:405,status:"Method Not Allowed"},NOT_ACCEPTABLE:{code:406,status:"Not Acceptable"},REQUEST_TIMEOUT:{code:408,status:"Request Timeout"},CONFLICT:{code:409,status:"Conflict"},GONE:{code:410,status:"Gone"},LENGTH_REQUIRED:{code:411,status:"Length Required"},TOO_LARGE:{code:413,status:"Payload Too Large"},TOO_LONG:{code:414,status:"URI Too Long"},UNSUPPORTED_TYPE:{code:415,status:"Unsupported Media Type"},BAD_RANGE:{code:416,status:"Range Not Satisfiable"},BAD_EXPECTATION:{code:417,status:"Expectation Failed"},MISDIRECTED:{code:421,status:"Misdirected Request"},UNPROCESSABLE:{code:422,status:"Unprocessable Content"},LOCKED:{code:423,status:"Locked"},BAD_DEPENDENCY:{code:424,status:"Failed Dependency"},UPGRADE_REQUIRED:{code:426,status:"Upgrade Required"},BAD_PRECONDITION:{code:428,status:"Precondition Required"},TOO_MANY:{code:429,status:"Too Many Requests"},HEADER_TOO_LARGE:{code:431,status:"Request Header Fields Too Large"},LEGAL_REASONS:{code:451,status:"Unavailable For Legal Reasons"},ERROR:{code:500,status:"Internal Server Error"},NOT_IMPLEMENTED:{code:501,status:"Not Implemented"},BAD_GATEWAY:{code:502,status:"Bad Gateway"},UNAVAILABLE:{code:503,status:"Service Unavailable"},RESPONSE_TIMEOUT:{code:504,status:"Gateway Timeout"},BAD_VERSION:{code:505,status:"HTTP Version Not Supported"},INSUFFICIENT_STORAGE:{code:507,status:"Insufficient Storage"},INFINITE_LOOP:{code:508,status:"Loop Detected"},NETWORK_AUTHENTICATION_REQUIRED:{code:511,status:"Network Authentication Required"}};E.default=Y;function he(a){return Object.values(Y).find(t=>t.code===a)}});var D=o(L=>{"use strict";Object.defineProperty(L,"__esModule",{value:!0});var be=z(),N=class a extends Error{static try(t){return{catch:s=>{try{return t()}catch(r){if(r instanceof a)return s(r,r.type);if(r instanceof Error){let l=a.upgrade(r);return s(l,l.type)}else if(typeof r=="string"){let l=a.for(r);return s(l,l.type)}return s(r,"unknown")}}}}static for(t,...s){return s.forEach(function(r){t=t.replace("%s",String(r))}),new this(t)}static forErrors(t){let s=new this("Invalid Parameters");return s.withErrors(t),s}static require(t,s,...r){if(!t){for(let l of r)s=s.replace("%s",l);throw new this(s)}}static upgrade(t,s=500){if(t instanceof a)return t;let r=new this(t.message,s);return r.name=t.name,r.stack=t.stack,r}get code(){return this._code}get end(){return this._end}get errors(){return Object.assign({},this._errors)}get start(){return this._start}get type(){return this._type}constructor(t,s=500){var r;super(t),this._errors={},this._start=0,this._end=0,this.name=this.constructor.name,this._type=this.constructor.name,this._code=s,this._status=((r=(0,be.status)(s))===null||r===void 0?void 0:r.status)||"Unknown"}toJSON(){return JSON.stringify(this.toResponse(),null,2)}toResponse(t=0,s=0){let r={code:this._code,status:this._status,error:this.message,start:this._start,end:this._end,stack:this.trace(t,s)};return Object.keys(this._errors).length>0&&(r.errors=this._errors),r}trace(t=0,s=0){return typeof this.stack!="string"?[]:this.stack.split(`
+`).slice(t,s||this.stack.length).map(l=>l.trim()).map(l=>{if(!l.startsWith("at"))return!1;let[c,j,y]=l.split(" ");y||(y=`(${j})`,j="<none>");let[ie,ne,ce]=y.substring(1,y.length-1).split(":");return{method:j,file:ie,line:parseInt(ne)||0,char:parseInt(ce)||0}}).filter(Boolean)}withCode(t){return this._code=t,this}withErrors(t){return this._errors=t,this}withPosition(t,s){return this._start=t,this._end=s,this}};L.default=N});var K=o(m=>{"use strict";var Te=m&&m.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(m,"__esModule",{value:!0});var ge=Te(D()),I=class extends ge.default{};m.default=I});var S=o(O=>{"use strict";Object.defineProperty(O,"__esModule",{value:!0});var A=class{get length(){return this._elements.size}constructor(t=[]){this._elements=new Set,t.forEach(s=>this._elements.add(s))}add(t){this._elements.add(t)}toArray(){return Array.from(this._elements)}toString(){return Array.from(this._elements).filter(Boolean).map(t=>t.toString()).join("")}};O.default=A});var u=o(P=>{"use strict";Object.defineProperty(P,"__esModule",{value:!0});var ke=new Map;P.default=ke});var q=o(R=>{"use strict";Object.defineProperty(R,"__esModule",{value:!0});var C=class{get value(){return this._escape?this._value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"):this._value}constructor(t,s=!1){this._escape=s,this._value=t}toString(){return this.value}};R.default=C});var U=o(f=>{"use strict";var ye=f&&f.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(f,"__esModule",{value:!0});var ve=ye(S()),Ee=["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"],M=class{get attributes(){return this._attributes}get children(){return this._children}get name(){return this._name}get props(){return this._props}constructor(t,s={},r="",l=[]){this._attributes={},this._name=t,this._attributes=s,this._props=r,this._children=new ve.default(l)}toString(){let t=Object.entries(this._attributes),s=t.length>0?" "+t.map(([l,c])=>{if(typeof c=="string"&&!/["<>\n]/.test(c))return`${l}="${c}"`;if(typeof c=="boolean")return c?l:""}).join(" "):"";if(Ee.includes(this._name))return`<${this._name}${s} />`;let r=this._children.toString();return`<${this._name}${s}>${r}</${this._name}>`}};f.default=M});var $=o(x=>{"use strict";var X=x&&x.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(x,"__esModule",{value:!0});var we=X(q()),Q=X(U()),B=class{static render(t){return t.filter(Boolean).map(s=>s.toString()).join("")}static registry(t,s=new Set){return t.forEach(r=>{r instanceof Q.default&&(["html","head","body"].includes(r.name)||s.add(r),r.name!=="head"&&r.children.length>0&&this.registry(r.children.toArray(),s))}),s}static createElement(t,s,r,l=[]){return new Q.default(t,s,r,l)}static createText(t,s=!0){return new we.default(t,s)}};x.default=B});var Z=o(h=>{"use strict";var F=h&&h.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(h,"__esModule",{value:!0});var _e=F(D()),d=F(u()),H=F($()),W=class{bindings(t={}){d.default.set("props",t||{}),d.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries(d.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(l=>l[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let s=H.default.registry(this.template());return`{ ${Array.from(s.values()).map((l,c)=>l.props!=="{ }"?`'${c}': ${l.props}`:"").filter(l=>l!=="").join(", ")} }`}render(t={}){d.default.set("props",t||{}),d.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries(d.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(l=>l[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let s=this.template(),r=H.default.render(s).trim();if(!r.toLowerCase().startsWith("<html"))throw _e.default.for("Document must start with an <html> tag.");return`<!DOCTYPE html>
+${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:Array.isArray(t)&&t.every(s=>typeof s=="object"&&typeof s.nodeType=="number")?t:[H.default.createText(String(t))]}};h.default=W});var ee=o(b=>{"use strict";Object.defineProperty(b,"__esModule",{value:!0});b.InkEmitter=void 0;var w=class{emit(t,s){return this}on(t,s){return this}once(t,s){return this}unbind(t,s){return this}};b.InkEmitter=w;var je=new w;b.default=je});var te=o(T=>{"use strict";var Ne=T&&T.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(T,"__esModule",{value:!0});var Le=Ne(u());function De(a){let t=Le.default.get("env")||{};return a?t[a]||null:t}T.default=De});var ae=o(g=>{"use strict";var Ie=g&&g.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(g,"__esModule",{value:!0});g.default=Oe;var Ae=Ie(u());function Oe(){return Ae.default.get("props")||{}}});var re=o(n=>{"use strict";var Se=n&&n.__createBinding||(Object.create?function(a,t,s,r){r===void 0&&(r=s);var l=Object.getOwnPropertyDescriptor(t,s);(!l||("get"in l?!t.__esModule:l.writable||l.configurable))&&(l={enumerable:!0,get:function(){return t[s]}}),Object.defineProperty(a,r,l)}:function(a,t,s,r){r===void 0&&(r=s),a[r]=t[s]}),Pe=n&&n.__setModuleDefault||(Object.create?function(a,t){Object.defineProperty(a,"default",{enumerable:!0,value:t})}:function(a,t){a.default=t}),Ce=n&&n.__importStar||function(){var a=function(t){return a=Object.getOwnPropertyNames||function(s){var r=[];for(var l in s)Object.prototype.hasOwnProperty.call(s,l)&&(r[r.length]=l);return r},a(t)};return function(t){if(t&&t.__esModule)return t;var s={};if(t!=null)for(var r=a(t),l=0;l<r.length;l++)r[l]!=="default"&&Se(s,t,r[l]);return Pe(s,t),s}}(),p=n&&n.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(n,"__esModule",{value:!0});n.InkText=n.InkException=n.InkEmitter=n.InkElement=n.InkRegistry=n.InkDocument=n.InkCollection=n.props=n.emitter=n.env=n.data=void 0;var Re=p(K());n.InkException=Re.default;var qe=p(S());n.InkCollection=qe.default;var Me=p(Z());n.InkDocument=Me.default;var Ue=p($());n.InkRegistry=Ue.default;var Be=p(U());n.InkElement=Be.default;var se=Ce(ee());n.emitter=se.default;Object.defineProperty(n,"InkEmitter",{enumerable:!0,get:function(){return se.InkEmitter}});var $e=p(q());n.InkText=$e.default;var He=p(u());n.data=He.default;var We=p(te());n.env=We.default;var Fe=p(ae());n.props=Fe.default});var G=o((nt,le)=>{le.exports={...re()}});var Je={};fe(Je,{default:()=>_});var e=V(G()),k=V(G());var i=function(a,...t){let s=Ge(a);for(let r=0;r<t.length;r++)s=s.replace("%s",String(t[r]));return s},Ge=function(a){return a};var _=class extends e.InkDocument{id(){return"e06f4d82f045144e41f0"}styles(){return`@ink theme;
   @ink reset;
   @ink fouc-opacity;
-  @ink utilities;`;
-    }
-    template() {
-      const url = "/docs/getting-started.html";
-      const title = _("Getting Started - Ink reactive web component template engine.");
-      const description = _("How to install, setup and use Ink in a project.");
-      const toggle = () => {
-        document.getElementsByTagName("panel-layout")[0].toggle("left");
-      };
-      const examples = "https://github.com/stackpress/ink/tree/main/examples";
-      return [
-        import_server.InkRegistry.createText(`
-`, false),
-        import_server.InkRegistry.createElement("html", {}, "{ }", [
-          import_server.InkRegistry.createText(`
-  `, false),
-          ...[
-            import_server.InkRegistry.createElement("head", {}, "{ }", [
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "charset": `utf-8` }, "{ 'charset': `utf-8` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "name": `viewport`, "content": `width=device-width, initial-scale=1` }, "{ 'name': `viewport`, 'content': `width=device-width, initial-scale=1` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("title", {}, "{ }", [
-                ...this._toNodeList(title)
-              ]),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "name": `description`, "content": description }, "{ 'name': `description`, 'content': description }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "property": `og:title`, "content": title }, "{ 'property': `og:title`, 'content': title }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "property": `og:description`, "content": description }, "{ 'property': `og:description`, 'content': description }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "property": `og:image`, "content": `https://stackpress.github.io/ink/ink-logo.png` }, "{ 'property': `og:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "property": `og:url`, "content": `https://stackpress.github.io/ink${url}` }, "{ 'property': `og:url`, 'content': `https://stackpress.github.io/ink${url}` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "property": `og:type`, "content": `website` }, "{ 'property': `og:type`, 'content': `website` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "name": `twitter:card`, "content": `summary` }, "{ 'name': `twitter:card`, 'content': `summary` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "name": `twitter:site`, "content": `@stackpress` }, "{ 'name': `twitter:site`, 'content': `@stackpress` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "name": `twitter:title`, "content": title }, "{ 'name': `twitter:title`, 'content': title }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "name": `twitter:description`, "content": description }, "{ 'name': `twitter:description`, 'content': description }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("meta", { "name": `twitter:image`, "content": `https://stackpress.github.io/ink/ink-logo.png` }, "{ 'name': `twitter:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("link", { "rel": `favicon`, "href": `/ink/favicon.ico` }, "{ 'rel': `favicon`, 'href': `/ink/favicon.ico` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("link", { "rel": `shortcut icon`, "type": `image/png`, "href": `/ink/favicon.png` }, "{ 'rel': `shortcut icon`, 'type': `image/png`, 'href': `/ink/favicon.png` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("link", { "rel": `stylesheet`, "type": `text/css`, "href": `https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css` }, "{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("link", { "rel": `stylesheet`, "media": `(prefers-color-scheme:light)`, "href": `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css` }, "{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:light)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("link", { "rel": `stylesheet`, "media": `(prefers-color-scheme:dark)`, "href": `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css` }, "{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:dark)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("link", { "rel": `stylesheet`, "type": `text/css`, "href": `/ink/styles/global.css` }, "{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/styles/global.css` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              import_server.InkRegistry.createElement("link", { "rel": `stylesheet`, "type": `text/css`, "href": `/ink/build/client/${(0, import_server2.env)("BUILD_ID")}.css` }, "{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/build/client/${env('BUILD_ID')}.css` }"),
-              import_server.InkRegistry.createText(`
+  @ink utilities;`}template(){let t="/docs/getting-started.html",s=i("Getting Started - Ink reactive web component template engine."),r=i("How to install, setup and use Ink in a project."),l=()=>{document.getElementsByTagName("panel-layout")[0].toggle("left")},c="https://github.com/stackpress/ink/tree/main/examples";return[e.InkRegistry.createText(`
+`,!1),e.InkRegistry.createElement("html",{},"{ }",[e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("head",{},"{ }",[e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{charset:"utf-8"},"{ 'charset': `utf-8` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"viewport",content:"width=device-width, initial-scale=1"},"{ 'name': `viewport`, 'content': `width=device-width, initial-scale=1` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("title",{},"{ }",[...this._toNodeList(s)]),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"description",content:r},"{ 'name': `description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:title",content:s},"{ 'property': `og:title`, 'content': title }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:description",content:r},"{ 'property': `og:description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:image",content:"https://stackpress.github.io/ink/ink-logo.png"},"{ 'property': `og:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:url",content:`https://stackpress.github.io/ink${t}`},"{ 'property': `og:url`, 'content': `https://stackpress.github.io/ink${url}` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:type",content:"website"},"{ 'property': `og:type`, 'content': `website` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:card",content:"summary"},"{ 'name': `twitter:card`, 'content': `summary` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:site",content:"@stackpress"},"{ 'name': `twitter:site`, 'content': `@stackpress` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:title",content:s},"{ 'name': `twitter:title`, 'content': title }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:description",content:r},"{ 'name': `twitter:description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:image",content:"https://stackpress.github.io/ink/ink-logo.png"},"{ 'name': `twitter:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"favicon",href:"/ink/favicon.ico"},"{ 'rel': `favicon`, 'href': `/ink/favicon.ico` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"shortcut icon",type:"image/png",href:"/ink/favicon.png"},"{ 'rel': `shortcut icon`, 'type': `image/png`, 'href': `/ink/favicon.png` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",media:"(prefers-color-scheme:light)",href:"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css"},"{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:light)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",media:"(prefers-color-scheme:dark)",href:"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css"},"{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:dark)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:"/ink/styles/global.css"},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/styles/global.css` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:`/ink/build/client/${(0,k.env)("BUILD_ID")}.css`},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/build/client/${env('BUILD_ID')}.css` }"),e.InkRegistry.createText(`
   
-  `, false),
-              import_server.InkRegistry.createElement("script", { "data-app": (0, import_server2.env)("APP_DATA"), "src": `/ink/build/client/${(0, import_server2.env)("BUILD_ID")}.js` }, "{ 'data-app': env('APP_DATA'), 'src': `/ink/build/client/${env('BUILD_ID')}.js` }"),
-              import_server.InkRegistry.createText(`
-  `, false),
-              ...!!((0, import_server2.env)("NODE_ENV") === "development") ? [
-                import_server.InkRegistry.createText(`
-    `, false),
-                import_server.InkRegistry.createElement("script", { "src": `/dev.js` }, "{ 'src': `/dev.js` }"),
-                import_server.InkRegistry.createText(`
-  `, false)
-              ] : [],
-              import_server.InkRegistry.createText(`
-`, false)
-            ])
-          ],
-          import_server.InkRegistry.createText(`
-  `, false),
-          import_server.InkRegistry.createElement("body", { "class": `light bg-t-0 tx-t-1 tx-arial` }, "{ 'class': `light bg-t-0 tx-t-1 tx-arial` }", [
-            import_server.InkRegistry.createText(`
-    `, false),
-            import_server.InkRegistry.createElement("panel-layout", {}, "{ }", [
-              import_server.InkRegistry.createText(`
-      `, false),
-              import_server.InkRegistry.createElement("header", {}, "{ }", [
-                ...[
-                  import_server.InkRegistry.createElement("menu", { "class": `flex flex-center-y px-20 py-15 m-0 bg-t-1` }, "{ 'class': `flex flex-center-y px-20 py-15 m-0 bg-t-1` }", [
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url !== "/ink/index.html" && url !== "/ink/500.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("i", { "class": `fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1`, "click": toggle }, "{ 'class': `fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1`, 'click': toggle }", []),
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("div", { "class": `flex-grow` }, "{ 'class': `flex-grow` }", []),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "href": `/ink` }, "{ 'href': `/ink` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        import_server.InkRegistry.createElement("img", { "alt": `Ink Logo`, "class": `h-26 mr-10`, "src": `/ink/ink-icon.png` }, "{ 'alt': `Ink Logo`, 'class': `h-26 mr-10`, 'src': `/ink/ink-icon.png` }"),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    import_server.InkRegistry.createElement("nav", { "class": `flex flex-center-y` }, "{ 'class': `flex flex-center-y` }", [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-primary`, "href": `/ink/docs/index.html` }, "{ 'class': `tx-primary`, 'href': `/ink/docs/index.html` }", [
-                        import_server.InkRegistry.createText(`Docs`, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-5xl ml-10`, "href": `https://github.com/stackpress/ink`, "target": `_blank` }, "{ 'class': `tx-t-1 tx-5xl ml-10`, 'href': `https://github.com/stackpress/ink`, 'target': `_blank` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        import_server.InkRegistry.createElement("i", { "class": `fab fa-github` }, "{ 'class': `fab fa-github` }", []),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center`, "href": `https://www.npmjs.com/package/@stackpress/ink`, "target": `_blank` }, "{ 'class': `bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center`, 'href': `https://www.npmjs.com/package/@stackpress/ink`, 'target': `_blank` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        import_server.InkRegistry.createElement("i", { "class": `fab fa-npm tx-white` }, "{ 'class': `fab fa-npm tx-white` }", []),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-`, false)
-                  ])
-                ]
-              ]),
-              import_server.InkRegistry.createText(`
-      `, false),
-              import_server.InkRegistry.createElement("aside", { "left": true }, "{ 'left': true }", [
-                ...[
-                  import_server.InkRegistry.createElement("header", { "class": `flex flex-center-y bg-t-2 py-15 pr-5 pl-10` }, "{ 'class': `flex flex-center-y bg-t-2 py-15 pr-5 pl-10` }", [
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    import_server.InkRegistry.createElement("a", { "href": `/ink` }, "{ 'href': `/ink` }", [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("img", { "class": `h-26 mr-10`, "src": `/ink/ink-icon.png`, "alt": `Ink Logo` }, "{ 'class': `h-26 mr-10`, 'src': `/ink/ink-icon.png`, 'alt': `Ink Logo` }"),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    import_server.InkRegistry.createElement("h3", { "class": `flex-grow m-0 tx-upper` }, "{ 'class': `flex-grow m-0 tx-upper` }", [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-primary`, "href": `/ink` }, "{ 'class': `tx-primary`, 'href': `/ink` }", [
-                        import_server.InkRegistry.createText(`Ink`, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    import_server.InkRegistry.createElement("i", { "class": `fas fa-fw fa-chevron-left cursor-pointer none md-inline-block`, "click": toggle }, "{ 'class': `fas fa-fw fa-chevron-left cursor-pointer none md-inline-block`, 'click': toggle }", []),
-                    import_server.InkRegistry.createText(`
-`, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-`, false),
-                  import_server.InkRegistry.createElement("nav", { "class": `bg-t-1 scroll-auto h-calc-full-60` }, "{ 'class': `bg-t-1 scroll-auto h-calc-full-60` }", [
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    import_server.InkRegistry.createElement("h6", { "class": `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper` }, "{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper` }", [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      ...this._toNodeList(_("Introduction")),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/index.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/index.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/index.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Documentation")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/index.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/index.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Documentation")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/getting-started.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/getting-started.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/getting-started.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Getting Started")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/getting-started.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/getting-started.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Getting Started")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("script",{"data-app":(0,k.env)("APP_DATA"),src:`/ink/build/client/${(0,k.env)("BUILD_ID")}.js`},"{ 'data-app': env('APP_DATA'), 'src': `/ink/build/client/${env('BUILD_ID')}.js` }"),e.InkRegistry.createText(`
+  `,!1),...(0,k.env)("NODE_ENV")==="development"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("script",{src:"/dev.js"},"{ 'src': `/dev.js` }"),e.InkRegistry.createText(`
+  `,!1)]:[],e.InkRegistry.createText(`
+`,!1)]),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("body",{class:"light bg-t-0 tx-t-1 tx-arial"},"{ 'class': `light bg-t-0 tx-t-1 tx-arial` }",[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("panel-layout",{},"{ }",[e.InkRegistry.createText(`
+      `,!1),e.InkRegistry.createElement("header",{},"{ }",[e.InkRegistry.createElement("menu",{class:"flex flex-center-y px-20 py-15 m-0 bg-t-1"},"{ 'class': `flex flex-center-y px-20 py-15 m-0 bg-t-1` }",[e.InkRegistry.createText(`
+  `,!1),...t!=="/ink/index.html"&&t!=="/ink/500.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1",click:l},"{ 'class': `fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1`, 'click': toggle }",[]),e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("div",{class:"flex-grow"},"{ 'class': `flex-grow` }",[]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{href:"/ink"},"{ 'href': `/ink` }",[e.InkRegistry.createText(`
+      `,!1),e.InkRegistry.createElement("img",{alt:"Ink Logo",class:"h-26 mr-10",src:"/ink/ink-icon.png"},"{ 'alt': `Ink Logo`, 'class': `h-26 mr-10`, 'src': `/ink/ink-icon.png` }"),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("nav",{class:"flex flex-center-y"},"{ 'class': `flex flex-center-y` }",[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"tx-primary",href:"/ink/docs/index.html"},"{ 'class': `tx-primary`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText("Docs",!1)]),e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-5xl ml-10",href:"https://github.com/stackpress/ink",target:"_blank"},"{ 'class': `tx-t-1 tx-5xl ml-10`, 'href': `https://github.com/stackpress/ink`, 'target': `_blank` }",[e.InkRegistry.createText(`
+      `,!1),e.InkRegistry.createElement("i",{class:"fab fa-github"},"{ 'class': `fab fa-github` }",[]),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center",href:"https://www.npmjs.com/package/@stackpress/ink",target:"_blank"},"{ 'class': `bg-h-cb3837 pill tx-t-1 tx-lg ml-5 p-5 tx-center`, 'href': `https://www.npmjs.com/package/@stackpress/ink`, 'target': `_blank` }",[e.InkRegistry.createText(`
+      `,!1),e.InkRegistry.createElement("i",{class:"fab fa-npm tx-white"},"{ 'class': `fab fa-npm tx-white` }",[]),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]),e.InkRegistry.createText(`
+`,!1)])]),e.InkRegistry.createText(`
+      `,!1),e.InkRegistry.createElement("aside",{left:!0},"{ 'left': true }",[e.InkRegistry.createElement("header",{class:"flex flex-center-y bg-t-2 py-15 pr-5 pl-10"},"{ 'class': `flex flex-center-y bg-t-2 py-15 pr-5 pl-10` }",[e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("a",{href:"/ink"},"{ 'href': `/ink` }",[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("img",{class:"h-26 mr-10",src:"/ink/ink-icon.png",alt:"Ink Logo"},"{ 'class': `h-26 mr-10`, 'src': `/ink/ink-icon.png`, 'alt': `Ink Logo` }"),e.InkRegistry.createText(`
+  `,!1)]),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("h3",{class:"flex-grow m-0 tx-upper"},"{ 'class': `flex-grow m-0 tx-upper` }",[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"tx-primary",href:"/ink"},"{ 'class': `tx-primary`, 'href': `/ink` }",[e.InkRegistry.createText("Ink",!1)]),e.InkRegistry.createText(`
+  `,!1)]),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-chevron-left cursor-pointer none md-inline-block",click:l},"{ 'class': `fas fa-fw fa-chevron-left cursor-pointer none md-inline-block`, 'click': toggle }",[]),e.InkRegistry.createText(`
+`,!1)]),e.InkRegistry.createText(`
+`,!1),e.InkRegistry.createElement("nav",{class:"bg-t-1 scroll-auto h-calc-full-60"},"{ 'class': `bg-t-1 scroll-auto h-calc-full-60` }",[e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(i("Introduction")),e.InkRegistry.createText(`
+  `,!1)]),e.InkRegistry.createText(`
+  `,!1),...t==="/docs/index.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/index.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Documentation")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/index.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Documentation")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/getting-started.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/getting-started.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/getting-started.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Getting Started")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/getting-started.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/getting-started.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Getting Started")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
 
-  `, false),
-                    import_server.InkRegistry.createElement("h6", { "class": `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }, "{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }", [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      ...this._toNodeList(_("Features")),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/markup-syntax.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/markup-syntax.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/markup-syntax.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Markup Syntax")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/markup-syntax.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/markup-syntax.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Markup Syntax")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/state-management.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/state-management.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/state-management.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("State Management")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/state-management.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/state-management.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("State Management")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/component-strategy.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/component-strategy.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-strategy.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Component Strategy")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/component-strategy.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-strategy.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Component Strategy")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/compiler-api.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/compiler-api.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/compiler-api.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Compiler API")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/compiler-api.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/compiler-api.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Compiler API")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/client-api.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/client-api.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/client-api.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Client API")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/client-api.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/client-api.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Client API")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(i("Features")),e.InkRegistry.createText(`
+  `,!1)]),e.InkRegistry.createText(`
+  `,!1),...t==="/docs/markup-syntax.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/markup-syntax.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/markup-syntax.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Markup Syntax")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/markup-syntax.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/markup-syntax.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Markup Syntax")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/state-management.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/state-management.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/state-management.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("State Management")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/state-management.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/state-management.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("State Management")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/component-strategy.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/component-strategy.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-strategy.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Component Strategy")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/component-strategy.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-strategy.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Component Strategy")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/compiler-api.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/compiler-api.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/compiler-api.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Compiler API")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/compiler-api.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/compiler-api.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Compiler API")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/client-api.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/client-api.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/client-api.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Client API")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/client-api.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/client-api.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Client API")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
 
-  `, false),
-                    import_server.InkRegistry.createElement("h6", { "class": `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }, "{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }", [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      ...this._toNodeList(_("Usage")),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/template-engine.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/template-engine.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/template-engine.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Template Engine")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/template-engine.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/template-engine.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Template Engine")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/single-page.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/single-page.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/single-page.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Single Page App")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/single-page.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/single-page.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Single Page App")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/static-site.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/static-site.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/static-site.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Static Site Generator")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/static-site.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/static-site.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Static Site Generator")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/component-publisher.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold`, "href": `/ink/docs/component-publisher.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-publisher.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Component Publisher")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10`, "href": `/ink/docs/component-publisher.html` }, "{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-publisher.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Component Publisher")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-  `, false),
-                    ...!!(url === "/docs/developer-tools.html") ? [
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 tx-bold mb-100`, "href": `/ink/docs/developer-tools.html` }, "{ 'class': `block tx-info py-10 pl-10 tx-bold mb-100`, 'href': `/ink/docs/developer-tools.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Developer Tools")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : true ? [
-                      ,
-                      import_server.InkRegistry.createText(`
-    `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `block tx-info py-10 pl-10 mb-100`, "href": `/ink/docs/developer-tools.html` }, "{ 'class': `block tx-info py-10 pl-10 mb-100`, 'href': `/ink/docs/developer-tools.html` }", [
-                        import_server.InkRegistry.createText(`
-      `, false),
-                        ...this._toNodeList(_("Developer Tools")),
-                        import_server.InkRegistry.createText(`
-    `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-  `, false)
-                    ] : [],
-                    import_server.InkRegistry.createText(`
-`, false)
-                  ])
-                ]
-              ]),
-              import_server.InkRegistry.createText(`
-      `, false),
-              import_server.InkRegistry.createElement("aside", { "right": true }, "{ 'right': true }", [
-                import_server.InkRegistry.createText(`
-        `, false),
-                import_server.InkRegistry.createElement("menu", { "class": `m-0 px-10 py-20 h-calc-full-40 bg-t-2 scroll-auto` }, "{ 'class': `m-0 px-10 py-20 h-calc-full-40 bg-t-2 scroll-auto` }", [
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("h6", { "class": `tx-muted tx-14 mb-0 mt-0 pb-10 tx-uppercase` }, "{ 'class': `tx-muted tx-14 mb-0 mt-0 pb-10 tx-uppercase` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    ...this._toNodeList(_("On this page")),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("nav", { "class": `tx-14 tx-lh-32` }, "{ 'class': `tx-14 tx-lh-32` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("a", { "class": `block tx-t-0`, "href": `#http` }, "{ 'class': `block tx-t-0`, 'href': `#http` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      ...this._toNodeList(_("1. Add HTTP")),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("a", { "class": `block tx-t-0`, "href": `#develop` }, "{ 'class': `block tx-t-0`, 'href': `#develop` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      ...this._toNodeList(_("2. Add Dev Tools")),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("a", { "class": `block tx-t-0`, "href": `#cache` }, "{ 'class': `block tx-t-0`, 'href': `#cache` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      ...this._toNodeList(_("3. Add File Cache")),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("a", { "class": `block tx-t-0`, "href": `#tailwind` }, "{ 'class': `block tx-t-0`, 'href': `#tailwind` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      ...this._toNodeList(_("4. Add TailwindCSS")),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("a", { "class": `block tx-t-0`, "href": `#express` }, "{ 'class': `block tx-t-0`, 'href': `#express` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      ...this._toNodeList(_("5. Add ExpressJS")),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-        `, false)
-                ]),
-                import_server.InkRegistry.createText(`
-      `, false)
-              ]),
-              import_server.InkRegistry.createText(`
-      `, false),
-              import_server.InkRegistry.createElement("main", {}, "{ }", [
-                import_server.InkRegistry.createText(`
-        `, false),
-                import_server.InkRegistry.createElement("api-docs", {}, "{ }", [
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("h1", { "class": `tx-primary tx-uppercase tx-30 py-20` }, "{ 'class': `tx-primary tx-uppercase tx-30 py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    ...this._toNodeList(_("Getting Started")),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(i("Usage")),e.InkRegistry.createText(`
+  `,!1)]),e.InkRegistry.createText(`
+  `,!1),...t==="/docs/template-engine.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/template-engine.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/template-engine.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Template Engine")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/template-engine.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/template-engine.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Template Engine")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/single-page.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/single-page.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/single-page.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Single Page App")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/single-page.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/single-page.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Single Page App")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/static-site.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/static-site.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/static-site.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Static Site Generator")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/static-site.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/static-site.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Static Site Generator")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/component-publisher.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/component-publisher.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-publisher.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Component Publisher")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/component-publisher.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-publisher.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Component Publisher")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+  `,!1),...t==="/docs/developer-tools.html"?[e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold mb-100",href:"/ink/docs/developer-tools.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold mb-100`, 'href': `/ink/docs/developer-tools.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Developer Tools")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]:[,e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 mb-100",href:"/ink/docs/developer-tools.html"},"{ 'class': `block tx-info py-10 pl-10 mb-100`, 'href': `/ink/docs/developer-tools.html` }",[e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(i("Developer Tools")),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)],e.InkRegistry.createText(`
+`,!1)])]),e.InkRegistry.createText(`
+      `,!1),e.InkRegistry.createElement("aside",{right:!0},"{ 'right': true }",[e.InkRegistry.createText(`
+        `,!1),e.InkRegistry.createElement("menu",{class:"m-0 px-10 py-20 h-calc-full-40 bg-t-2 scroll-auto"},"{ 'class': `m-0 px-10 py-20 h-calc-full-40 bg-t-2 scroll-auto` }",[e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h6",{class:"tx-muted tx-14 mb-0 mt-0 pb-10 tx-uppercase"},"{ 'class': `tx-muted tx-14 mb-0 mt-0 pb-10 tx-uppercase` }",[e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(i("On this page")),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("nav",{class:"tx-14 tx-lh-32"},"{ 'class': `tx-14 tx-lh-32` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#http"},"{ 'class': `block tx-t-0`, 'href': `#http` }",[e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(i("1. Add HTTP")),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#develop"},"{ 'class': `block tx-t-0`, 'href': `#develop` }",[e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(i("2. Add Dev Tools")),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#cache"},"{ 'class': `block tx-t-0`, 'href': `#cache` }",[e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(i("3. Add File Cache")),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#tailwind"},"{ 'class': `block tx-t-0`, 'href': `#tailwind` }",[e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(i("4. Add TailwindCSS")),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#express"},"{ 'class': `block tx-t-0`, 'href': `#express` }",[e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(i("5. Add ExpressJS")),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+        `,!1)]),e.InkRegistry.createText(`
+      `,!1)]),e.InkRegistry.createText(`
+      `,!1),e.InkRegistry.createElement("main",{},"{ }",[e.InkRegistry.createText(`
+        `,!1),e.InkRegistry.createElement("api-docs",{},"{ }",[e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h1",{class:"tx-primary tx-uppercase tx-30 py-20"},"{ 'class': `tx-primary tx-uppercase tx-30 py-20` }",[e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(i("Getting Started")),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             To try out Ink, run the following commands in terminal: 
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npm init -y && npm install --save @stackpress/ink && npm install --save-dev ts-node typescript @types/node
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("element-alert", { "solid": true, "curved": true, "info": true, "class": `my-20 tx-lh-24` }, "{ 'solid': true, 'curved': true, 'info': true, 'class': `my-20 tx-lh-24` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("element-icon", { "name": `info-circle` }, "{ 'name': `info-circle` }"),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("strong", {}, "{ }", [
-                      import_server.InkRegistry.createText(`Recommended:`, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            Download the Ink editor plugin at the `, false),
-                    import_server.InkRegistry.createElement("a", { "target": `_blank`, "class": `tx-white tx-underline`, "href": `https://marketplace.visualstudio.com/items?itemName=stackpress.ink-language` }, "{ 'target': `_blank`, 'class': `tx-white tx-underline`, 'href': `https://marketplace.visualstudio.com/items?itemName=stackpress.ink-language` }", [
-                      import_server.InkRegistry.createText(`Visual Studio Marketplace`, false)
-                    ]),
-                    import_server.InkRegistry.createText(`.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("element-alert",{solid:!0,curved:!0,info:!0,class:"my-20 tx-lh-24"},"{ 'solid': true, 'curved': true, 'info': true, 'class': `my-20 tx-lh-24` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("element-icon",{name:"info-circle"},"{ 'name': `info-circle` }"),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("strong",{},"{ }",[e.InkRegistry.createText("Recommended:",!1)]),e.InkRegistry.createText(`
+            Download the Ink editor plugin at the `,!1),e.InkRegistry.createElement("a",{target:"_blank",class:"tx-white tx-underline",href:"https://marketplace.visualstudio.com/items?itemName=stackpress.ink-language"},"{ 'target': `_blank`, 'class': `tx-white tx-underline`, 'href': `https://marketplace.visualstudio.com/items?itemName=stackpress.ink-language` }",[e.InkRegistry.createText("Visual Studio Marketplace",!1)]),e.InkRegistry.createText(`.
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Create a server file called
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true }, "{ 'inline': true }", [
-                      import_server.InkRegistry.createText(`src/index.ts`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0},"{ 'inline': true }",[e.InkRegistry.createText("src/index.ts",!1)]),e.InkRegistry.createText(` 
             with the following code that uses the compiler.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/index.ts`, "class": `py-20` }, "{ 'title': `src/index.ts`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "class": `scroll-auto`, "lang": `js`, "numbers": true, "trim": true, "detab": 14 }, "{ 'class': `scroll-auto`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/index.ts",class:"py-20"},"{ 'title': `src/index.ts`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{class:"scroll-auto",lang:"js",numbers:!0,trim:!0,detab:14},"{ 'class': `scroll-auto`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               import ink from '@stackpress/ink/compiler';
               // make a ink compiler
               const compiler = ink();
@@ -1183,31 +244,15 @@ ${document2}`;
               compiler.styles('./src/page.ink').then(console.log);
               // render JS
               compiler.client('./src/page.ink').then(console.log);
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Last, create a document file called
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true }, "{ 'inline': true }", [
-                      import_server.InkRegistry.createText(`src/page.ink`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0},"{ 'inline': true }",[e.InkRegistry.createText("src/page.ink",!1)]),e.InkRegistry.createText(` 
             with the following template code.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/page.ink`, "class": `py-20` }, "{ 'title': `src/page.ink`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "class": `scroll-auto`, "numbers": true, "trim": true, "detab": 14 }, "{ 'class': `scroll-auto`, 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/page.ink",class:"py-20"},"{ 'title': `src/page.ink`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{class:"scroll-auto",numbers:!0,trim:!0,detab:14},"{ 'class': `scroll-auto`, 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               <style>
                 .center { text-align: center; }
               </style>
@@ -1226,172 +271,72 @@ ${document2}`;
                   <h1 class="center">{title}</h1>
                 </body>
               </html>
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             To try out the basic implementation of Ink and see the 
             results, just run the following command in terminal.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npx ts-node src/index.ts
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("a", { "name": `http` }, "{ 'name': `http` }", []),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("h2", { "class": `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }, "{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    ...this._toNodeList(_("1. Add HTTP")),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("a",{name:"http"},"{ 'name': `http` }",[]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(i("1. Add HTTP")),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             In most cases Ink will be used to render a front end from 
             a server framework. In this example, we will use the native
             NodeJS HTTP module to create a server that renders a page
             using Ink. Start by replacing the 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true }, "{ 'inline': true }", [
-                      ...this._toNodeList(`'src/index.ts'`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0},"{ 'inline': true }",[...this._toNodeList("'src/index.ts'")]),e.InkRegistry.createText(`
             file with the following code. 
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("element-alert", { "solid": true, "curved": true, "info": true, "class": `my-20 tx-lh-24` }, "{ 'solid': true, 'curved': true, 'info': true, 'class': `my-20 tx-lh-24` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("element-icon", { "name": `info-circle` }, "{ 'name': `info-circle` }"),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("strong", {}, "{ }", [
-                      import_server.InkRegistry.createText(`Optional:`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` You can also check your other 
+          `,!1),e.InkRegistry.createElement("element-alert",{solid:!0,curved:!0,info:!0,class:"my-20 tx-lh-24"},"{ 'solid': true, 'curved': true, 'info': true, 'class': `my-20 tx-lh-24` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("element-icon",{name:"info-circle"},"{ 'name': `info-circle` }"),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("strong",{},"{ }",[e.InkRegistry.createText("Optional:",!1)]),e.InkRegistry.createText(` You can also check your other 
             files to make sure you are following along.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "height": 410, "title": `With NodeJS HTTP` }, "{ 'height': 410, 'title': `With NodeJS HTTP` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-head", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("div", { "class": `flex scroll-x-auto pt-5 pl-5` }, "{ 'class': `flex scroll-x-auto pt-5 pl-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `http`, "selector": `#http-index-ts` }, "{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `http`, 'selector': `#http-index-ts` }", [
-                          import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{height:410,title:"With NodeJS HTTP"},"{ 'height': 410, 'title': `With NodeJS HTTP` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-head",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("div",{class:"flex scroll-x-auto pt-5 pl-5"},"{ 'class': `flex scroll-x-auto pt-5 pl-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"http",selector:"#http-index-ts"},"{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `http`, 'selector': `#http-index-ts` }",[e.InkRegistry.createText(`
                   src/index.ts
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `http`, "selector": `#http-page-ink` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `http`, 'selector': `#http-page-ink` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"http",selector:"#http-page-ink"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `http`, 'selector': `#http-page-ink` }",[e.InkRegistry.createText(`
                   src/page.ink
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `http`, "selector": `#http-package-json` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `http`, 'selector': `#http-package-json` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"http",selector:"#http-package-json"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `http`, 'selector': `#http-package-json` }",[e.InkRegistry.createText(`
                   package.json
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-left", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("h5", { "class": `p-5` }, "{ 'class': `p-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `chevron-down` }, "{ 'name': `chevron-down` }"),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("span", {}, "{ }", [
-                          import_server.InkRegistry.createText(`src`, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `http`, "selector": `#http-index-ts` }, "{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `http`, 'selector': `#http-index-ts` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-left",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("h5",{class:"p-5"},"{ 'class': `p-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-down"},"{ 'name': `chevron-down` }"),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("span",{},"{ }",[e.InkRegistry.createText("src",!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"http",selector:"#http-index-ts"},"{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `http`, 'selector': `#http-index-ts` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 index.ts
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `http`, "selector": `#http-page-ink` }, "{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `http`, 'selector': `#http-page-ink` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"http",selector:"#http-page-ink"},"{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `http`, 'selector': `#http-page-ink` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 page.ink
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `http`, "selector": `#http-package-json` }, "{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `http`, 'selector': `#http-package-json` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"http",selector:"#http-package-json"},"{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `http`, 'selector': `#http-package-json` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 package.json
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-main", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `http-index-ts`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `http-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-main",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"http-index-ts",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `http-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 import http from 'http';
                 import ink from '@stackpress/ink/compiler';
 
@@ -1419,12 +364,8 @@ ${document2}`;
                 });
                 // listen on port 3000
                 server.listen(3000);
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `http-page-ink`, "style": `display:none`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `http-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"http-page-ink",style:"display:none",numbers:!0,trim:!0,detab:16},"{ 'id': `http-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 <style>
                   .center { text-align: center; }
                 </style>
@@ -1443,12 +384,8 @@ ${document2}`;
                     <h1 class="center">{title}</h1>
                   </body>
                 </html>
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `http-package-json`, "style": `display:none`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `http-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"http-package-json",style:"display:none",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `http-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 {
                   "name": "my-project",
                   "version": "1.0.0",
@@ -1457,7 +394,7 @@ ${document2}`;
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.1.26"
+                    "@stackpress/ink": "0.2.5"
                   },
                   "devDependencies": {
                     "@types/node": "22.1.0",
@@ -1465,128 +402,56 @@ ${document2}`;
                     "typescript": "5.5.4"
                   }
                 }
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+              `)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             To run your first Ink web app, just run the following 
             command in terminal.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npx ts-node src/index.ts
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             You can now check 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      import_server.InkRegistry.createText(`http://localhost:3000/`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[e.InkRegistry.createText("http://localhost:3000/",!1)]),e.InkRegistry.createText(` 
             in your browser to see your Ink application. The 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      import_server.InkRegistry.createText(`ink()`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[e.InkRegistry.createText("ink()",!1)]),e.InkRegistry.createText(` 
             function takes in the following options, all of 
             which are optional.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("api-ui", { "start": `Render Methods` }, "{ 'start': `Render Methods` }"),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("api-ui",{start:"Render Methods"},"{ 'start': `Render Methods` }"),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("a", { "name": `develop` }, "{ 'name': `develop` }", []),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("h2", { "class": `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }, "{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    ...this._toNodeList(_("2. Add Developer Tools")),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("a",{name:"develop"},"{ 'name': `develop` }",[]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(i("2. Add Developer Tools")),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Ink provides a separate package for a better development 
             experience when working with server frameworks that utilize 
             the native http module. Start by installing adding 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`@stackpress/ink-dev`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("@stackpress/ink-dev")]),e.InkRegistry.createText(`
             to your project.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npm install --save-dev @stackpress/ink-dev
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
-            Next, import the `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`dev()`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
+            Next, import the `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("dev()")]),e.InkRegistry.createText(` 
             function from the package and use it in your existing 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`src/index.ts`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("src/index.ts")]),e.InkRegistry.createText(` 
             file to create a development server as shown in the example below.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/index.ts`, "class": `py-20` }, "{ 'title': `src/index.ts`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "numbers": true, "trim": true, "detab": 14 }, "{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/index.ts",class:"py-20"},"{ 'title': `src/index.ts`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",numbers:!0,trim:!0,detab:14},"{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               // ...
               import { dev } from '@stackpress/ink-dev';
               // ...create ink compiler...
@@ -1606,72 +471,32 @@ ${document2}`;
                 }
               });
               //...listen on port 3000...
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
-            The `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`dev()`)
-                    ]),
-                    import_server.InkRegistry.createText(` export 
-            from  `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`@stackpress/ink-dev`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
+            The `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("dev()")]),e.InkRegistry.createText(` export 
+            from  `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("@stackpress/ink-dev")]),e.InkRegistry.createText(`
             exports tools that supports development mode and accepts the 
             following options.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("api-ui", { "start": `DeveloperOptions` }, "{ 'start': `DeveloperOptions` }"),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("api-ui",{start:"DeveloperOptions"},"{ 'start': `DeveloperOptions` }"),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             This returns several tools you can use in your server app.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("api-ui", { "start": `Developer Tools` }, "{ 'start': `Developer Tools` }"),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("api-ui",{start:"Developer Tools"},"{ 'start': `Developer Tools` }"),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Lastly, update the document file 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`src/page.ink`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("src/page.ink")]),e.InkRegistry.createText(` 
             to include the development script 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true }, "{ 'inline': true }", [
-                      ...this._toNodeList(`<script src="/dev.js"></script>`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0},"{ 'inline': true }",[...this._toNodeList('<script src="/dev.js"></script>')]),e.InkRegistry.createText(` 
             as shown below.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/page.ink`, "class": `py-20` }, "{ 'title': `src/page.ink`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "numbers": true, "trim": true, "detab": 14 }, "{ 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/page.ink",class:"py-20"},"{ 'title': `src/page.ink`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{numbers:!0,trim:!0,detab:14},"{ 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               <style>
                 /* ... */
               </style>
@@ -1688,113 +513,47 @@ ${document2}`;
                   <!-- ... -->
                 </body>
               </html>
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             The project should now look like the example below.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "height": 410, "title": `With Developer Tools`, "class": `py-20` }, "{ 'height': 410, 'title': `With Developer Tools`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-head", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("div", { "class": `flex scroll-x-auto pt-5 pl-5` }, "{ 'class': `flex scroll-x-auto pt-5 pl-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `develop`, "selector": `#develop-index-ts` }, "{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `develop`, 'selector': `#develop-index-ts` }", [
-                          import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{height:410,title:"With Developer Tools",class:"py-20"},"{ 'height': 410, 'title': `With Developer Tools`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-head",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("div",{class:"flex scroll-x-auto pt-5 pl-5"},"{ 'class': `flex scroll-x-auto pt-5 pl-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"develop",selector:"#develop-index-ts"},"{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `develop`, 'selector': `#develop-index-ts` }",[e.InkRegistry.createText(`
                   src/index.ts
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `develop`, "selector": `#develop-page-ink` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `develop`, 'selector': `#develop-page-ink` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"develop",selector:"#develop-page-ink"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `develop`, 'selector': `#develop-page-ink` }",[e.InkRegistry.createText(`
                   src/page.ink
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `develop`, "selector": `#develop-package-json` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `develop`, 'selector': `#develop-package-json` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"develop",selector:"#develop-package-json"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `develop`, 'selector': `#develop-package-json` }",[e.InkRegistry.createText(`
                   package.json
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-left", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("h5", { "class": `p-5` }, "{ 'class': `p-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `chevron-down` }, "{ 'name': `chevron-down` }"),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("span", {}, "{ }", [
-                          import_server.InkRegistry.createText(`src`, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `develop`, "selector": `#develop-index-ts` }, "{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `develop`, 'selector': `#develop-index-ts` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-left",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("h5",{class:"p-5"},"{ 'class': `p-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-down"},"{ 'name': `chevron-down` }"),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("span",{},"{ }",[e.InkRegistry.createText("src",!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"develop",selector:"#develop-index-ts"},"{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `develop`, 'selector': `#develop-index-ts` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 index.ts
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `develop`, "selector": `#develop-page-ink` }, "{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `develop`, 'selector': `#develop-page-ink` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"develop",selector:"#develop-page-ink"},"{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `develop`, 'selector': `#develop-page-ink` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 page.ink
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `develop`, "selector": `#develop-package-json` }, "{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `develop`, 'selector': `#develop-package-json` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"develop",selector:"#develop-package-json"},"{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `develop`, 'selector': `#develop-package-json` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 package.json
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-main", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `develop-index-ts`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `develop-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-main",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"develop-index-ts",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `develop-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 import http from 'http';
                 import ink from '@stackpress/ink/compiler';
                 import { dev } from '@stackpress/ink-dev';
@@ -1823,12 +582,8 @@ ${document2}`;
                   }
                 });
                 server.listen(3000);
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `develop-page-ink`, "style": `display:none`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `develop-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"develop-page-ink",style:"display:none",numbers:!0,trim:!0,detab:16},"{ 'id': `develop-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 <style>
                   .center { text-align: center; }
                 </style>
@@ -1848,12 +603,8 @@ ${document2}`;
                     <h1 class="center">{title}</h1>
                   </body>
                 </html>
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `develop-package-json`, "style": `display:none`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `develop-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"develop-package-json",style:"display:none",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `develop-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 {
                   "name": "my-project",
                   "version": "1.0.0",
@@ -1862,102 +613,52 @@ ${document2}`;
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.1.26"
+                    "@stackpress/ink": "0.2.5"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.1.26",
+                    "@stackpress/ink-dev": "0.2.5",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
                   }
                 }
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+              `)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Re-run the following command in terminal. It shouldn't look 
             like anything has changed, but the development server is now
             running in the background. Try to change
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`src/page.ink`)
-                    ]),
-                    import_server.InkRegistry.createText(`.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("src/page.ink")]),e.InkRegistry.createText(`.
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npx ts-node src/index.ts
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
-            Whenever `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`src/page.ink`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
+            Whenever `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("src/page.ink")]),e.InkRegistry.createText(` 
             is saved, the development server will automatically refresh 
             the page. Components will also be updated in real-time without
             the page reloading.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("a", { "name": `cache` }, "{ 'name': `cache` }", []),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("h2", { "class": `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }, "{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    ...this._toNodeList(_("3. Add Cache Files")),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("a",{name:"cache"},"{ 'name': `cache` }",[]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(i("3. Add Cache Files")),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Ink has an out-of-the-box cache and build strategy that
             can be used to store and serve pre-compiled files. To use the
             cache, you just need to import it from the 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`@stackpress/ink/compiler`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("@stackpress/ink/compiler")]),e.InkRegistry.createText(` 
             module and use it like the following example.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/index.ts`, "class": `py-20` }, "{ 'title': `src/index.ts`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "numbers": true, "trim": true, "detab": 14 }, "{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/index.ts",class:"py-20"},"{ 'title': `src/index.ts`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",numbers:!0,trim:!0,detab:14},"{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               // ...
               import path from 'path';
               import { cache } from '@stackpress/ink/compiler';
@@ -1969,32 +670,16 @@ ${document2}`;
               // ...create dev tools...
               // ...create http server...
               // ...listen on port 3000...
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
-            The `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`src/index.ts`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
+            The `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("src/index.ts")]),e.InkRegistry.createText(` 
             file should now look like the example below.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/index.ts`, "class": `py-20` }, "{ 'title': `src/index.ts`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "numbers": true, "trim": true, "detab": 14 }, "{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/index.ts",class:"py-20"},"{ 'title': `src/index.ts`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",numbers:!0,trim:!0,detab:14},"{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               import path from 'path';
               import http from 'http';
               import ink, { cache } from '@stackpress/ink/compiler';
@@ -2022,62 +707,30 @@ ${document2}`;
                 }
               });
               server.listen(3000);
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Re-run the following command in terminal to start the cache 
             server.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npx ts-node src/index.ts
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Load 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      import_server.InkRegistry.createText(`http://localhost:3000/`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[e.InkRegistry.createText("http://localhost:3000/",!1)]),e.InkRegistry.createText(` 
             in your browser. After loading you should see files that were 
             generated in a new build folder found in your project root. 
-            The `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      import_server.InkRegistry.createText(`cache()`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` plugin is 
+            The `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[e.InkRegistry.createText("cache()",!1)]),e.InkRegistry.createText(` plugin is 
             just a wrapper that listens for build related events and
             stores the generated files in the specified build path.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "height": 400, "title": `cache.ts (Internal)`, "class": `py-20` }, "{ 'height': 400, 'title': `cache.ts (Internal)`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "numbers": true, "trim": true, "detab": 14 }, "{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-app",{height:400,title:"cache.ts (Internal)",class:"py-20"},"{ 'height': 400, 'title': `cache.ts (Internal)`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",numbers:!0,trim:!0,detab:14},"{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               emitter.on('manifest-resolved', (event: Event<string>) => {
                 const manifest = event.params.manifest as Manifest
                 //write the manifest to the file system
@@ -2168,145 +821,73 @@ ${document2}`;
                   JSON.parse(fs.readFileSync(paths.manifest, 'utf-8'))
                 );
               }
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             This means you can also use your own cache strategy by 
             listening to the events emitted by the compiler. The
             following table lists all the events that the compiler
             emits during the build cycle of a document.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("api-ui", { "start": `EventEmitter` }, "{ 'start': `EventEmitter` }"),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("api-ui",{start:"EventEmitter"},"{ 'start': `EventEmitter` }"),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("a", { "name": `tailwind` }, "{ 'name': `tailwind` }", []),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("h2", { "class": `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }, "{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    ...this._toNodeList(_("4. Add TailwindCSS")),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("a",{name:"tailwind"},"{ 'name': `tailwind` }",[]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(i("4. Add TailwindCSS")),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Tailwind is an atomic CSS collection of styles that favours 
             small, single-purpose classes with their selector names based 
             on its visual function. It works by using a build process to
             read your source files to generate its styles based only on 
             what is being used. This makes using Tailwind optimal because
             it doesn't bloat your CSS with unused styles.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             At the same time, web components with the
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true }, "{ 'inline': true }", [
-                      ...this._toNodeList(`<style>`)
-                    ]),
-                    import_server.InkRegistry.createText(` tag imply using the 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0},"{ 'inline': true }",[...this._toNodeList("<style>")]),e.InkRegistry.createText(` tag imply using the 
             component's shadow DOM which will encapsulate the styles within
             the component and not be affected by global styles. Since 
             Tailwind in turn implies that you do not need to (necessarily) 
             define styles, you do not need to use the shadow DOM at all if
             you are using Tailwind.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("element-alert", { "solid": true, "curved": true, "warning": true, "class": `my-20 tx-lh-24` }, "{ 'solid': true, 'curved': true, 'warning': true, 'class': `my-20 tx-lh-24` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("element-icon", { "name": `exclamation-triangle` }, "{ 'name': `exclamation-triangle` }"),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("strong", {}, "{ }", [
-                      import_server.InkRegistry.createText(`Warning:`, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("element-alert",{solid:!0,curved:!0,warning:!0,class:"my-20 tx-lh-24"},"{ 'solid': true, 'curved': true, 'warning': true, 'class': `my-20 tx-lh-24` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("element-icon",{name:"exclamation-triangle"},"{ 'name': `exclamation-triangle` }"),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("strong",{},"{ }",[e.InkRegistry.createText("Warning:",!1)]),e.InkRegistry.createText(`
             The caveat for using TailwindCSS, means that web components 
             using it will not be shippable to other projects that do not
             use Tailwind. It all comes down to preference in the end.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Ink has a separate package called
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`@stackpress/ink-tailwind`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("@stackpress/ink-tailwind")]),e.InkRegistry.createText(`
             to use TailwindCSS with Ink. This is just another wrapper 
             class that listens to the compiler's build events. You can 
             install this plugin by running the following command in terminal.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npm install --save-dev @stackpress/ink-tailwind autoprefixer postcss tailwindcss
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
-            Next, in `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`src/index.ts`)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            import the `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`tailwind()`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
+            Next, in `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("src/index.ts")]),e.InkRegistry.createText(`
+            import the `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("tailwind()")]),e.InkRegistry.createText(`
             plugin from the package and use it in the compiler as shown
             in the example below.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/index.ts`, "class": `py-20` }, "{ 'title': `src/index.ts`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "numbers": true, "trim": true, "detab": 14 }, "{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/index.ts",class:"py-20"},"{ 'title': `src/index.ts`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",numbers:!0,trim:!0,detab:14},"{ 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               // ...
               import { tailwind } from '@stackpress/ink-tailwind';
               // ...create ink compiler...
@@ -2322,45 +903,21 @@ ${document2}`;
               // ...create dev tools...
               // ...create http server...
               // ...listen on port 3000...
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
-            Lastly, in `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`src/page.ink`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
+            Lastly, in `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("src/page.ink")]),e.InkRegistry.createText(`
             add the Tailwind directives inside the 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true }, "{ 'inline': true }", [
-                      ...this._toNodeList(`<style>`)
-                    ]),
-                    import_server.InkRegistry.createText(` tag like the code 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0},"{ 'inline': true }",[...this._toNodeList("<style>")]),e.InkRegistry.createText(` tag like the code 
             below. Also add a tailwind class, (like 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`<style>`)
-                    ]),
-                    import_server.InkRegistry.createText(`) to the 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("<style>")]),e.InkRegistry.createText(`) to the 
             markup to verify that the plugin is working and the styles 
             are being applied.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
           
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `src/page.ink`, "class": `py-20` }, "{ 'title': `src/page.ink`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "numbers": true, "trim": true, "detab": 14 }, "{ 'numbers': true, 'trim': true, 'detab': 14 }", [
-                      ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"src/page.ink",class:"py-20"},"{ 'title': `src/page.ink`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{numbers:!0,trim:!0,detab:14},"{ 'numbers': true, 'trim': true, 'detab': 14 }",[...this._toNodeList(`
               <style>
                 /* 2. Add tailwind directives */
                 @tailwind base;
@@ -2380,113 +937,47 @@ ${document2}`;
                   <h1 class="text-center">{title}</h1>
                 </body>
               </html>
-            `)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Check to see if the project files look like the example below.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "height": 410, "title": `With TailwindCSS`, "class": `py-20` }, "{ 'height': 410, 'title': `With TailwindCSS`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-head", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("div", { "class": `flex scroll-x-auto pt-5 pl-5` }, "{ 'class': `flex scroll-x-auto pt-5 pl-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `tailwind`, "selector": `#tailwind-index-ts` }, "{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-index-ts` }", [
-                          import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{height:410,title:"With TailwindCSS",class:"py-20"},"{ 'height': 410, 'title': `With TailwindCSS`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-head",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("div",{class:"flex scroll-x-auto pt-5 pl-5"},"{ 'class': `flex scroll-x-auto pt-5 pl-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"tailwind",selector:"#tailwind-index-ts"},"{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-index-ts` }",[e.InkRegistry.createText(`
                   src/index.ts
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `tailwind`, "selector": `#tailwind-page-ink` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-page-ink` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"tailwind",selector:"#tailwind-page-ink"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-page-ink` }",[e.InkRegistry.createText(`
                   src/page.ink
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `tailwind`, "selector": `#tailwind-package-json` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-package-json` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"tailwind",selector:"#tailwind-package-json"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-package-json` }",[e.InkRegistry.createText(`
                   package.json
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-left", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("h5", { "class": `p-5` }, "{ 'class': `p-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `chevron-down` }, "{ 'name': `chevron-down` }"),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("span", {}, "{ }", [
-                          import_server.InkRegistry.createText(`src`, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `tailwind`, "selector": `#tailwind-index-ts` }, "{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-index-ts` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-left",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("h5",{class:"p-5"},"{ 'class': `p-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-down"},"{ 'name': `chevron-down` }"),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("span",{},"{ }",[e.InkRegistry.createText("src",!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"tailwind",selector:"#tailwind-index-ts"},"{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-index-ts` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 index.ts
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `tailwind`, "selector": `#tailwind-page-ink` }, "{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-page-ink` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"tailwind",selector:"#tailwind-page-ink"},"{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-page-ink` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 page.ink
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `tailwind`, "selector": `#tailwind-package-json` }, "{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-package-json` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"tailwind",selector:"#tailwind-package-json"},"{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `tailwind`, 'selector': `#tailwind-package-json` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 package.json
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-main", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `tailwind-index-ts`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `tailwind-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-main",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"tailwind-index-ts",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `tailwind-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 import path from 'path';
                 import http from 'http';
                 import ink, { cache } from '@stackpress/ink/compiler';
@@ -2522,12 +1013,8 @@ ${document2}`;
                   }
                 });
                 server.listen(3000);
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `tailwind-page-ink`, "style": `display:none`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `tailwind-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"tailwind-page-ink",style:"display:none",numbers:!0,trim:!0,detab:16},"{ 'id': `tailwind-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 <style>
                   /* 2. Add tailwind directives */
                   @tailwind base;
@@ -2550,12 +1037,8 @@ ${document2}`;
                     <h1 class="text-center">{title}</h1>
                   </body>
                 </html>
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `tailwind-package-json`, "style": `display:none`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `tailwind-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"tailwind-package-json",style:"display:none",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `tailwind-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 {
                   "name": "my-project",
                   "version": "1.0.0",
@@ -2564,11 +1047,11 @@ ${document2}`;
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.1.26"
+                    "@stackpress/ink": "0.2.5"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.1.26",
-                    "@stackpress/ink-tailwind": "0.1.26",
+                    "@stackpress/ink-dev": "0.2.5",
+                    "@stackpress/ink-tailwind": "0.2.5",
                     "@types/node": "22.1.0",
                     "autoprefixer": "10.4.20",
                     "postcss": "8.4.44",
@@ -2577,163 +1060,73 @@ ${document2}`;
                     "typescript": "5.5.4"
                   }
                 }
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+              `)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Re-run the following command in terminal to initialize the 
             tailwind plugin.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npx ts-node src/index.ts
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Load 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      import_server.InkRegistry.createText(`http://localhost:3000/`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[e.InkRegistry.createText("http://localhost:3000/",!1)]),e.InkRegistry.createText(` 
             in your browser. After loading you should see files that were 
             generated in a new build folder found in your project root. 
             Try to add a Tailwind class to the markup in
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      ...this._toNodeList(`src/page.ink`)
-                    ]),
-                    import_server.InkRegistry.createText(` and 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[...this._toNodeList("src/page.ink")]),e.InkRegistry.createText(` and 
             save. The development server will automatically refresh 
             the styles and component styles will also be update in 
             real-time without the page reloading.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("a", { "name": `express` }, "{ 'name': `express` }", []),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("h2", { "class": `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }, "{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    ...this._toNodeList(_("5. Add ExpressJS")),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("a",{name:"express"},"{ 'name': `express` }",[]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-uppercase tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(i("5. Add ExpressJS")),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Ink has a separate package called
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`@stackpress/ink-express`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("@stackpress/ink-express")]),e.InkRegistry.createText(`
             to use Express with Ink. You can install this plugin by 
             running the following command in terminal.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npm install --save @stackpress/ink-express express && npm install --save-dev @types/express
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             The package 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`@stackpress/ink-express`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("@stackpress/ink-express")]),e.InkRegistry.createText(`
             exports two plugins for express.
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`view()`)
-                    ]),
-                    import_server.InkRegistry.createText(` is the view 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("view()")]),e.InkRegistry.createText(` is the view 
             engine for production (live) environments. It can be used with
             an express app like 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`app.use(view(compiler))`)
-                    ]),
-                    import_server.InkRegistry.createText(`.
-            The other export, `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`dev()`)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("app.use(view(compiler))")]),e.InkRegistry.createText(`.
+            The other export, `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("dev()")]),e.InkRegistry.createText(` 
             is the same export from the Developer Tools documentation above, 
             but returns several tools used to integrate with express.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("api-ui", { "start": `Express Developer Tools` }, "{ 'start': `Express Developer Tools` }"),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("api-ui",{start:"Express Developer Tools"},"{ 'start': `Express Developer Tools` }"),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Example logic to use the all the Ink Express tools together
             with Ink developer tools could look like the following code
             that cases for 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`development`)
-                    ]),
-                    import_server.InkRegistry.createText(` and 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`production`)
-                    ]),
-                    import_server.InkRegistry.createText(` modes.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("development")]),e.InkRegistry.createText(` and 
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("production")]),e.InkRegistry.createText(` modes.
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-code", { "numbers": true, "trim": true, "detab": 12, "lang": `js`, "class": `py-20` }, "{ 'numbers': true, 'trim': true, 'detab': 12, 'lang': `js`, 'class': `py-20` }", [
-                    ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-code",{numbers:!0,trim:!0,detab:12,lang:"js",class:"py-20"},"{ 'numbers': true, 'trim': true, 'detab': 12, 'lang': `js`, 'class': `py-20` }",[...this._toNodeList(`
             import { view, dev } from '@stackpress/ink-express';
 
             //create ink compiler
@@ -2758,27 +1151,15 @@ ${document2}`;
               //let's use express' template engine feature
               app.engine('ink', view(compiler));
             }
-          `)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             And you can now case for development mode in 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "inline": true, "lang": `js` }, "{ 'inline': true, 'lang': `js` }", [
-                      ...this._toNodeList(`src/page.ink`)
-                    ]),
-                    import_server.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{inline:!0,lang:"js"},"{ 'inline': true, 'lang': `js` }",[...this._toNodeList("src/page.ink")]),e.InkRegistry.createText(`
             like in the example below
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-code", { "numbers": true, "trim": true, "detab": 12, "class": `py-20` }, "{ 'numbers': true, 'trim': true, 'detab': 12, 'class': `py-20` }", [
-                    ...this._toNodeList(`
+          `,!1),e.InkRegistry.createElement("ide-code",{numbers:!0,trim:!0,detab:12,class:"py-20"},"{ 'numbers': true, 'trim': true, 'detab': 12, 'class': `py-20` }",[...this._toNodeList(`
             <style>
               /* ... */
             </style>
@@ -2797,110 +1178,46 @@ ${document2}`;
                 <!-- ... -->
               </body>
             </html>
-          `)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Check to see if the project files look like the example below.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "height": 410, "title": `With ExpressJS`, "class": `py-20` }, "{ 'height': 410, 'title': `With ExpressJS`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-head", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("div", { "class": `flex scroll-x-auto pt-5 pl-5` }, "{ 'class': `flex scroll-x-auto pt-5 pl-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `express`, "selector": `#express-index-ts` }, "{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `express`, 'selector': `#express-index-ts` }", [
-                          import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{height:410,title:"With ExpressJS",class:"py-20"},"{ 'height': 410, 'title': `With ExpressJS`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-head",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("div",{class:"flex scroll-x-auto pt-5 pl-5"},"{ 'class': `flex scroll-x-auto pt-5 pl-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"express",selector:"#express-index-ts"},"{ 'on': true, 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `express`, 'selector': `#express-index-ts` }",[e.InkRegistry.createText(`
                   src/index.ts
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `express`, "selector": `#express-page-ink` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `express`, 'selector': `#express-page-ink` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"express",selector:"#express-page-ink"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `express`, 'selector': `#express-page-ink` }",[e.InkRegistry.createText(`
                   src/page.ink
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-tab", { "class": `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, "active": `bg-black tx-white`, "inactive": `bg-t-1 tx-t-1`, "group": `express`, "selector": `#express-package-json` }, "{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `express`, 'selector': `#express-package-json` }", [
-                          import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-tab",{class:"relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0",active:"bg-black tx-white",inactive:"bg-t-1 tx-t-1",group:"express",selector:"#express-package-json"},"{ 'class': `relative ml-2 p-10 ct-sm b-solid b-t-1 bx-1 bt-1 bb-0`, 'active': `bg-black tx-white`, 'inactive': `bg-t-1 tx-t-1`, 'group': `express`, 'selector': `#express-package-json` }",[e.InkRegistry.createText(`
                   package.json
-                `, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-left", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("h5", { "class": `p-5` }, "{ 'class': `p-5` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `chevron-down` }, "{ 'name': `chevron-down` }"),
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("span", {}, "{ }", [
-                          import_server.InkRegistry.createText(`src`, false)
-                        ]),
-                        import_server.InkRegistry.createText(`
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "on": true, "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `express`, "selector": `#express-index-ts` }, "{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `express`, 'selector': `#express-index-ts` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+                `,!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-left",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("h5",{class:"p-5"},"{ 'class': `p-5` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-down"},"{ 'name': `chevron-down` }"),e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("span",{},"{ }",[e.InkRegistry.createText("src",!1)]),e.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{on:!0,class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"express",selector:"#express-index-ts"},"{ 'on': true, 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `express`, 'selector': `#express-index-ts` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 index.ts
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pl-15 pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `express`, "selector": `#express-page-ink` }, "{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `express`, 'selector': `#express-page-ink` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pl-15 pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"express",selector:"#express-page-ink"},"{ 'class': `pl-15 pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `express`, 'selector': `#express-page-ink` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 page.ink
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-tab", { "class": `pt-10 block`, "active": `tx-white`, "inactive": `tx-t-1`, "group": `express`, "selector": `#express-package-json` }, "{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `express`, 'selector': `#express-package-json` }", [
-                        import_server.InkRegistry.createText(`
-                `, false),
-                        import_server.InkRegistry.createElement("element-icon", { "name": `file` }, "{ 'name': `file` }"),
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-tab",{class:"pt-10 block",active:"tx-white",inactive:"tx-t-1",group:"express",selector:"#express-package-json"},"{ 'class': `pt-10 block`, 'active': `tx-white`, 'inactive': `tx-t-1`, 'group': `express`, 'selector': `#express-package-json` }",[e.InkRegistry.createText(`
+                `,!1),e.InkRegistry.createElement("element-icon",{name:"file"},"{ 'name': `file` }"),e.InkRegistry.createText(`
                 package.json
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("app-main", {}, "{ }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `express-index-ts`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `express-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("app-main",{},"{ }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"express-index-ts",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `express-index-ts`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 import path from 'path';
                 import express from 'express';
                 import ink, { cache } from '@stackpress/ink/compiler';
@@ -2963,12 +1280,8 @@ ${document2}`;
                 app.listen(3000, () => {
                   console.log('HTTP server is running on http://localhost:3000');
                 });
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `express-page-ink`, "style": `display:none`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `express-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"express-page-ink",style:"display:none",numbers:!0,trim:!0,detab:16},"{ 'id': `express-page-ink`, 'style': `display:none`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 <style>
                   @tailwind base;
                   @tailwind components;
@@ -2992,12 +1305,8 @@ ${document2}`;
                     <h1 class="text-center">{title}</h1>
                   </body>
                 </html>
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("ide-code", { "id": `express-package-json`, "style": `display:none`, "lang": `js`, "numbers": true, "trim": true, "detab": 16 }, "{ 'id': `express-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }", [
-                        ...this._toNodeList(`
+              `)]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("ide-code",{id:"express-package-json",style:"display:none",lang:"js",numbers:!0,trim:!0,detab:16},"{ 'id': `express-package-json`, 'style': `display:none`, 'lang': `js`, 'numbers': true, 'trim': true, 'detab': 16 }",[...this._toNodeList(`
                 {
                   "name": "my-project",
                   "version": "1.0.0",
@@ -3022,271 +1331,107 @@ ${document2}`;
                     "typescript": "^5.5.4"
                   }
                 }
-              `)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+              `)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Re-run the following command in terminal to initialize the 
             re-run your application using Express.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ide-app", { "title": `Terminal`, "class": `py-20` }, "{ 'title': `Terminal`, 'class': `py-20` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `bash` }, "{ 'lang': `bash` }", [
-                      import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ide-app",{title:"Terminal",class:"py-20"},"{ 'title': `Terminal`, 'class': `py-20` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"bash"},"{ 'lang': `bash` }",[e.InkRegistry.createText(`
               npx ts-node src/index.ts
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Load 
-            `, false),
-                    import_server.InkRegistry.createElement("ide-code", { "lang": `js`, "inline": true }, "{ 'lang': `js`, 'inline': true }", [
-                      import_server.InkRegistry.createText(`http://localhost:3000/`, false)
-                    ]),
-                    import_server.InkRegistry.createText(` 
+            `,!1),e.InkRegistry.createElement("ide-code",{lang:"js",inline:!0},"{ 'lang': `js`, 'inline': true }",[e.InkRegistry.createText("http://localhost:3000/",!1)]),e.InkRegistry.createText(` 
             in your browser. After loading you should see everything is 
             exactly as it was, but you now benefit from using ExpressJS.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("h3", { "class": `tx-t-1 tx-uppercase tx-22 pt-40 pb-20` }, "{ 'class': `tx-t-1 tx-uppercase tx-22 pt-40 pb-20` }", [
-                    import_server.InkRegistry.createText(`
-            -- `, false),
-                    ...this._toNodeList(_("Read On")),
-                    import_server.InkRegistry.createText(` --
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h3",{class:"tx-t-1 tx-uppercase tx-22 pt-40 pb-20"},"{ 'class': `tx-t-1 tx-uppercase tx-22 pt-40 pb-20` }",[e.InkRegistry.createText(`
+            -- `,!1),...this._toNodeList(i("Read On")),e.InkRegistry.createText(` --
+          `,!1)]),e.InkRegistry.createText(`
 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-20` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }", [
-                    import_server.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             To see other getting started examples with various frameworks,
             you can check out the following project examples in the 
             official repository.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ul", {}, "{ }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "target": `_blank`, "href": `${examples}/with-fastify` }, "{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-fastify` }", [
-                        import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ul",{},"{ }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",target:"_blank",href:`${c}/with-fastify`},"{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-fastify` }",[e.InkRegistry.createText(`
                 Fastify
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "target": `_blank`, "href": `${examples}/with-hapi` }, "{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-hapi` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",target:"_blank",href:`${c}/with-hapi`},"{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-hapi` }",[e.InkRegistry.createText(`
                 Hapi
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "target": `_blank`, "href": `${examples}/with-koa` }, "{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-koa` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",target:"_blank",href:`${c}/with-koa`},"{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-koa` }",[e.InkRegistry.createText(`
                 Koa
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "target": `_blank`, "href": `${examples}/with-nest` }, "{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-nest` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",target:"_blank",href:`${c}/with-nest`},"{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-nest` }",[e.InkRegistry.createText(`
                 NestJS
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "target": `_blank`, "href": `${examples}/with-restify` }, "{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-restify` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",target:"_blank",href:`${c}/with-restify`},"{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-restify` }",[e.InkRegistry.createText(`
                 Restify
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "target": `_blank`, "href": `${examples}/with-webpack` }, "{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-webpack` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",target:"_blank",href:`${c}/with-webpack`},"{ 'class': `tx-t-1 tx-underline`, 'target': `_blank`, 'href': `${examples}/with-webpack` }",[e.InkRegistry.createText(`
                 Webpack
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(` 
-          `, false),
-                  import_server.InkRegistry.createElement("i18n-translate", { "p": true, "trim": true, "class": `tx-lh-36 py-10` }, "{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-10` }", [
-                    import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(` 
+          `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-10"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-10` }",[e.InkRegistry.createText(`
             Depending on how you plan to use Ink, you can also look at 
             the following project setups.
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("ul", {}, "{ }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "href": `/ink/docs/template-engine.html` }, "{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/template-engine.html` }", [
-                        import_server.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("ul",{},"{ }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",href:"/ink/docs/template-engine.html"},"{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/template-engine.html` }",[e.InkRegistry.createText(`
                 Template Engine
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "href": `/ink/docs/single-page.html` }, "{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/single-page.html` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",href:"/ink/docs/single-page.html"},"{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/single-page.html` }",[e.InkRegistry.createText(`
                 Single Page App
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "href": `/ink/docs/static-site.html` }, "{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/static-site.html` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",href:"/ink/docs/static-site.html"},"{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/static-site.html` }",[e.InkRegistry.createText(`
                 Static Site Generator
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("li", { "class": `py-5` }, "{ 'class': `py-5` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("a", { "class": `tx-t-1 tx-underline`, "href": `/ink/docs/component-publisher.html` }, "{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/component-publisher.html` }", [
-                        import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("li",{class:"py-5"},"{ 'class': `py-5` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"tx-t-1 tx-underline",href:"/ink/docs/component-publisher.html"},"{ 'class': `tx-t-1 tx-underline`, 'href': `/ink/docs/component-publisher.html` }",[e.InkRegistry.createText(`
                 Web Component Publisher
-              `, false)
-                      ]),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
+              `,!1)]),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
           
-          `, false),
-                  import_server.InkRegistry.createElement("nav", { "class": `flex` }, "{ 'class': `flex` }", [
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("a", { "class": `tx-primary py-40`, "href": `/ink/docs/index.html` }, "{ 'class': `tx-primary py-40`, 'href': `/ink/docs/index.html` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-icon", { "name": `chevron-left`, "theme": `tx-1` }, "{ 'name': `chevron-left`, 'theme': `tx-1` }"),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      ...this._toNodeList(_("Documentation")),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-            `, false),
-                    import_server.InkRegistry.createElement("a", { "class": `flex-grow tx-right tx-primary py-40`, "href": `/ink/docs/markup-syntax.html` }, "{ 'class': `flex-grow tx-right tx-primary py-40`, 'href': `/ink/docs/markup-syntax.html` }", [
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      ...this._toNodeList(_("Markup Syntax")),
-                      import_server.InkRegistry.createText(`
-              `, false),
-                      import_server.InkRegistry.createElement("element-icon", { "name": `chevron-right`, "theme": `tx-1` }, "{ 'name': `chevron-right`, 'theme': `tx-1` }"),
-                      import_server.InkRegistry.createText(`
-            `, false)
-                    ]),
-                    import_server.InkRegistry.createText(`
-          `, false)
-                  ]),
-                  import_server.InkRegistry.createText(`
-          `, false),
-                  import_server.InkRegistry.createElement("footer", { "class": `foot` }, "{ 'class': `foot` }", []),
-                  import_server.InkRegistry.createText(`
-        `, false)
-                ]),
-                import_server.InkRegistry.createText(`
-      `, false)
-              ]),
-              import_server.InkRegistry.createText(`
-    `, false)
-            ]),
-            import_server.InkRegistry.createText(`
-  `, false)
-          ]),
-          import_server.InkRegistry.createText(`
-`, false)
-        ])
-      ];
-    }
-  };
-  return __toCommonJS(getting_started_exports);
-})();
+          `,!1),e.InkRegistry.createElement("nav",{class:"flex"},"{ 'class': `flex` }",[e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"tx-primary py-40",href:"/ink/docs/index.html"},"{ 'class': `tx-primary py-40`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-left",theme:"tx-1"},"{ 'name': `chevron-left`, 'theme': `tx-1` }"),e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(i("Documentation")),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"flex-grow tx-right tx-primary py-40",href:"/ink/docs/markup-syntax.html"},"{ 'class': `flex-grow tx-right tx-primary py-40`, 'href': `/ink/docs/markup-syntax.html` }",[e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(i("Markup Syntax")),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-right",theme:"tx-1"},"{ 'name': `chevron-right`, 'theme': `tx-1` }"),e.InkRegistry.createText(`
+            `,!1)]),e.InkRegistry.createText(`
+          `,!1)]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("footer",{class:"foot"},"{ 'class': `foot` }",[]),e.InkRegistry.createText(`
+        `,!1)]),e.InkRegistry.createText(`
+      `,!1)]),e.InkRegistry.createText(`
+    `,!1)]),e.InkRegistry.createText(`
+  `,!1)]),e.InkRegistry.createText(`
+`,!1)])]}};return xe(Je);})();

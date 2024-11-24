@@ -1,23 +1,24 @@
-var InkAPI=(()=>{var X=Object.create;var k=Object.defineProperty;var Z=Object.getOwnPropertyDescriptor;var ee=Object.getOwnPropertyNames;var te=Object.getPrototypeOf,ae=Object.prototype.hasOwnProperty;var i=(a,t)=>()=>(t||a((t={exports:{}}).exports,t),t.exports),re=(a,t)=>{for(var r in t)k(a,r,{get:t[r],enumerable:!0})},W=(a,t,r,l)=>{if(t&&typeof t=="object"||typeof t=="function")for(let n of ee(t))!ae.call(a,n)&&n!==r&&k(a,n,{get:()=>t[n],enumerable:!(l=Z(t,n))||l.enumerable});return a};var H=(a,t,r)=>(r=a!=null?X(te(a)):{},W(t||!a||!a.__esModule?k(r,"default",{value:a,enumerable:!0}):r,a)),se=a=>W(k({},"__esModule",{value:!0}),a);var _=i(E=>{"use strict";Object.defineProperty(E,"__esModule",{value:!0});var v=class extends Error{static for(t,...r){return r.forEach(function(l){t=t.replace("%s",l)}),new this(t)}static forErrorsFound(t){let r=new this("Invalid Parameters");return r.errors=t,r}static require(t,r,...l){if(!t){for(let n of l)r=r.replace("%s",n);throw new this(r)}}constructor(t,r=500){super(),this.errors={},this.start=0,this.end=0,this.message=t,this.name=this.constructor.name,this.code=r}withCode(t){return this.code=t,this}withPosition(t,r){return this.start=t,this.end=r,this}toJSON(){return{error:!0,code:this.code,message:this.message}}};E.default=v});var I=i(L=>{"use strict";Object.defineProperty(L,"__esModule",{value:!0});var w=class{get length(){return this._elements.size}constructor(t=[]){this._elements=new Set,t.forEach(r=>this._elements.add(r))}add(t){this._elements.add(t)}toArray(){return Array.from(this._elements)}toString(){return Array.from(this._elements).filter(Boolean).map(t=>t.toString()).join("")}};L.default=w});var m=i(N=>{"use strict";Object.defineProperty(N,"__esModule",{value:!0});var le=new Map;N.default=le});var P=i(A=>{"use strict";Object.defineProperty(A,"__esModule",{value:!0});var D=class{get value(){return this._escape?this._value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"):this._value}constructor(t,r=!1){this._escape=r,this._value=t}toString(){return this.value}};A.default=D});var S=i(f=>{"use strict";var ce=f&&f.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(f,"__esModule",{value:!0});var ne=ce(I()),ie=["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"],j=class{get attributes(){return this._attributes}get children(){return this._children}get name(){return this._name}get props(){return this._props}constructor(t,r={},l="",n=[]){this._attributes={},this._name=t,this._attributes=r,this._props=l,this._children=new ne.default(n)}toString(){let t=Object.entries(this._attributes),r=t.length>0?" "+t.map(([n,p])=>{if(typeof p=="string"&&!/["<>\n]/.test(p))return`${n}="${p}"`;if(typeof p=="boolean")return p?n:""}).join(" "):"";if(ie.includes(this._name))return`<${this._name}${r} />`;let l=this._children.toString();return`<${this._name}${r}>${l}</${this._name}>`}};f.default=j});var C=i(x=>{"use strict";var J=x&&x.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(x,"__esModule",{value:!0});var oe=J(P()),F=J(S()),O=class{static render(t){return t.filter(Boolean).map(r=>r.toString()).join("")}static registry(t,r=new Set){return t.forEach(l=>{l instanceof F.default&&(["html","head","body"].includes(l.name)||r.add(l),l.name!=="head"&&l.children.length>0&&this.registry(l.children.toArray(),r))}),r}static createElement(t,r,l,n=[]){return new F.default(t,r,l,n)}static createText(t,r=!0){return new oe.default(t,r)}};x.default=O});var R=i(h=>{"use strict";var $=h&&h.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(h,"__esModule",{value:!0});var pe=$(_()),M=$(m()),U=$(C()),B=class{bindings(){let t=U.default.registry(this.template());return`{ ${Array.from(t.values()).map((l,n)=>l.props!=="{ }"?`'${n}': ${l.props}`:"").filter(l=>l!=="").join(", ")} }`}render(t={}){M.default.set("props",t||{}),M.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries(M.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(n=>n[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let r=this.template(),l=U.default.render(r).trim();if(!l.toLowerCase().startsWith("<html"))throw pe.default.for("Document must start with an <html> tag.");return`<!DOCTYPE html>
-${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:Array.isArray(t)&&t.every(r=>typeof r=="object"&&typeof r.nodeType=="number")?t:[U.default.createText(String(t))]}};h.default=B});var G=i(d=>{"use strict";Object.defineProperty(d,"__esModule",{value:!0});d.InkEmitter=void 0;var g=class{emit(t,r){return this}on(t,r){return this}once(t,r){return this}unbind(t,r){return this}};d.InkEmitter=g;var me=new g;d.default=me});var Y=i(b=>{"use strict";var fe=b&&b.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(b,"__esModule",{value:!0});var xe=fe(m());function he(a){let t=xe.default.get("env")||{};return a?t[a]||null:t}b.default=he});var z=i(u=>{"use strict";var de=u&&u.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(u,"__esModule",{value:!0});u.default=ue;var be=de(m());function ue(){return be.default.get("props")||{}}});var K=i(c=>{"use strict";var Te=c&&c.__createBinding||(Object.create?function(a,t,r,l){l===void 0&&(l=r);var n=Object.getOwnPropertyDescriptor(t,r);(!n||("get"in n?!t.__esModule:n.writable||n.configurable))&&(n={enumerable:!0,get:function(){return t[r]}}),Object.defineProperty(a,l,n)}:function(a,t,r,l){l===void 0&&(l=r),a[l]=t[r]}),ke=c&&c.__setModuleDefault||(Object.create?function(a,t){Object.defineProperty(a,"default",{enumerable:!0,value:t})}:function(a,t){a.default=t}),ge=c&&c.__importStar||function(a){if(a&&a.__esModule)return a;var t={};if(a!=null)for(var r in a)r!=="default"&&Object.prototype.hasOwnProperty.call(a,r)&&Te(t,a,r);return ke(t,a),t},o=c&&c.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(c,"__esModule",{value:!0});c.InkText=c.InkException=c.InkEmitter=c.InkElement=c.InkRegistry=c.InkDocument=c.InkCollection=c.props=c.emitter=c.env=c.data=void 0;var ye=o(_());c.InkException=ye.default;var ve=o(I());c.InkCollection=ve.default;var Ee=o(R());c.InkDocument=Ee.default;var _e=o(C());c.InkRegistry=_e.default;var we=o(S());c.InkElement=we.default;var V=ge(G());c.emitter=V.default;Object.defineProperty(c,"InkEmitter",{enumerable:!0,get:function(){return V.InkEmitter}});var Le=o(P());c.InkText=Le.default;var Ie=o(m());c.data=Ie.default;var Ne=o(Y());c.env=Ne.default;var De=o(z());c.props=De.default});var q=i((Je,Q)=>{Q.exports={...K()}});var Pe={};re(Pe,{default:()=>y});var e=H(q()),T=H(q());var s=function(a,...t){let r=Ae(a);for(let l=0;l<t.length;l++)r=r.replace("%s",String(t[l]));return r},Ae=function(a){return a};var y=class extends e.InkDocument{id(){return"e728f894ed3f1278a022"}styles(){return`@ink theme;
+var InkAPI=(()=>{var oe=Object.create;var E=Object.defineProperty;var pe=Object.getOwnPropertyDescriptor;var me=Object.getOwnPropertyNames;var fe=Object.getPrototypeOf,de=Object.prototype.hasOwnProperty;var i=(a,t)=>()=>(t||a((t={exports:{}}).exports,t),t.exports),xe=(a,t)=>{for(var r in t)E(a,r,{get:t[r],enumerable:!0})},Y=(a,t,r,s)=>{if(t&&typeof t=="object"||typeof t=="function")for(let l of me(t))!de.call(a,l)&&l!==r&&E(a,l,{get:()=>t[l],enumerable:!(s=pe(t,l))||s.enumerable});return a};var J=(a,t,r)=>(r=a!=null?oe(fe(a)):{},Y(t||!a||!a.__esModule?E(r,"default",{value:a,enumerable:!0}):r,a)),he=a=>Y(E({},"__esModule",{value:!0}),a);var K=i(v=>{"use strict";Object.defineProperty(v,"__esModule",{value:!0});v.status=ue;var V={CONTINUE:{code:100,status:"Continue"},PROCESSING:{code:102,status:"Processing"},OK:{code:200,status:"OK"},CREATED:{code:201,status:"Created"},ACCEPTED:{code:202,status:"Accepted"},EMPTY:{code:204,status:"No Content"},RESET:{code:205,status:"Reset Content"},PARTIAL:{code:206,status:"Partial Content"},MOVED:{code:301,status:"Moved Permanently"},FOUND:{code:302,status:"Found"},REDIRECT:{code:303,status:"See Other"},CACHE:{code:304,status:"Not Modified"},TEMPORARY:{code:307,status:"Temporary Redirect"},PERMANENT:{code:308,status:"Permanent Redirect"},ABORT:{code:309,status:"Aborted"},BAD_REQUEST:{code:400,status:"Bad Request"},UNAUTHORIZED:{code:401,status:"Unauthorized"},FORBIDDEN:{code:403,status:"Forbidden"},NOT_FOUND:{code:404,status:"Not Found"},BAD_METHOD:{code:405,status:"Method Not Allowed"},NOT_ACCEPTABLE:{code:406,status:"Not Acceptable"},REQUEST_TIMEOUT:{code:408,status:"Request Timeout"},CONFLICT:{code:409,status:"Conflict"},GONE:{code:410,status:"Gone"},LENGTH_REQUIRED:{code:411,status:"Length Required"},TOO_LARGE:{code:413,status:"Payload Too Large"},TOO_LONG:{code:414,status:"URI Too Long"},UNSUPPORTED_TYPE:{code:415,status:"Unsupported Media Type"},BAD_RANGE:{code:416,status:"Range Not Satisfiable"},BAD_EXPECTATION:{code:417,status:"Expectation Failed"},MISDIRECTED:{code:421,status:"Misdirected Request"},UNPROCESSABLE:{code:422,status:"Unprocessable Content"},LOCKED:{code:423,status:"Locked"},BAD_DEPENDENCY:{code:424,status:"Failed Dependency"},UPGRADE_REQUIRED:{code:426,status:"Upgrade Required"},BAD_PRECONDITION:{code:428,status:"Precondition Required"},TOO_MANY:{code:429,status:"Too Many Requests"},HEADER_TOO_LARGE:{code:431,status:"Request Header Fields Too Large"},LEGAL_REASONS:{code:451,status:"Unavailable For Legal Reasons"},ERROR:{code:500,status:"Internal Server Error"},NOT_IMPLEMENTED:{code:501,status:"Not Implemented"},BAD_GATEWAY:{code:502,status:"Bad Gateway"},UNAVAILABLE:{code:503,status:"Service Unavailable"},RESPONSE_TIMEOUT:{code:504,status:"Gateway Timeout"},BAD_VERSION:{code:505,status:"HTTP Version Not Supported"},INSUFFICIENT_STORAGE:{code:507,status:"Insufficient Storage"},INFINITE_LOOP:{code:508,status:"Loop Detected"},NETWORK_AUTHENTICATION_REQUIRED:{code:511,status:"Network Authentication Required"}};v.default=V;function ue(a){return Object.values(V).find(t=>t.code===a)}});var D=i(I=>{"use strict";Object.defineProperty(I,"__esModule",{value:!0});var be=K(),L=class a extends Error{static try(t){return{catch:r=>{try{return t()}catch(s){if(s instanceof a)return r(s,s.type);if(s instanceof Error){let l=a.upgrade(s);return r(l,l.type)}else if(typeof s=="string"){let l=a.for(s);return r(l,l.type)}return r(s,"unknown")}}}}static for(t,...r){return r.forEach(function(s){t=t.replace("%s",String(s))}),new this(t)}static forErrors(t){let r=new this("Invalid Parameters");return r.withErrors(t),r}static require(t,r,...s){if(!t){for(let l of s)r=r.replace("%s",l);throw new this(r)}}static upgrade(t,r=500){if(t instanceof a)return t;let s=new this(t.message,r);return s.name=t.name,s.stack=t.stack,s}get code(){return this._code}get end(){return this._end}get errors(){return Object.assign({},this._errors)}get start(){return this._start}get type(){return this._type}constructor(t,r=500){var s;super(t),this._errors={},this._start=0,this._end=0,this.name=this.constructor.name,this._type=this.constructor.name,this._code=r,this._status=((s=(0,be.status)(r))===null||s===void 0?void 0:s.status)||"Unknown"}toJSON(){return JSON.stringify(this.toResponse(),null,2)}toResponse(t=0,r=0){let s={code:this._code,status:this._status,error:this.message,start:this._start,end:this._end,stack:this.trace(t,r)};return Object.keys(this._errors).length>0&&(s.errors=this._errors),s}trace(t=0,r=0){return typeof this.stack!="string"?[]:this.stack.split(`
+`).slice(t,r||this.stack.length).map(l=>l.trim()).map(l=>{if(!l.startsWith("at"))return!1;let[p,N,y]=l.split(" ");y||(y=`(${N})`,N="<none>");let[ce,ne,ie]=y.substring(1,y.length-1).split(":");return{method:N,file:ce,line:parseInt(ne)||0,char:parseInt(ie)||0}}).filter(Boolean)}withCode(t){return this._code=t,this}withErrors(t){return this._errors=t,this}withPosition(t,r){return this._start=t,this._end=r,this}};I.default=L});var Q=i(f=>{"use strict";var Te=f&&f.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(f,"__esModule",{value:!0});var ge=Te(D()),A=class extends ge.default{};f.default=A});var S=i(P=>{"use strict";Object.defineProperty(P,"__esModule",{value:!0});var O=class{get length(){return this._elements.size}constructor(t=[]){this._elements=new Set,t.forEach(r=>this._elements.add(r))}add(t){this._elements.add(t)}toArray(){return Array.from(this._elements)}toString(){return Array.from(this._elements).filter(Boolean).map(t=>t.toString()).join("")}};P.default=O});var d=i(j=>{"use strict";Object.defineProperty(j,"__esModule",{value:!0});var ke=new Map;j.default=ke});var U=i(R=>{"use strict";Object.defineProperty(R,"__esModule",{value:!0});var C=class{get value(){return this._escape?this._value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"):this._value}constructor(t,r=!1){this._escape=r,this._value=t}toString(){return this.value}};R.default=C});var B=i(x=>{"use strict";var ye=x&&x.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(x,"__esModule",{value:!0});var Ee=ye(S()),ve=["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"],M=class{get attributes(){return this._attributes}get children(){return this._children}get name(){return this._name}get props(){return this._props}constructor(t,r={},s="",l=[]){this._attributes={},this._name=t,this._attributes=r,this._props=s,this._children=new Ee.default(l)}toString(){let t=Object.entries(this._attributes),r=t.length>0?" "+t.map(([l,p])=>{if(typeof p=="string"&&!/["<>\n]/.test(p))return`${l}="${p}"`;if(typeof p=="boolean")return p?l:""}).join(" "):"";if(ve.includes(this._name))return`<${this._name}${r} />`;let s=this._children.toString();return`<${this._name}${r}>${s}</${this._name}>`}};x.default=M});var $=i(h=>{"use strict";var X=h&&h.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(h,"__esModule",{value:!0});var _e=X(U()),z=X(B()),q=class{static render(t){return t.filter(Boolean).map(r=>r.toString()).join("")}static registry(t,r=new Set){return t.forEach(s=>{s instanceof z.default&&(["html","head","body"].includes(s.name)||r.add(s),s.name!=="head"&&s.children.length>0&&this.registry(s.children.toArray(),r))}),r}static createElement(t,r,s,l=[]){return new z.default(t,r,s,l)}static createText(t,r=!0){return new _e.default(t,r)}};h.default=q});var Z=i(u=>{"use strict";var H=u&&u.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(u,"__esModule",{value:!0});var we=H(D()),m=H(d()),F=H($()),G=class{bindings(t={}){m.default.set("props",t||{}),m.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries(m.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(l=>l[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let r=F.default.registry(this.template());return`{ ${Array.from(r.values()).map((l,p)=>l.props!=="{ }"?`'${p}': ${l.props}`:"").filter(l=>l!=="").join(", ")} }`}render(t={}){m.default.set("props",t||{}),m.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries(m.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(l=>l[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let r=this.template(),s=F.default.render(r).trim();if(!s.toLowerCase().startsWith("<html"))throw we.default.for("Document must start with an <html> tag.");return`<!DOCTYPE html>
+${s}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:Array.isArray(t)&&t.every(r=>typeof r=="object"&&typeof r.nodeType=="number")?t:[F.default.createText(String(t))]}};u.default=G});var ee=i(b=>{"use strict";Object.defineProperty(b,"__esModule",{value:!0});b.InkEmitter=void 0;var _=class{emit(t,r){return this}on(t,r){return this}once(t,r){return this}unbind(t,r){return this}};b.InkEmitter=_;var Ne=new _;b.default=Ne});var te=i(T=>{"use strict";var Le=T&&T.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(T,"__esModule",{value:!0});var Ie=Le(d());function De(a){let t=Ie.default.get("env")||{};return a?t[a]||null:t}T.default=De});var ae=i(g=>{"use strict";var Ae=g&&g.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(g,"__esModule",{value:!0});g.default=Pe;var Oe=Ae(d());function Pe(){return Oe.default.get("props")||{}}});var se=i(n=>{"use strict";var Se=n&&n.__createBinding||(Object.create?function(a,t,r,s){s===void 0&&(s=r);var l=Object.getOwnPropertyDescriptor(t,r);(!l||("get"in l?!t.__esModule:l.writable||l.configurable))&&(l={enumerable:!0,get:function(){return t[r]}}),Object.defineProperty(a,s,l)}:function(a,t,r,s){s===void 0&&(s=r),a[s]=t[r]}),je=n&&n.__setModuleDefault||(Object.create?function(a,t){Object.defineProperty(a,"default",{enumerable:!0,value:t})}:function(a,t){a.default=t}),Ce=n&&n.__importStar||function(){var a=function(t){return a=Object.getOwnPropertyNames||function(r){var s=[];for(var l in r)Object.prototype.hasOwnProperty.call(r,l)&&(s[s.length]=l);return s},a(t)};return function(t){if(t&&t.__esModule)return t;var r={};if(t!=null)for(var s=a(t),l=0;l<s.length;l++)s[l]!=="default"&&Se(r,t,s[l]);return je(r,t),r}}(),o=n&&n.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(n,"__esModule",{value:!0});n.InkText=n.InkException=n.InkEmitter=n.InkElement=n.InkRegistry=n.InkDocument=n.InkCollection=n.props=n.emitter=n.env=n.data=void 0;var Re=o(Q());n.InkException=Re.default;var Ue=o(S());n.InkCollection=Ue.default;var Me=o(Z());n.InkDocument=Me.default;var Be=o($());n.InkRegistry=Be.default;var qe=o(B());n.InkElement=qe.default;var re=Ce(ee());n.emitter=re.default;Object.defineProperty(n,"InkEmitter",{enumerable:!0,get:function(){return re.InkEmitter}});var $e=o(U());n.InkText=$e.default;var Fe=o(d());n.data=Fe.default;var Ge=o(te());n.env=Ge.default;var He=o(ae());n.props=He.default});var W=i((nt,le)=>{le.exports={...se()}});var Ye={};xe(Ye,{default:()=>w});var e=J(W()),k=J(W());var c=function(a,...t){let r=We(a);for(let s=0;s<t.length;s++)r=r.replace("%s",String(t[s]));return r},We=function(a){return a};var w=class extends e.InkDocument{id(){return"e728f894ed3f1278a022"}styles(){return`@ink theme;
   @ink reset;
   @ink fouc-opacity;
-  @ink utilities;`}template(){let t="/docs/component-strategy.html",r=s("Component Strategy - Ink reactive web component template engine."),l=s("Learn more about web components and how they work with Ink."),n=()=>{document.getElementsByTagName("panel-layout")[0].toggle("left")};return[e.InkRegistry.createText(`
+  @ink utilities;`}template(){let t="/docs/component-strategy.html",r=c("Component Strategy - Ink reactive web component template engine."),s=c("Learn more about web components and how they work with Ink."),l=()=>{document.getElementsByTagName("panel-layout")[0].toggle("left")};return[e.InkRegistry.createText(`
 `,!1),e.InkRegistry.createElement("html",{},"{ }",[e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("head",{},"{ }",[e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{charset:"utf-8"},"{ 'charset': `utf-8` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"viewport",content:"width=device-width, initial-scale=1"},"{ 'name': `viewport`, 'content': `width=device-width, initial-scale=1` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("title",{},"{ }",[...this._toNodeList(r)]),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{name:"description",content:l},"{ 'name': `description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"description",content:s},"{ 'name': `description`, 'content': description }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{property:"og:title",content:r},"{ 'property': `og:title`, 'content': title }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{property:"og:description",content:l},"{ 'property': `og:description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:description",content:s},"{ 'property': `og:description`, 'content': description }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{property:"og:image",content:"https://stackpress.github.io/ink/ink-logo.png"},"{ 'property': `og:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{property:"og:url",content:`https://stackpress.github.io/ink${t}`},"{ 'property': `og:url`, 'content': `https://stackpress.github.io/ink${url}` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{property:"og:type",content:"website"},"{ 'property': `og:type`, 'content': `website` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"twitter:card",content:"summary"},"{ 'name': `twitter:card`, 'content': `summary` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"twitter:site",content:"@stackpress"},"{ 'name': `twitter:site`, 'content': `@stackpress` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"twitter:title",content:r},"{ 'name': `twitter:title`, 'content': title }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:description",content:l},"{ 'name': `twitter:description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:description",content:s},"{ 'name': `twitter:description`, 'content': description }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"twitter:image",content:"https://stackpress.github.io/ink/ink-logo.png"},"{ 'name': `twitter:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"favicon",href:"/ink/favicon.ico"},"{ 'rel': `favicon`, 'href': `/ink/favicon.ico` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"shortcut icon",type:"image/png",href:"/ink/favicon.png"},"{ 'rel': `shortcut icon`, 'type': `image/png`, 'href': `/ink/favicon.png` }"),e.InkRegistry.createText(`
@@ -25,10 +26,10 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
   `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",media:"(prefers-color-scheme:light)",href:"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css"},"{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:light)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",media:"(prefers-color-scheme:dark)",href:"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css"},"{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:dark)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:"/ink/styles/global.css"},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/styles/global.css` }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:`/ink/build/client/${(0,T.env)("BUILD_ID")}.css`},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/build/client/${env('BUILD_ID')}.css` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:`/ink/build/client/${(0,k.env)("BUILD_ID")}.css`},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/build/client/${env('BUILD_ID')}.css` }"),e.InkRegistry.createText(`
   
-  `,!1),e.InkRegistry.createElement("script",{"data-app":(0,T.env)("APP_DATA"),src:`/ink/build/client/${(0,T.env)("BUILD_ID")}.js`},"{ 'data-app': env('APP_DATA'), 'src': `/ink/build/client/${env('BUILD_ID')}.js` }"),e.InkRegistry.createText(`
-  `,!1),...(0,T.env)("NODE_ENV")==="development"?[e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("script",{"data-app":(0,k.env)("APP_DATA"),src:`/ink/build/client/${(0,k.env)("BUILD_ID")}.js`},"{ 'data-app': env('APP_DATA'), 'src': `/ink/build/client/${env('BUILD_ID')}.js` }"),e.InkRegistry.createText(`
+  `,!1),...(0,k.env)("NODE_ENV")==="development"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("script",{src:"/dev.js"},"{ 'src': `/dev.js` }"),e.InkRegistry.createText(`
   `,!1)]:[],e.InkRegistry.createText(`
 `,!1)]),e.InkRegistry.createText(`
@@ -36,7 +37,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
     `,!1),e.InkRegistry.createElement("panel-layout",{},"{ }",[e.InkRegistry.createText(`
       `,!1),e.InkRegistry.createElement("header",{},"{ }",[e.InkRegistry.createElement("menu",{class:"flex flex-center-y px-20 py-15 m-0 bg-t-1"},"{ 'class': `flex flex-center-y px-20 py-15 m-0 bg-t-1` }",[e.InkRegistry.createText(`
   `,!1),...t!=="/ink/index.html"&&t!=="/ink/500.html"?[e.InkRegistry.createText(`
-    `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1",click:n},"{ 'class': `fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1`, 'click': toggle }",[]),e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1",click:l},"{ 'class': `fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1`, 'click': toggle }",[]),e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("div",{class:"flex-grow"},"{ 'class': `flex-grow` }",[]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{href:"/ink"},"{ 'href': `/ink` }",[e.InkRegistry.createText(`
@@ -60,152 +61,152 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
   `,!1),e.InkRegistry.createElement("h3",{class:"flex-grow m-0 tx-upper"},"{ 'class': `flex-grow m-0 tx-upper` }",[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"tx-primary",href:"/ink"},"{ 'class': `tx-primary`, 'href': `/ink` }",[e.InkRegistry.createText("Ink",!1)]),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-chevron-left cursor-pointer none md-inline-block",click:n},"{ 'class': `fas fa-fw fa-chevron-left cursor-pointer none md-inline-block`, 'click': toggle }",[]),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-chevron-left cursor-pointer none md-inline-block",click:l},"{ 'class': `fas fa-fw fa-chevron-left cursor-pointer none md-inline-block`, 'click': toggle }",[]),e.InkRegistry.createText(`
 `,!1)]),e.InkRegistry.createText(`
 `,!1),e.InkRegistry.createElement("nav",{class:"bg-t-1 scroll-auto h-calc-full-60"},"{ 'class': `bg-t-1 scroll-auto h-calc-full-60` }",[e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
-    `,!1),...this._toNodeList(s("Introduction")),e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(c("Introduction")),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
   `,!1),...t==="/docs/index.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/index.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Documentation")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Documentation")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/index.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Documentation")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Documentation")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/getting-started.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/getting-started.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/getting-started.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Getting Started")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Getting Started")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/getting-started.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/getting-started.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Getting Started")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Getting Started")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
 
   `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
-    `,!1),...this._toNodeList(s("Features")),e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(c("Features")),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
   `,!1),...t==="/docs/markup-syntax.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/markup-syntax.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/markup-syntax.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Markup Syntax")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Markup Syntax")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/markup-syntax.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/markup-syntax.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Markup Syntax")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Markup Syntax")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/state-management.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/state-management.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/state-management.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("State Management")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("State Management")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/state-management.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/state-management.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("State Management")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("State Management")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/component-strategy.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/component-strategy.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-strategy.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Component Strategy")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Component Strategy")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/component-strategy.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-strategy.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Component Strategy")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Component Strategy")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/compiler-api.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/compiler-api.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/compiler-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Compiler API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Compiler API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/compiler-api.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/compiler-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Compiler API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Compiler API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/client-api.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/client-api.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/client-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Client API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Client API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/client-api.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/client-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Client API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Client API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
 
   `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
-    `,!1),...this._toNodeList(s("Usage")),e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(c("Usage")),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
   `,!1),...t==="/docs/template-engine.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/template-engine.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/template-engine.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Template Engine")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Template Engine")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/template-engine.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/template-engine.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Template Engine")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Template Engine")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/single-page.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/single-page.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/single-page.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Single Page App")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Single Page App")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/single-page.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/single-page.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Single Page App")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Single Page App")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/static-site.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/static-site.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/static-site.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Static Site Generator")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Static Site Generator")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/static-site.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/static-site.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Static Site Generator")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Static Site Generator")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/component-publisher.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/component-publisher.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-publisher.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Component Publisher")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Component Publisher")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/component-publisher.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-publisher.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Component Publisher")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Component Publisher")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/developer-tools.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold mb-100",href:"/ink/docs/developer-tools.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold mb-100`, 'href': `/ink/docs/developer-tools.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Developer Tools")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Developer Tools")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 mb-100",href:"/ink/docs/developer-tools.html"},"{ 'class': `block tx-info py-10 pl-10 mb-100`, 'href': `/ink/docs/developer-tools.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(s("Developer Tools")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(c("Developer Tools")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
 `,!1)])]),e.InkRegistry.createText(`
       `,!1),e.InkRegistry.createElement("aside",{right:!0},"{ 'right': true }",[e.InkRegistry.createText(`
         `,!1),e.InkRegistry.createElement("menu",{class:"m-0 px-10 py-20 h-calc-full-40 bg-t-2 scroll-auto"},"{ 'class': `m-0 px-10 py-20 h-calc-full-40 bg-t-2 scroll-auto` }",[e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h6",{class:"tx-muted tx-14 mb-0 mt-0 pb-10 tx-upper"},"{ 'class': `tx-muted tx-14 mb-0 mt-0 pb-10 tx-upper` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("On this page")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("On this page")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("nav",{class:"tx-14 tx-lh-32"},"{ 'class': `tx-14 tx-lh-32` }",[e.InkRegistry.createText(`
-            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#document"},"{ 'class': `block tx-t-0`, 'href': `#document` }",[...this._toNodeList(s("Document"))]),e.InkRegistry.createText(`
-            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#template"},"{ 'class': `block tx-t-0`, 'href': `#template` }",[...this._toNodeList(s("Template"))]),e.InkRegistry.createText(`
-            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#component"},"{ 'class': `block tx-t-0`, 'href': `#component` }",[...this._toNodeList(s("Component"))]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#document"},"{ 'class': `block tx-t-0`, 'href': `#document` }",[...this._toNodeList(c("Document"))]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#template"},"{ 'class': `block tx-t-0`, 'href': `#template` }",[...this._toNodeList(c("Template"))]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#component"},"{ 'class': `block tx-t-0`, 'href': `#component` }",[...this._toNodeList(c("Component"))]),e.InkRegistry.createText(`
             `,!1),e.InkRegistry.createElement("nav",{class:"pl-20"},"{ 'class': `pl-20` }",[e.InkRegistry.createText(`
-              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-1"},"{ 'class': `block tx-t-1`, 'href': `#strat-1` }",[...this._toNodeList(s("Strategy 1"))]),e.InkRegistry.createText(`
-              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-2"},"{ 'class': `block tx-t-1`, 'href': `#strat-2` }",[...this._toNodeList(s("Strategy 2"))]),e.InkRegistry.createText(`
-              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-3"},"{ 'class': `block tx-t-1`, 'href': `#strat-3` }",[...this._toNodeList(s("Strategy 3"))]),e.InkRegistry.createText(`
-              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-4"},"{ 'class': `block tx-t-1`, 'href': `#strat-4` }",[...this._toNodeList(s("Strategy 4"))]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-1"},"{ 'class': `block tx-t-1`, 'href': `#strat-1` }",[...this._toNodeList(c("Strategy 1"))]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-2"},"{ 'class': `block tx-t-1`, 'href': `#strat-2` }",[...this._toNodeList(c("Strategy 2"))]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-3"},"{ 'class': `block tx-t-1`, 'href': `#strat-3` }",[...this._toNodeList(c("Strategy 3"))]),e.InkRegistry.createText(`
+              `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-1",href:"#strat-4"},"{ 'class': `block tx-t-1`, 'href': `#strat-4` }",[...this._toNodeList(c("Strategy 4"))]),e.InkRegistry.createText(`
             `,!1)]),e.InkRegistry.createText(`
-            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#fouc"},"{ 'class': `block tx-t-0`, 'href': `#fouc` }",[...this._toNodeList(s("FOUC"))]),e.InkRegistry.createText(`
+            `,!1),e.InkRegistry.createElement("a",{class:"block tx-t-0",href:"#fouc"},"{ 'class': `block tx-t-0`, 'href': `#fouc` }",[...this._toNodeList(c("FOUC"))]),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
         `,!1)]),e.InkRegistry.createText(`
       `,!1)]),e.InkRegistry.createText(`
       `,!1),e.InkRegistry.createElement("main",{},"{ }",[e.InkRegistry.createText(`
         `,!1),e.InkRegistry.createElement("api-docs",{},"{ }",[e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h1",{class:"tx-primary tx-upper tx-30 py-20"},"{ 'class': `tx-primary tx-upper tx-30 py-20` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Component Strategy")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Component Strategy")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -222,7 +223,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
 
           `,!1),e.InkRegistry.createElement("a",{name:"document"},"{ 'name': `document` }",[]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Document")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Document")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -320,7 +321,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
 
           `,!1),e.InkRegistry.createElement("a",{name:"template"},"{ 'name': `template` }",[]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Template")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Template")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -419,7 +420,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
 
           `,!1),e.InkRegistry.createElement("a",{name:"component"},"{ 'name': `component` }",[]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h2",{class:"tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0"},"{ 'class': `tx-primary tx-upper tx-26 pt-40 pb-10 mb-20 b-solid b-t-1 bb-1 bt-0 bx-0` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Component")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Component")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -439,7 +440,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
 
           `,!1),e.InkRegistry.createElement("a",{name:"strat-1"},"{ 'name': `strat-1` }",[]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h3",{class:"tx-t-1 tx-upper tx-22 pt-40 pb-20"},"{ 'class': `tx-t-1 tx-upper tx-22 pt-40 pb-20` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Strategy 1: No Components")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Strategy 1: No Components")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -535,7 +536,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
 
           `,!1),e.InkRegistry.createElement("a",{name:"strat-2"},"{ 'name': `strat-2` }",[]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h3",{class:"tx-t-1 tx-upper tx-22 pt-40 pb-20"},"{ 'class': `tx-t-1 tx-upper tx-22 pt-40 pb-20` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Strategy 2: Shallow Components")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Strategy 2: Shallow Components")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -631,7 +632,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
 
           `,!1),e.InkRegistry.createElement("a",{name:"strat-3"},"{ 'name': `strat-3` }",[]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h3",{class:"tx-t-1 tx-upper tx-22 pt-40 pb-20"},"{ 'class': `tx-t-1 tx-upper tx-22 pt-40 pb-20` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Strategy 3: Partial Styling")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Strategy 3: Partial Styling")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -731,7 +732,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
 
           `,!1),e.InkRegistry.createElement("a",{name:"strat-4"},"{ 'name': `strat-4` }",[]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h3",{class:"tx-t-1 tx-upper tx-22 pt-40 pb-20"},"{ 'class': `tx-t-1 tx-upper tx-22 pt-40 pb-20` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(s("Strategy 4: Encapulation")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(c("Strategy 4: Encapulation")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
@@ -838,7 +839,7 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
           `,!1)]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("a",{name:"fouc"},"{ 'name': `fouc` }",[]),e.InkRegistry.createText(`
-          `,!1),e.InkRegistry.createElement("h2",{},"{ }",[...this._toNodeList(s("Flash of Unstyled Content"))]),e.InkRegistry.createText(`
+          `,!1),e.InkRegistry.createElement("h2",{},"{ }",[...this._toNodeList(c("Flash of Unstyled Content"))]),e.InkRegistry.createText(`
 
           `,!1),e.InkRegistry.createElement("i18n-translate",{p:!0,trim:!0,class:"tx-lh-36 py-20"},"{ 'p': true, 'trim': true, 'class': `tx-lh-36 py-20` }",[e.InkRegistry.createText(`
             Web Components (custom elements) are 100% defined in 
@@ -877,10 +878,10 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
           `,!1),e.InkRegistry.createElement("nav",{class:"flex"},"{ 'class': `flex` }",[e.InkRegistry.createText(`
             `,!1),e.InkRegistry.createElement("a",{class:"tx-primary py-40",href:"/ink/docs/state-management.html"},"{ 'class': `tx-primary py-40`, 'href': `/ink/docs/state-management.html` }",[e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-left",theme:"tx-1"},"{ 'name': `chevron-left`, 'theme': `tx-1` }"),e.InkRegistry.createText(`
-              `,!1),...this._toNodeList(s("State Management")),e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(c("State Management")),e.InkRegistry.createText(`
             `,!1)]),e.InkRegistry.createText(`
             `,!1),e.InkRegistry.createElement("a",{class:"flex-grow tx-right tx-primary py-40",href:"/ink/docs/compiler-api.html"},"{ 'class': `flex-grow tx-right tx-primary py-40`, 'href': `/ink/docs/compiler-api.html` }",[e.InkRegistry.createText(`
-              `,!1),...this._toNodeList(s("Compiler API")),e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(c("Compiler API")),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("element-icon",{name:"chevron-right",theme:"tx-1"},"{ 'name': `chevron-right`, 'theme': `tx-1` }"),e.InkRegistry.createText(`
             `,!1)]),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
@@ -889,4 +890,4 @@ ${l}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
       `,!1)]),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
-`,!1)])]}};return se(Pe);})();
+`,!1)])]}};return he(Ye);})();

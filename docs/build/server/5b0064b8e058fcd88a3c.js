@@ -1,23 +1,24 @@
-var InkAPI=(()=>{var ae=Object.create;var k=Object.defineProperty;var se=Object.getOwnPropertyDescriptor;var re=Object.getOwnPropertyNames;var ce=Object.getPrototypeOf,ie=Object.prototype.hasOwnProperty;var o=(l,t)=>()=>(t||l((t={exports:{}}).exports,t),t.exports),ne=(l,t)=>{for(var a in t)k(l,a,{get:t[a],enumerable:!0})},z=(l,t,a,r)=>{if(t&&typeof t=="object"||typeof t=="function")for(let n of re(t))!ie.call(l,n)&&n!==a&&k(l,n,{get:()=>t[n],enumerable:!(r=se(t,n))||r.enumerable});return l};var G=(l,t,a)=>(a=l!=null?ae(ce(l)):{},z(t||!l||!l.__esModule?k(a,"default",{value:l,enumerable:!0}):a,l)),oe=l=>z(k({},"__esModule",{value:!0}),l);var I=o(_=>{"use strict";Object.defineProperty(_,"__esModule",{value:!0});var w=class extends Error{static for(t,...a){return a.forEach(function(r){t=t.replace("%s",r)}),new this(t)}static forErrorsFound(t){let a=new this("Invalid Parameters");return a.errors=t,a}static require(t,a,...r){if(!t){for(let n of r)a=a.replace("%s",n);throw new this(a)}}constructor(t,a=500){super(),this.errors={},this.start=0,this.end=0,this.message=t,this.name=this.constructor.name,this.code=a}withCode(t){return this.code=t,this}withPosition(t,a){return this.start=t,this.end=a,this}toJSON(){return{error:!0,code:this.code,message:this.message}}};_.default=w});var L=o(D=>{"use strict";Object.defineProperty(D,"__esModule",{value:!0});var j=class{get length(){return this._elements.size}constructor(t=[]){this._elements=new Set,t.forEach(a=>this._elements.add(a))}add(t){this._elements.add(t)}toArray(){return Array.from(this._elements)}toString(){return Array.from(this._elements).filter(Boolean).map(t=>t.toString()).join("")}};D.default=j});var m=o(S=>{"use strict";Object.defineProperty(S,"__esModule",{value:!0});var fe=new Map;S.default=fe});var P=o(O=>{"use strict";Object.defineProperty(O,"__esModule",{value:!0});var N=class{get value(){return this._escape?this._value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"):this._value}constructor(t,a=!1){this._escape=a,this._value=t}toString(){return this.value}};O.default=N});var A=o(h=>{"use strict";var xe=h&&h.__importDefault||function(l){return l&&l.__esModule?l:{default:l}};Object.defineProperty(h,"__esModule",{value:!0});var me=xe(L()),he=["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"],M=class{get attributes(){return this._attributes}get children(){return this._children}get name(){return this._name}get props(){return this._props}constructor(t,a={},r="",n=[]){this._attributes={},this._name=t,this._attributes=a,this._props=r,this._children=new me.default(n)}toString(){let t=Object.entries(this._attributes),a=t.length>0?" "+t.map(([n,x])=>{if(typeof x=="string"&&!/["<>\n]/.test(x))return`${n}="${x}"`;if(typeof x=="boolean")return x?n:""}).join(" "):"";if(he.includes(this._name))return`<${this._name}${a} />`;let r=this._children.toString();return`<${this._name}${a}>${r}</${this._name}>`}};h.default=M});var q=o(d=>{"use strict";var W=d&&d.__importDefault||function(l){return l&&l.__esModule?l:{default:l}};Object.defineProperty(d,"__esModule",{value:!0});var de=W(P()),J=W(A()),C=class{static render(t){return t.filter(Boolean).map(a=>a.toString()).join("")}static registry(t,a=new Set){return t.forEach(r=>{r instanceof J.default&&(["html","head","body"].includes(r.name)||a.add(r),r.name!=="head"&&r.children.length>0&&this.registry(r.children.toArray(),a))}),a}static createElement(t,a,r,n=[]){return new J.default(t,a,r,n)}static createText(t,a=!0){return new de.default(t,a)}};d.default=C});var Y=o(b=>{"use strict";var F=b&&b.__importDefault||function(l){return l&&l.__esModule?l:{default:l}};Object.defineProperty(b,"__esModule",{value:!0});var be=F(I()),$=F(m()),B=F(q()),U=class{bindings(){let t=B.default.registry(this.template());return`{ ${Array.from(t.values()).map((r,n)=>r.props!=="{ }"?`'${n}': ${r.props}`:"").filter(r=>r!=="").join(", ")} }`}render(t={}){$.default.set("props",t||{}),$.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries($.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(n=>n[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let a=this.template(),r=B.default.render(a).trim();if(!r.toLowerCase().startsWith("<html"))throw be.default.for("Document must start with an <html> tag.");return`<!DOCTYPE html>
-${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:Array.isArray(t)&&t.every(a=>typeof a=="object"&&typeof a.nodeType=="number")?t:[B.default.createText(String(t))]}};b.default=U});var V=o(u=>{"use strict";Object.defineProperty(u,"__esModule",{value:!0});u.InkEmitter=void 0;var E=class{emit(t,a){return this}on(t,a){return this}once(t,a){return this}unbind(t,a){return this}};u.InkEmitter=E;var ue=new E;u.default=ue});var H=o(p=>{"use strict";var pe=p&&p.__importDefault||function(l){return l&&l.__esModule?l:{default:l}};Object.defineProperty(p,"__esModule",{value:!0});var ge=pe(m());function Te(l){let t=ge.default.get("env")||{};return l?t[l]||null:t}p.default=Te});var K=o(g=>{"use strict";var ke=g&&g.__importDefault||function(l){return l&&l.__esModule?l:{default:l}};Object.defineProperty(g,"__esModule",{value:!0});g.default=ye;var Ee=ke(m());function ye(){return Ee.default.get("props")||{}}});var X=o(c=>{"use strict";var ve=c&&c.__createBinding||(Object.create?function(l,t,a,r){r===void 0&&(r=a);var n=Object.getOwnPropertyDescriptor(t,a);(!n||("get"in n?!t.__esModule:n.writable||n.configurable))&&(n={enumerable:!0,get:function(){return t[a]}}),Object.defineProperty(l,r,n)}:function(l,t,a,r){r===void 0&&(r=a),l[r]=t[a]}),we=c&&c.__setModuleDefault||(Object.create?function(l,t){Object.defineProperty(l,"default",{enumerable:!0,value:t})}:function(l,t){l.default=t}),_e=c&&c.__importStar||function(l){if(l&&l.__esModule)return l;var t={};if(l!=null)for(var a in l)a!=="default"&&Object.prototype.hasOwnProperty.call(l,a)&&ve(t,l,a);return we(t,l),t},f=c&&c.__importDefault||function(l){return l&&l.__esModule?l:{default:l}};Object.defineProperty(c,"__esModule",{value:!0});c.InkText=c.InkException=c.InkEmitter=c.InkElement=c.InkRegistry=c.InkDocument=c.InkCollection=c.props=c.emitter=c.env=c.data=void 0;var Ie=f(I());c.InkException=Ie.default;var je=f(L());c.InkCollection=je.default;var De=f(Y());c.InkDocument=De.default;var Le=f(q());c.InkRegistry=Le.default;var Se=f(A());c.InkElement=Se.default;var Q=_e(V());c.emitter=Q.default;Object.defineProperty(c,"InkEmitter",{enumerable:!0,get:function(){return Q.InkEmitter}});var Ne=f(P());c.InkText=Ne.default;var Oe=f(m());c.data=Oe.default;var Pe=f(H());c.env=Pe.default;var Me=f(K());c.props=Me.default});var R=o((Qe,Z)=>{Z.exports={...X()}});var Ce={};ne(Ce,{default:()=>y});var e=G(R()),T=G(R());var i=function(l,...t){let a=Ae(l);for(let r=0;r<t.length;r++)a=a.replace("%s",String(t[r]));return a},Ae=function(l){return l};var y=class extends e.InkDocument{id(){return"5b0064b8e058fcd88a3c"}styles(){return`@ink theme;
+var InkAPI=(()=>{var oe=Object.create;var w=Object.defineProperty;var fe=Object.getOwnPropertyDescriptor;var de=Object.getOwnPropertyNames;var xe=Object.getPrototypeOf,me=Object.prototype.hasOwnProperty;var o=(a,t)=>()=>(t||a((t={exports:{}}).exports,t),t.exports),he=(a,t)=>{for(var l in t)w(a,l,{get:t[l],enumerable:!0})},V=(a,t,l,s)=>{if(t&&typeof t=="object"||typeof t=="function")for(let c of de(t))!me.call(a,c)&&c!==l&&w(a,c,{get:()=>t[c],enumerable:!(s=fe(t,c))||s.enumerable});return a};var K=(a,t,l)=>(l=a!=null?oe(xe(a)):{},V(t||!a||!a.__esModule?w(l,"default",{value:a,enumerable:!0}):l,a)),ue=a=>V(w({},"__esModule",{value:!0}),a);var X=o(O=>{"use strict";Object.defineProperty(O,"__esModule",{value:!0});O.status=be;var Q={CONTINUE:{code:100,status:"Continue"},PROCESSING:{code:102,status:"Processing"},OK:{code:200,status:"OK"},CREATED:{code:201,status:"Created"},ACCEPTED:{code:202,status:"Accepted"},EMPTY:{code:204,status:"No Content"},RESET:{code:205,status:"Reset Content"},PARTIAL:{code:206,status:"Partial Content"},MOVED:{code:301,status:"Moved Permanently"},FOUND:{code:302,status:"Found"},REDIRECT:{code:303,status:"See Other"},CACHE:{code:304,status:"Not Modified"},TEMPORARY:{code:307,status:"Temporary Redirect"},PERMANENT:{code:308,status:"Permanent Redirect"},ABORT:{code:309,status:"Aborted"},BAD_REQUEST:{code:400,status:"Bad Request"},UNAUTHORIZED:{code:401,status:"Unauthorized"},FORBIDDEN:{code:403,status:"Forbidden"},NOT_FOUND:{code:404,status:"Not Found"},BAD_METHOD:{code:405,status:"Method Not Allowed"},NOT_ACCEPTABLE:{code:406,status:"Not Acceptable"},REQUEST_TIMEOUT:{code:408,status:"Request Timeout"},CONFLICT:{code:409,status:"Conflict"},GONE:{code:410,status:"Gone"},LENGTH_REQUIRED:{code:411,status:"Length Required"},TOO_LARGE:{code:413,status:"Payload Too Large"},TOO_LONG:{code:414,status:"URI Too Long"},UNSUPPORTED_TYPE:{code:415,status:"Unsupported Media Type"},BAD_RANGE:{code:416,status:"Range Not Satisfiable"},BAD_EXPECTATION:{code:417,status:"Expectation Failed"},MISDIRECTED:{code:421,status:"Misdirected Request"},UNPROCESSABLE:{code:422,status:"Unprocessable Content"},LOCKED:{code:423,status:"Locked"},BAD_DEPENDENCY:{code:424,status:"Failed Dependency"},UPGRADE_REQUIRED:{code:426,status:"Upgrade Required"},BAD_PRECONDITION:{code:428,status:"Precondition Required"},TOO_MANY:{code:429,status:"Too Many Requests"},HEADER_TOO_LARGE:{code:431,status:"Request Header Fields Too Large"},LEGAL_REASONS:{code:451,status:"Unavailable For Legal Reasons"},ERROR:{code:500,status:"Internal Server Error"},NOT_IMPLEMENTED:{code:501,status:"Not Implemented"},BAD_GATEWAY:{code:502,status:"Bad Gateway"},UNAVAILABLE:{code:503,status:"Service Unavailable"},RESPONSE_TIMEOUT:{code:504,status:"Gateway Timeout"},BAD_VERSION:{code:505,status:"HTTP Version Not Supported"},INSUFFICIENT_STORAGE:{code:507,status:"Insufficient Storage"},INFINITE_LOOP:{code:508,status:"Loop Detected"},NETWORK_AUTHENTICATION_REQUIRED:{code:511,status:"Network Authentication Required"}};O.default=Q;function be(a){return Object.values(Q).find(t=>t.code===a)}});var L=o(S=>{"use strict";Object.defineProperty(S,"__esModule",{value:!0});var pe=X(),A=class a extends Error{static try(t){return{catch:l=>{try{return t()}catch(s){if(s instanceof a)return l(s,s.type);if(s instanceof Error){let c=a.upgrade(s);return l(c,c.type)}else if(typeof s=="string"){let c=a.for(s);return l(c,c.type)}return l(s,"unknown")}}}}static for(t,...l){return l.forEach(function(s){t=t.replace("%s",String(s))}),new this(t)}static forErrors(t){let l=new this("Invalid Parameters");return l.withErrors(t),l}static require(t,l,...s){if(!t){for(let c of s)l=l.replace("%s",c);throw new this(l)}}static upgrade(t,l=500){if(t instanceof a)return t;let s=new this(t.message,l);return s.name=t.name,s.stack=t.stack,s}get code(){return this._code}get end(){return this._end}get errors(){return Object.assign({},this._errors)}get start(){return this._start}get type(){return this._type}constructor(t,l=500){var s;super(t),this._errors={},this._start=0,this._end=0,this.name=this.constructor.name,this._type=this.constructor.name,this._code=l,this._status=((s=(0,pe.status)(l))===null||s===void 0?void 0:s.status)||"Unknown"}toJSON(){return JSON.stringify(this.toResponse(),null,2)}toResponse(t=0,l=0){let s={code:this._code,status:this._status,error:this.message,start:this._start,end:this._end,stack:this.trace(t,l)};return Object.keys(this._errors).length>0&&(s.errors=this._errors),s}trace(t=0,l=0){return typeof this.stack!="string"?[]:this.stack.split(`
+`).slice(t,l||this.stack.length).map(c=>c.trim()).map(c=>{if(!c.startsWith("at"))return!1;let[f,h,x]=c.split(" ");x||(x=`(${h})`,h="<none>");let[N,r,u]=x.substring(1,x.length-1).split(":");return{method:h,file:N,line:parseInt(r)||0,char:parseInt(u)||0}}).filter(Boolean)}withCode(t){return this._code=t,this}withErrors(t){return this._errors=t,this}withPosition(t,l){return this._start=t,this._end=l,this}};S.default=A});var Z=o(b=>{"use strict";var Te=b&&b.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(b,"__esModule",{value:!0});var ge=Te(L()),P=class extends ge.default{};b.default=P});var C=o(R=>{"use strict";Object.defineProperty(R,"__esModule",{value:!0});var j=class{get length(){return this._elements.size}constructor(t=[]){this._elements=new Set,t.forEach(l=>this._elements.add(l))}add(t){this._elements.add(t)}toArray(){return Array.from(this._elements)}toString(){return Array.from(this._elements).filter(Boolean).map(t=>t.toString()).join("")}};R.default=j});var p=o(M=>{"use strict";Object.defineProperty(M,"__esModule",{value:!0});var ke=new Map;M.default=ke});var q=o(B=>{"use strict";Object.defineProperty(B,"__esModule",{value:!0});var U=class{get value(){return this._escape?this._value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"):this._value}constructor(t,l=!1){this._escape=l,this._value=t}toString(){return this.value}};B.default=U});var G=o(T=>{"use strict";var Ee=T&&T.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(T,"__esModule",{value:!0});var ye=Ee(C()),ve=["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"],F=class{get attributes(){return this._attributes}get children(){return this._children}get name(){return this._name}get props(){return this._props}constructor(t,l={},s="",c=[]){this._attributes={},this._name=t,this._attributes=l,this._props=s,this._children=new ye.default(c)}toString(){let t=Object.entries(this._attributes),l=t.length>0?" "+t.map(([c,f])=>{if(typeof f=="string"&&!/["<>\n]/.test(f))return`${c}="${f}"`;if(typeof f=="boolean")return f?c:""}).join(" "):"";if(ve.includes(this._name))return`<${this._name}${l} />`;let s=this._children.toString();return`<${this._name}${l}>${s}</${this._name}>`}};T.default=F});var Y=o(g=>{"use strict";var te=g&&g.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(g,"__esModule",{value:!0});var _e=te(q()),ee=te(G()),$=class{static render(t){return t.filter(Boolean).map(l=>l.toString()).join("")}static registry(t,l=new Set){return t.forEach(s=>{s instanceof ee.default&&(["html","head","body"].includes(s.name)||l.add(s),s.name!=="head"&&s.children.length>0&&this.registry(s.children.toArray(),l))}),l}static createElement(t,l,s,c=[]){return new ee.default(t,l,s,c)}static createText(t,l=!0){return new _e.default(t,l)}};g.default=$});var ae=o(k=>{"use strict";var z=k&&k.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(k,"__esModule",{value:!0});var we=z(L()),m=z(p()),H=z(Y()),W=class{bindings(t={}){m.default.set("props",t||{}),m.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries(m.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(c=>c[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let l=H.default.registry(this.template());return`{ ${Array.from(l.values()).map((c,f)=>c.props!=="{ }"?`'${f}': ${c.props}`:"").filter(c=>c!=="").join(", ")} }`}render(t={}){m.default.set("props",t||{}),m.default.set("env",Object.assign(Object.assign({},process.env||{}),{BUILD_ID:this.id(),APP_DATA:btoa(JSON.stringify(Object.assign(Object.assign({},Object.fromEntries(m.default.entries())),{env:Object.assign(Object.assign({},Object.fromEntries(Object.entries(process.env||{}).filter(c=>c[0].startsWith("PUBLIC_")))),{BUILD_ID:this.id()})})))}));let l=this.template(),s=H.default.render(l).trim();if(!s.toLowerCase().startsWith("<html"))throw we.default.for("Document must start with an <html> tag.");return`<!DOCTYPE html>
+${s}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:Array.isArray(t)&&t.every(l=>typeof l=="object"&&typeof l.nodeType=="number")?t:[H.default.createText(String(t))]}};k.default=W});var le=o(E=>{"use strict";Object.defineProperty(E,"__esModule",{value:!0});E.InkEmitter=void 0;var I=class{emit(t,l){return this}on(t,l){return this}once(t,l){return this}unbind(t,l){return this}};E.InkEmitter=I;var Oe=new I;E.default=Oe});var se=o(y=>{"use strict";var Ie=y&&y.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(y,"__esModule",{value:!0});var De=Ie(p());function Ne(a){let t=De.default.get("env")||{};return a?t[a]||null:t}y.default=Ne});var re=o(v=>{"use strict";var Ae=v&&v.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(v,"__esModule",{value:!0});v.default=Le;var Se=Ae(p());function Le(){return Se.default.get("props")||{}}});var ie=o(i=>{"use strict";var Pe=i&&i.__createBinding||(Object.create?function(a,t,l,s){s===void 0&&(s=l);var c=Object.getOwnPropertyDescriptor(t,l);(!c||("get"in c?!t.__esModule:c.writable||c.configurable))&&(c={enumerable:!0,get:function(){return t[l]}}),Object.defineProperty(a,s,c)}:function(a,t,l,s){s===void 0&&(s=l),a[s]=t[l]}),je=i&&i.__setModuleDefault||(Object.create?function(a,t){Object.defineProperty(a,"default",{enumerable:!0,value:t})}:function(a,t){a.default=t}),Re=i&&i.__importStar||function(){var a=function(t){return a=Object.getOwnPropertyNames||function(l){var s=[];for(var c in l)Object.prototype.hasOwnProperty.call(l,c)&&(s[s.length]=c);return s},a(t)};return function(t){if(t&&t.__esModule)return t;var l={};if(t!=null)for(var s=a(t),c=0;c<s.length;c++)s[c]!=="default"&&Pe(l,t,s[c]);return je(l,t),l}}(),d=i&&i.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(i,"__esModule",{value:!0});i.InkText=i.InkException=i.InkEmitter=i.InkElement=i.InkRegistry=i.InkDocument=i.InkCollection=i.props=i.emitter=i.env=i.data=void 0;var Ce=d(Z());i.InkException=Ce.default;var Me=d(C());i.InkCollection=Me.default;var Ue=d(ae());i.InkDocument=Ue.default;var Be=d(Y());i.InkRegistry=Be.default;var qe=d(G());i.InkElement=qe.default;var ce=Re(le());i.emitter=ce.default;Object.defineProperty(i,"InkEmitter",{enumerable:!0,get:function(){return ce.InkEmitter}});var Fe=d(q());i.InkText=Fe.default;var Ge=d(p());i.data=Ge.default;var $e=d(se());i.env=$e.default;var Ye=d(re());i.props=Ye.default});var J=o((ot,ne)=>{ne.exports={...ie()}});var We={};he(We,{default:()=>D});var e=K(J()),_=K(J());var n=function(a,...t){let l=He(a);for(let s=0;s<t.length;s++)l=l.replace("%s",String(t[s]));return l},He=function(a){return a};var D=class extends e.InkDocument{id(){return"5b0064b8e058fcd88a3c"}styles(){return`@ink theme;
   @ink reset;
   @ink fouc-opacity;
-  @ink utilities;`}template(){let t="/ink/panel.html",a=i("Ink UI - Web Components Meets Atomic Styles."),r=i("Ink UI atomically generates CSS styles and provides out of box web components."),n=()=>{document.querySelector("panel-layout").toggle("left")},x=(s,v)=>{setTimeout(()=>{v("https://images.wsj.net/im-580612/8SR")},5e3)},ee=(s,v)=>{setTimeout(()=>{v(s.map((qe,$e)=>"https://images.wsj.net/im-580612/8SR"))},1e3)},te={first:"Jane",last:"Doe"},le=[{first1:"John",last1:"Doe",fieldset2:[{first2:"Jane",last2:"Doe"}]}];return[e.InkRegistry.createText(`
+  @ink utilities;`}template(){let t="/ink/panel.html",l=n("Ink UI - Web Components Meets Atomic Styles."),s=n("Ink UI atomically generates CSS styles and provides out of box web components."),c=()=>{document.querySelector("panel-layout").toggle("left")},f=(r,u)=>{setTimeout(()=>{u("https://images.wsj.net/im-580612/8SR")},5e3)},h=(r,u)=>{setTimeout(()=>{u(r.map((ze,Je)=>"https://images.wsj.net/im-580612/8SR"))},1e3)},x={first:"Jane",last:"Doe"},N=[{first1:"John",last1:"Doe",fieldset2:[{first2:"Jane",last2:"Doe"}]}];return[e.InkRegistry.createText(`
 `,!1),e.InkRegistry.createElement("html",{},"{ }",[e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("head",{},"{ }",[e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{charset:"utf-8"},"{ 'charset': `utf-8` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"viewport",content:"width=device-width, initial-scale=1"},"{ 'name': `viewport`, 'content': `width=device-width, initial-scale=1` }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("title",{},"{ }",[...this._toNodeList(a)]),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{name:"description",content:r},"{ 'name': `description`, 'content': description }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{property:"og:title",content:a},"{ 'property': `og:title`, 'content': title }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{property:"og:description",content:r},"{ 'property': `og:description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("title",{},"{ }",[...this._toNodeList(l)]),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"description",content:s},"{ 'name': `description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:title",content:l},"{ 'property': `og:title`, 'content': title }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{property:"og:description",content:s},"{ 'property': `og:description`, 'content': description }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{property:"og:image",content:"https://stackpress.github.io/ink/ink-logo.png"},"{ 'property': `og:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{property:"og:url",content:`https://stackpress.github.io/ink${t}`},"{ 'property': `og:url`, 'content': `https://stackpress.github.io/ink${url}` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{property:"og:type",content:"website"},"{ 'property': `og:type`, 'content': `website` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"twitter:card",content:"summary"},"{ 'name': `twitter:card`, 'content': `summary` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"twitter:site",content:"@stackpress"},"{ 'name': `twitter:site`, 'content': `@stackpress` }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:title",content:a},"{ 'name': `twitter:title`, 'content': title }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:description",content:r},"{ 'name': `twitter:description`, 'content': description }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:title",content:l},"{ 'name': `twitter:title`, 'content': title }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("meta",{name:"twitter:description",content:s},"{ 'name': `twitter:description`, 'content': description }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("meta",{name:"twitter:image",content:"https://stackpress.github.io/ink/ink-logo.png"},"{ 'name': `twitter:image`, 'content': `https://stackpress.github.io/ink/ink-logo.png` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"favicon",href:"/ink/favicon.ico"},"{ 'rel': `favicon`, 'href': `/ink/favicon.ico` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"shortcut icon",type:"image/png",href:"/ink/favicon.png"},"{ 'rel': `shortcut icon`, 'type': `image/png`, 'href': `/ink/favicon.png` }"),e.InkRegistry.createText(`
@@ -25,10 +26,10 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
   `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",media:"(prefers-color-scheme:light)",href:"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css"},"{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:light)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/light.css` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",media:"(prefers-color-scheme:dark)",href:"https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css"},"{ 'rel': `stylesheet`, 'media': `(prefers-color-scheme:dark)`, 'href': `https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css` }"),e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:"/ink/styles/global.css"},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/styles/global.css` }"),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:`/ink/build/client/${(0,T.env)("BUILD_ID")}.css`},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/build/client/${env('BUILD_ID')}.css` }"),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("link",{rel:"stylesheet",type:"text/css",href:`/ink/build/client/${(0,_.env)("BUILD_ID")}.css`},"{ 'rel': `stylesheet`, 'type': `text/css`, 'href': `/ink/build/client/${env('BUILD_ID')}.css` }"),e.InkRegistry.createText(`
   
-  `,!1),e.InkRegistry.createElement("script",{"data-app":(0,T.env)("APP_DATA"),src:`/ink/build/client/${(0,T.env)("BUILD_ID")}.js`},"{ 'data-app': env('APP_DATA'), 'src': `/ink/build/client/${env('BUILD_ID')}.js` }"),e.InkRegistry.createText(`
-  `,!1),...(0,T.env)("NODE_ENV")==="development"?[e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("script",{"data-app":(0,_.env)("APP_DATA"),src:`/ink/build/client/${(0,_.env)("BUILD_ID")}.js`},"{ 'data-app': env('APP_DATA'), 'src': `/ink/build/client/${env('BUILD_ID')}.js` }"),e.InkRegistry.createText(`
+  `,!1),...(0,_.env)("NODE_ENV")==="development"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("script",{src:"/dev.js"},"{ 'src': `/dev.js` }"),e.InkRegistry.createText(`
   `,!1)]:[],e.InkRegistry.createText(`
 `,!1)]),e.InkRegistry.createText(`
@@ -36,7 +37,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
     `,!1),e.InkRegistry.createElement("panel-layout",{},"{ }",[e.InkRegistry.createText(`
       `,!1),e.InkRegistry.createElement("header",{},"{ }",[e.InkRegistry.createElement("menu",{class:"flex flex-center-y px-20 py-15 m-0 bg-t-1"},"{ 'class': `flex flex-center-y px-20 py-15 m-0 bg-t-1` }",[e.InkRegistry.createText(`
   `,!1),...t!=="/ink/index.html"&&t!=="/ink/500.html"?[e.InkRegistry.createText(`
-    `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1",click:n},"{ 'class': `fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1`, 'click': toggle }",[]),e.InkRegistry.createText(`
+    `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1",click:c},"{ 'class': `fas fa-fw fa-bars cursor-pointer py-5 pr-10 none md-inline-block tx-t-1`, 'click': toggle }",[]),e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("div",{class:"flex-grow"},"{ 'class': `flex-grow` }",[]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{href:"/ink"},"{ 'href': `/ink` }",[e.InkRegistry.createText(`
@@ -60,133 +61,133 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
   `,!1),e.InkRegistry.createElement("h3",{class:"flex-grow m-0 tx-upper"},"{ 'class': `flex-grow m-0 tx-upper` }",[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"tx-primary",href:"/ink"},"{ 'class': `tx-primary`, 'href': `/ink` }",[e.InkRegistry.createText("Ink",!1)]),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
-  `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-chevron-left cursor-pointer none md-inline-block",click:n},"{ 'class': `fas fa-fw fa-chevron-left cursor-pointer none md-inline-block`, 'click': toggle }",[]),e.InkRegistry.createText(`
+  `,!1),e.InkRegistry.createElement("i",{class:"fas fa-fw fa-chevron-left cursor-pointer none md-inline-block",click:c},"{ 'class': `fas fa-fw fa-chevron-left cursor-pointer none md-inline-block`, 'click': toggle }",[]),e.InkRegistry.createText(`
 `,!1)]),e.InkRegistry.createText(`
 `,!1),e.InkRegistry.createElement("nav",{class:"bg-t-1 scroll-auto h-calc-full-60"},"{ 'class': `bg-t-1 scroll-auto h-calc-full-60` }",[e.InkRegistry.createText(`
   `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-0 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
-    `,!1),...this._toNodeList(i("Introduction")),e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(n("Introduction")),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
   `,!1),...t==="/docs/index.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/index.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Documentation")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Documentation")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/index.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/index.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Documentation")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Documentation")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/getting-started.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/getting-started.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/getting-started.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Getting Started")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Getting Started")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/getting-started.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/getting-started.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Getting Started")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Getting Started")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
 
   `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
-    `,!1),...this._toNodeList(i("Features")),e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(n("Features")),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
   `,!1),...t==="/docs/markup-syntax.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/markup-syntax.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/markup-syntax.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Markup Syntax")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Markup Syntax")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/markup-syntax.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/markup-syntax.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Markup Syntax")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Markup Syntax")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/state-management.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/state-management.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/state-management.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("State Management")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("State Management")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/state-management.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/state-management.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("State Management")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("State Management")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/component-strategy.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/component-strategy.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-strategy.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Component Strategy")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Component Strategy")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/component-strategy.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-strategy.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Component Strategy")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Component Strategy")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/compiler-api.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/compiler-api.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/compiler-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Compiler API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Compiler API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/compiler-api.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/compiler-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Compiler API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Compiler API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/client-api.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/client-api.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/client-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Client API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Client API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/client-api.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/client-api.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Client API")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Client API")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
 
   `,!1),e.InkRegistry.createElement("h6",{class:"bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper"},"{ 'class': `bt-1 bt-solid bt-t-1 tx-black tx-14 mb-0 mt-20 pt-20 pb-10 pl-10 tx-upper` }",[e.InkRegistry.createText(`
-    `,!1),...this._toNodeList(i("Usage")),e.InkRegistry.createText(`
+    `,!1),...this._toNodeList(n("Usage")),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
   `,!1),...t==="/docs/template-engine.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/template-engine.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/template-engine.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Template Engine")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Template Engine")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/template-engine.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/template-engine.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Template Engine")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Template Engine")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/single-page.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/single-page.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/single-page.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Single Page App")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Single Page App")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/single-page.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/single-page.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Single Page App")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Single Page App")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/static-site.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/static-site.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/static-site.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Static Site Generator")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Static Site Generator")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/static-site.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/static-site.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Static Site Generator")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Static Site Generator")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/component-publisher.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold",href:"/ink/docs/component-publisher.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold`, 'href': `/ink/docs/component-publisher.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Component Publisher")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Component Publisher")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10",href:"/ink/docs/component-publisher.html"},"{ 'class': `block tx-info py-10 pl-10`, 'href': `/ink/docs/component-publisher.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Component Publisher")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Component Publisher")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
   `,!1),...t==="/docs/developer-tools.html"?[e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 tx-bold mb-100",href:"/ink/docs/developer-tools.html"},"{ 'class': `block tx-info py-10 pl-10 tx-bold mb-100`, 'href': `/ink/docs/developer-tools.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Developer Tools")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Developer Tools")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]:[,e.InkRegistry.createText(`
     `,!1),e.InkRegistry.createElement("a",{class:"block tx-info py-10 pl-10 mb-100",href:"/ink/docs/developer-tools.html"},"{ 'class': `block tx-info py-10 pl-10 mb-100`, 'href': `/ink/docs/developer-tools.html` }",[e.InkRegistry.createText(`
-      `,!1),...this._toNodeList(i("Developer Tools")),e.InkRegistry.createText(`
+      `,!1),...this._toNodeList(n("Developer Tools")),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)],e.InkRegistry.createText(`
 `,!1)])]),e.InkRegistry.createText(`
       `,!1),e.InkRegistry.createElement("main",{},"{ }",[e.InkRegistry.createText(`
         `,!1),e.InkRegistry.createElement("api-docs",{},"{ }",[e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("h1",{class:"tx-primary tx-upper tx-30 py-20"},"{ 'class': `tx-primary tx-upper tx-30 py-20` }",[e.InkRegistry.createText(`
-            `,!1),...this._toNodeList(i("Form")),e.InkRegistry.createText(`
+            `,!1),...this._toNodeList(n("Form")),e.InkRegistry.createText(`
           `,!1)]),e.InkRegistry.createText(`
           `,!1),e.InkRegistry.createElement("form",{method:"get",action:"/ink/ui/form/index.html"},"{ 'method': `get`, 'action': `/ink/ui/form/index.html` }",[e.InkRegistry.createText(`
             `,!1),e.InkRegistry.createElement("section",{class:"flex flex-wrap gap-10"},"{ 'class': `flex flex-wrap gap-10` }",[e.InkRegistry.createText(`
@@ -215,7 +216,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("div",{class:"bg-t-3 h-120 flex flex-center"},"{ 'class': `bg-t-3 h-120 flex flex-center` }",[e.InkRegistry.createText(`
-                  `,!1),e.InkRegistry.createElement("form-fieldset",{legend:"Fieldset %s",name:"fieldset1",value:le},"{ 'legend': `Fieldset %s`, 'name': `fieldset1`, 'value': fieldset }",[e.InkRegistry.createText(`
+                  `,!1),e.InkRegistry.createElement("form-fieldset",{legend:"Fieldset %s",name:"fieldset1",value:N,multiple:!0},"{ 'legend': `Fieldset %s`, 'name': `fieldset1`, 'value': fieldset, 'multiple': true }",[e.InkRegistry.createText(`
                     `,!1),e.InkRegistry.createElement("field-input",{name:"first1",placeholder:"Enter your first name"},"{ 'name': `first1`, 'placeholder': `Enter your first name` }"),e.InkRegistry.createText(`
                   `,!1)]),e.InkRegistry.createText(`
                 `,!1)]),e.InkRegistry.createText(`
@@ -225,7 +226,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
             `,!1)]),e.InkRegistry.createText(`
             `,!1),e.InkRegistry.createElement("h1",{class:"tx-primary tx-upper tx-30 py-20"},"{ 'class': `tx-primary tx-upper tx-30 py-20` }",[e.InkRegistry.createText(`
-              `,!1),...this._toNodeList(i("Fields")),e.InkRegistry.createText(`
+              `,!1),...this._toNodeList(n("Fields")),e.InkRegistry.createText(`
             `,!1)]),e.InkRegistry.createText(`
             `,!1),e.InkRegistry.createElement("section",{class:"flex flex-wrap gap-10"},"{ 'class': `flex flex-wrap gap-10` }",[e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
@@ -246,7 +247,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("div",{class:"bg-t-3 h-120 flex flex-center"},"{ 'class': `bg-t-3 h-120 flex flex-center` }",[e.InkRegistry.createText(`
-                  `,!1),e.InkRegistry.createElement("field-country",{name:"country",class:"w-200 relative z-1",placeholder:"Choose Country",value:"US",open:s=>console.log("open",s),close:s=>console.log("close",s),filter:s=>console.log("filter",s),select:s=>console.log("select",s),remove:s=>console.log("remove",s),add:s=>console.log("add",s),clear:s=>console.log("clear",s),change:s=>console.log("change",s),update:s=>console.log("update",s)},"{ 'name': `country`, 'class': `w-200 relative z-1`, 'placeholder': `Choose Country`, 'value': `US`, 'open': (e) => console.log('open', e), 'close': (e) => console.log('close', e), 'filter': (e) => console.log('filter', e), 'select': (e) => console.log('select', e), 'remove': (e) => console.log('remove', e), 'add': (e) => console.log('add', e), 'clear': (e) => console.log('clear', e), 'change': (e) => console.log('change', e), 'update': (e) => console.log('update', e) }"),e.InkRegistry.createText(`
+                  `,!1),e.InkRegistry.createElement("field-country",{name:"country",class:"w-200 relative z-1",placeholder:"Choose Country",value:"US",open:r=>console.log("open",r),close:r=>console.log("close",r),filter:r=>console.log("filter",r),select:r=>console.log("select",r),remove:r=>console.log("remove",r),add:r=>console.log("add",r),clear:r=>console.log("clear",r),change:r=>console.log("change",r),update:r=>console.log("update",r)},"{ 'name': `country`, 'class': `w-200 relative z-1`, 'placeholder': `Choose Country`, 'value': `US`, 'open': (e) => console.log('open', e), 'close': (e) => console.log('close', e), 'filter': (e) => console.log('filter', e), 'select': (e) => console.log('select', e), 'remove': (e) => console.log('remove', e), 'add': (e) => console.log('add', e), 'clear': (e) => console.log('clear', e), 'change': (e) => console.log('change', e), 'update': (e) => console.log('update', e) }"),e.InkRegistry.createText(`
                 `,!1)]),e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("a",{class:"block tx-center tx-white p-10 b-solid b-t-3 b-1",href:"/ink/ui/form/country.html"},"{ 'class': `block tx-center tx-white p-10 b-solid b-t-3 b-1`, 'href': `/ink/ui/form/country.html` }",[e.InkRegistry.createText(`
                   Country
@@ -254,7 +255,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("div",{class:"bg-t-3 h-120 flex flex-center"},"{ 'class': `bg-t-3 h-120 flex flex-center` }",[e.InkRegistry.createText(`
-                  `,!1),e.InkRegistry.createElement("field-currency",{name:"currency",class:"w-200",placeholder:"Choose Currency",value:"PHP",open:s=>console.log("open",s),close:s=>console.log("close",s),filter:s=>console.log("filter",s),select:s=>console.log("select",s),remove:s=>console.log("remove",s),add:s=>console.log("add",s),clear:s=>console.log("clear",s),change:s=>console.log("change",s),update:s=>console.log("update",s)},"{ 'name': `currency`, 'class': `w-200`, 'placeholder': `Choose Currency`, 'value': `PHP`, 'open': (e) => console.log('open', e), 'close': (e) => console.log('close', e), 'filter': (e) => console.log('filter', e), 'select': (e) => console.log('select', e), 'remove': (e) => console.log('remove', e), 'add': (e) => console.log('add', e), 'clear': (e) => console.log('clear', e), 'change': (e) => console.log('change', e), 'update': (e) => console.log('update', e) }"),e.InkRegistry.createText(`
+                  `,!1),e.InkRegistry.createElement("field-currency",{name:"currency",class:"w-200",placeholder:"Choose Currency",value:"PHP",open:r=>console.log("open",r),close:r=>console.log("close",r),filter:r=>console.log("filter",r),select:r=>console.log("select",r),remove:r=>console.log("remove",r),add:r=>console.log("add",r),clear:r=>console.log("clear",r),change:r=>console.log("change",r),update:r=>console.log("update",r)},"{ 'name': `currency`, 'class': `w-200`, 'placeholder': `Choose Currency`, 'value': `PHP`, 'open': (e) => console.log('open', e), 'close': (e) => console.log('close', e), 'filter': (e) => console.log('filter', e), 'select': (e) => console.log('select', e), 'remove': (e) => console.log('remove', e), 'add': (e) => console.log('add', e), 'clear': (e) => console.log('clear', e), 'change': (e) => console.log('change', e), 'update': (e) => console.log('update', e) }"),e.InkRegistry.createText(`
                 `,!1)]),e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("a",{class:"block tx-center tx-white p-10 b-solid b-t-3 b-1",href:"/ink/ui/form/currency.html"},"{ 'class': `block tx-center tx-white p-10 b-solid b-t-3 b-1`, 'href': `/ink/ui/form/currency.html` }",[e.InkRegistry.createText(`
                   Currency
@@ -286,7 +287,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("div",{class:"bg-t-3 h-120 flex flex-center"},"{ 'class': `bg-t-3 h-120 flex flex-center` }",[e.InkRegistry.createText(`
-                  `,!1),e.InkRegistry.createElement("field-file",{name:"file",class:"block w-250",upload:x,update:console.log},"{ 'name': `file`, 'class': `block w-250`, 'upload': fileupload, 'update': console.log }"),e.InkRegistry.createText(`
+                  `,!1),e.InkRegistry.createElement("field-file",{name:"file",class:"block w-250",upload:f,update:console.log},"{ 'name': `file`, 'class': `block w-250`, 'upload': fileupload, 'update': console.log }"),e.InkRegistry.createText(`
                 `,!1)]),e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("a",{class:"block tx-center tx-white p-10 b-solid b-t-3 b-1",href:"/ink/ui/form/file.html"},"{ 'class': `block tx-center tx-white p-10 b-solid b-t-3 b-1`, 'href': `/ink/ui/form/file.html` }",[e.InkRegistry.createText(`
                   File
@@ -294,7 +295,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("div",{class:"bg-t-3 h-120 flex flex-center"},"{ 'class': `bg-t-3 h-120 flex flex-center` }",[e.InkRegistry.createText(`
-                  `,!1),e.InkRegistry.createElement("field-filelist",{image:!0,name:"filelist",class:"block w-250",upload:ee,update:console.log},"{ 'image': true, 'name': `filelist`, 'class': `block w-250`, 'upload': filelistupload, 'update': console.log }"),e.InkRegistry.createText(`
+                  `,!1),e.InkRegistry.createElement("field-filelist",{image:!0,name:"filelist",class:"block w-250",upload:h,update:console.log},"{ 'image': true, 'name': `filelist`, 'class': `block w-250`, 'upload': filelistupload, 'update': console.log }"),e.InkRegistry.createText(`
                 `,!1)]),e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("a",{class:"block tx-center tx-white p-10 b-solid b-t-3 b-1",href:"/ink/ui/form/filelist.html"},"{ 'class': `block tx-center tx-white p-10 b-solid b-t-3 b-1`, 'href': `/ink/ui/form/filelist.html` }",[e.InkRegistry.createText(`
                   Filelist
@@ -332,7 +333,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("div",{class:"bg-t-3 h-120 flex flex-center"},"{ 'class': `bg-t-3 h-120 flex flex-center` }",[e.InkRegistry.createText(`
-                  `,!1),e.InkRegistry.createElement("field-metadata",{class:"w-250",name:"metadata",placeholder:"Enter text",value:te,update:console.log},"{ 'class': `w-250`, 'name': `metadata`, 'placeholder': `Enter text`, 'value': metadata, 'update': console.log }"),e.InkRegistry.createText(`
+                  `,!1),e.InkRegistry.createElement("field-metadata",{class:"w-250",name:"metadata",placeholder:"Enter text",value:x,update:console.log},"{ 'class': `w-250`, 'name': `metadata`, 'placeholder': `Enter text`, 'value': metadata, 'update': console.log }"),e.InkRegistry.createText(`
                 `,!1)]),e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("a",{class:"block tx-center tx-white p-10 b-solid b-t-3 b-1",href:"/ink/ui/form/metadata.html"},"{ 'class': `block tx-center tx-white p-10 b-solid b-t-3 b-1`, 'href': `/ink/ui/form/metadata.html` }",[e.InkRegistry.createText(`
                   Metadata
@@ -381,7 +382,7 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
               `,!1)]),e.InkRegistry.createText(`
               `,!1),e.InkRegistry.createElement("div",{class:"basis-third-10 lg-basis-half-10 md-basis-full"},"{ 'class': `basis-third-10 lg-basis-half-10 md-basis-full` }",[e.InkRegistry.createText(`
                 `,!1),e.InkRegistry.createElement("div",{class:"bg-t-3 h-120 flex flex-center"},"{ 'class': `bg-t-3 h-120 flex flex-center` }",[e.InkRegistry.createText(`
-                  `,!1),e.InkRegistry.createElement("field-select",{class:"w-200 relative z-1",name:"select",placeholder:"Choose",value:"1",search:!0,custom:!0,multiple:!0,open:s=>console.log("open",s),close:s=>console.log("close",s),filter:s=>console.log("filter",s),select:s=>console.log("select",s),remove:s=>console.log("remove",s),add:s=>console.log("add",s),clear:s=>console.log("clear",s),change:s=>console.log("change",s),update:s=>console.log("update",s)},"{ 'class': `w-200 relative z-1`, 'name': `select`, 'placeholder': `Choose`, 'value': `1`, 'search': true, 'custom': true, 'multiple': true, 'open': (e) => console.log('open', e), 'close': (e) => console.log('close', e), 'filter': (e) => console.log('filter', e), 'select': (e) => console.log('select', e), 'remove': (e) => console.log('remove', e), 'add': (e) => console.log('add', e), 'clear': (e) => console.log('clear', e), 'change': (e) => console.log('change', e), 'update': (e) => console.log('update', e) }",[e.InkRegistry.createText(`
+                  `,!1),e.InkRegistry.createElement("field-select",{class:"w-200 relative z-1",name:"select",placeholder:"Choose",value:"1",search:!0,custom:!0,multiple:!0,open:r=>console.log("open",r),close:r=>console.log("close",r),filter:r=>console.log("filter",r),select:r=>console.log("select",r),remove:r=>console.log("remove",r),add:r=>console.log("add",r),clear:r=>console.log("clear",r),change:r=>console.log("change",r),update:r=>console.log("update",r)},"{ 'class': `w-200 relative z-1`, 'name': `select`, 'placeholder': `Choose`, 'value': `1`, 'search': true, 'custom': true, 'multiple': true, 'open': (e) => console.log('open', e), 'close': (e) => console.log('close', e), 'filter': (e) => console.log('filter', e), 'select': (e) => console.log('select', e), 'remove': (e) => console.log('remove', e), 'add': (e) => console.log('add', e), 'clear': (e) => console.log('clear', e), 'change': (e) => console.log('change', e), 'update': (e) => console.log('update', e) }",[e.InkRegistry.createText(`
                     `,!1),e.InkRegistry.createElement("option",{value:"1",keyword:"option 1"},"{ 'value': `1`, 'keyword': `option 1` }",[e.InkRegistry.createText("Option 1",!1)]),e.InkRegistry.createText(`
                     `,!1),e.InkRegistry.createElement("option",{value:4,keyword:"option 2"},"{ 'value': 4, 'keyword': `option 2` }",[e.InkRegistry.createElement("strong",{},"{ }",[e.InkRegistry.createText("Option 2",!1)])]),e.InkRegistry.createText(`
                     `,!1),e.InkRegistry.createElement("option",{value:[1,"2",3],keyword:"option 3"},"{ 'value': [1, '2', 3], 'keyword': `option 3` }",[e.InkRegistry.createText("Option 3",!1)]),e.InkRegistry.createText(`
@@ -454,4 +455,4 @@ ${r}`}_toNodeList(t){return typeof t=="object"&&typeof t.nodeType=="number"?[t]:
       `,!1)]),e.InkRegistry.createText(`
     `,!1)]),e.InkRegistry.createText(`
   `,!1)]),e.InkRegistry.createText(`
-`,!1)])]}};return oe(Ce);})();
+`,!1)])]}};return ue(We);})();

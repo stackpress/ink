@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-loader",
-  "version": "0.1.26",
+  "version": "0.2.5",
   "description": "Webpack support for the Ink markup language.",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -20,13 +20,14 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.26",
-    "loader-utils": "3.2.1",
+    "@stackpress/ink": "0.2.5",
+    "loader-utils": "3.3.1",
     "schema-utils": "4.2.0"
   },
   "devDependencies": {
     "@types/loader-utils": "2.0.6",
-    "@types/node": "22.7.4",
-    "typescript": "5.6.2"
+    "@types/node": "22.9.3",
+    "ts-node": "10.9.2",
+    "typescript": "5.7.2"
   }
 }

@@ -7,15 +7,15 @@
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.1.26",
-    "@stackpress/ink-dev": "0.1.26"
+    "@stackpress/ink": "0.2.5",
+    "@stackpress/ink-dev": "0.2.5"
   },
   "devDependencies": {
-    "@types/node": "22.1.0",
+    "@types/node": "22.9.3",
     "autoprefixer": "10.4.20",
     "postcss": "8.4.47",
     "tailwindcss": "3.4.13",
     "ts-node": "10.9.2",
-    "typescript": "5.5.4"
+    "typescript": "5.7.2"
   }
 }

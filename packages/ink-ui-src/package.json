@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-ui-src",
-  "version": "0.1.26",
+  "version": "0.2.5",
   "private": true,
   "scripts": {
     "build": "yarn build:tsc && yarn build:element && yarn build:field && yarn build:form && yarn build:format && yarn build:layout && yarn build:intl && yarn build:files && yarn build:package",
@@ -15,10 +15,10 @@
     "build:tsc": "tsc"
   },
   "devDependencies": {
-    "@stackpress/ink": "0.1.26",
+    "@stackpress/ink": "0.2.5",
     "@types/dompurify": "3.0.5",
     "@types/inputmask": "5.0.7",
-    "@types/node": "22.7.4",
+    "@types/node": "22.9.3",
     "@types/prismjs": "1.26.4",
     "codemirror": "5.65.17",
     "dayjs": "1.11.13",
@@ -27,6 +27,7 @@
     "marked": "14.1.2",
     "prismjs": "1.29.0",
     "suneditor": "2.47.0",
-    "typescript": "5.6.2"
+    "ts-node": "10.9.2",
+    "typescript": "5.7.2"
   }
 }
