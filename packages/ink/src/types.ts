@@ -237,8 +237,13 @@ export type ServerNode = ServerElement|ServerText;
 
 export type AnyChild = ClientElement|Node|string|undefined;
 
-export type InkComponentClass = Constructor<ClientComponent> &{
-  component: [ string, string ],
+export type InkComponentClass = Constructor<ClientComponent> & {
+  //ie. abc123
+  id: string,
+  //ie. tag-name
+  tagname: string,
+  //ie. className_abc123
+  classname: string,
   registered: string|null,
   observedAttributes?: string[],
   register(): void

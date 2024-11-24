@@ -66,8 +66,6 @@ export default class Transpiler {
         declarationMap: true, 
         // Generates corresponding '.map' file.
         sourceMap: true, 
-        // Set the target JavaScript version
-        target: ts.ScriptTarget.ESNext,  
         // Set the module system
         module: ts.ModuleKind.CommonJS
       },
@@ -97,6 +95,7 @@ export default class Transpiler {
    */
   public transpile() {
     const { 
+      id,
       absolute,
       classname, 
       imports,
@@ -169,11 +168,23 @@ export default class Transpiler {
       extends: parent,
       isDefaultExport: true,
     });
-    //public static component = ['foo-bar', 'FoobarComponent'];
+    //public static id = 'abc123';
     component.addProperty({
-      name: 'component',
+      name: 'id',
       isStatic: true,
-      initializer: `[ '${tagname}', '${classname}' ] as [ string, string ]`
+      initializer: `'${id}'`
+    });
+    //public static tagname = 'foo-bar';
+    component.addProperty({
+      name: 'tagname',
+      isStatic: true,
+      initializer: `'${tagname}'`
+    });
+    //public static classname = 'FoobarComponent_abc123';
+    component.addProperty({
+      name: 'classname',
+      isStatic: true,
+      initializer: `'${classname}'`
     });
     //public static observedAttributes = ["required", "value"]
     if (observe.length > 0) {

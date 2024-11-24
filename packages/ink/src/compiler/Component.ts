@@ -152,8 +152,15 @@ export default class Component {
       //no dependencies here...
       return [];
     }
+    //this should be imports from the <script>
+    //could be js or json
     const imports = this.imports.map(token => ({
-      path: this._loader.absolute(token.source, this.dirname, true),
+      path: this._loader.resolve(
+        token.source, 
+        this.dirname, 
+        [ '.js', '.json', '.ts' ], 
+        true
+      ) as string,
       type: 'file'
     }));
     const components = this.components.map(component => ({

@@ -155,8 +155,12 @@ export default class InkRegistry {
     Object.setPrototypeOf(component, definition.prototype);
     //set the constructor
     component.constructor = definition.constructor;
-    //@ts-ignore set the component names
-    component.constructor.component = definition.component;
+    //@ts-ignore set the component id
+    component.constructor.id = definition.id;
+    //@ts-ignore set the component tagname
+    component.constructor.tagname = definition.tagname;
+    //@ts-ignore set the component classname
+    component.constructor.classname = definition.classname;
     //@ts-ignore set the observed attributes
     if (definition.observedAttributes) {
       //@ts-ignore set the observed attributes

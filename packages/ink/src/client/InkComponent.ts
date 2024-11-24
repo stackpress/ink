@@ -15,8 +15,12 @@ import __APP_DATA__ from './data';
  * Ink web component class
  */
 export default abstract class InkComponent extends HTMLElement {
-  //name of the component [ tag-name, className ]
-  public static component: [ string, string ];
+  //ie. abc123
+  public static id: string;
+  //ie. tag-name
+  public static tagname: string;
+  //ie. className_abc123
+  public static classname: string;
 
   /**
    * Returns the registered element name from customElements
@@ -33,7 +37,7 @@ export default abstract class InkComponent extends HTMLElement {
    */
   public static register() {
     customElements.define(
-      this.component[0], 
+      this.tagname, 
       this as unknown as CustomElementConstructor
     );
   }
@@ -113,16 +117,17 @@ export default abstract class InkComponent extends HTMLElement {
    */
   public get metadata() {
     const { 
-      component, 
+      id,
+      classname,
+      tagname, 
       registered, 
       //@ts-ignore some components might 
       //not have observed attributes...
       observedAttributes: observed = [] 
     } = this.definition;
-    //extract more names from component
-    const [ tagname, classname ] = component;
     //return all the static data collected
     return { 
+      id,
       tagname, 
       classname, 
       registered, 
