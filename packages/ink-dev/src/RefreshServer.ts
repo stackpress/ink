@@ -12,7 +12,7 @@ import {
 } from '@stackpress/ink/compiler';
 import { dependantsOf, update, errorMessage } from './helpers';
 
-const extensions = [ '.ink', '.ink', '.ts', '.js', '.json', '.css' ];
+const extensions = [ '.ink', '.ts', '.js', '.json', '.css' ];
 
 /**
  * Socket server to be used in node
@@ -208,7 +208,7 @@ export default class RefreshServer {
         //post emit document updated
         await this._emitter.waitFor('dev-updated-document', params);
       }
-    };
+    }
 
     //send out the updates to all the clients
     this._clients.forEach(res => {

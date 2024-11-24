@@ -21,8 +21,6 @@ export function createSourceFile(filePath: string) {
       declarationMap: true, 
       // Generates corresponding '.map' file.
       sourceMap: true, 
-      // Set the target JavaScript version
-      target: ts.ScriptTarget.ESNext,  
       // Set the module system
       module: ts.ModuleKind.CommonJS
     },
@@ -135,8 +133,8 @@ export function esRefreshPlugin(component: Component, options: UpdateOptions) {
 
 export function transpile(component: Component) {
   const { 
+    id,
     absolute,
-    classname,
     imports,
     styles, 
     scripts
@@ -199,8 +197,9 @@ export function transpile(component: Component) {
         `)}
         return () => ${transpiler.markup.trim()};
       };
-      const Component = components['${classname}'];
-      if (Component) {
+      Object.values(components).filter(
+        Component => Component.id === '${id}'
+      ).forEach(Component => {
         //get elements and components from registry
         const components = Array
           .from(InkRegistry.elements.keys())
@@ -232,7 +231,7 @@ export function transpile(component: Component) {
         //last, set static class
         Component.prototype.styles = styles;
         Component.prototype.template = template;
-      }
+      });
     `)
   });
 
