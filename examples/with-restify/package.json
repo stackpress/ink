@@ -7,7 +7,7 @@
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.2.5",
+    "@stackpress/ink": "0.2.6",
     "restify": "11.1.0",
     "restify-router": "0.6.2"
   },

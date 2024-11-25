@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-tailwind",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Webpack support for the Ink markup language.",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -20,7 +20,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@stackpress/ink": "0.2.5"
+    "@stackpress/ink": "0.2.6"
   },
   "peerDependencies": {
     "autoprefixer": "^10",
