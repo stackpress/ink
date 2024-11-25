@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-css",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Ink atomic css framework",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -20,7 +20,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@stackpress/ink": "0.2.6"
+    "@stackpress/ink": "0.2.7"
   },
   "devDependencies": {
     "@types/node": "22.9.3",
