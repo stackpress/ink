@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-express",
-  "version": "0.2.7",
+  "version": "0.2.10",
   "description": "Ink plugin for Express and native HTTP.",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -18,8 +18,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@stackpress/ink": "0.2.7",
-    "@stackpress/ink-dev": "0.2.7"
+    "@stackpress/ink": "0.2.10",
+    "@stackpress/ink-dev": "0.2.10"
   },
   "devDependencies": {
     "@types/node": "22.9.3",

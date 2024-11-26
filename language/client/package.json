@@ -1,7 +1,7 @@
 {
   "name": "ink-language-client",
   "description": "Adds syntax highlighting, formatting, auto-completion, jump-to-definition and linting for a custom.",
-  "version": "0.2.7",
+  "version": "0.2.10",
   "license": "MIT",
   "scripts": {
     "build": "tsc"
