@@ -1,15 +1,10 @@
-//types
+//modules
 import type { ProjectOptions } from 'ts-morph';
-import type { MarkupToken, MarkupChildToken, ObjectToken } from '../types';
-import type DirectiveInterface from '../directives/DirectiveInterface';
-import type Component from './Component';
-//file systems
-import path from 'path';
-//parsers
+import path from 'node:path';
 import ts from 'typescript';
 import { Project, IndentationText } from 'ts-morph';
-import Parser from './Parser';
 //directives
+import type DirectiveInterface from '../directives/DirectiveInterface';
 import { 
   IfDirective,
   ElifDirective,
@@ -20,6 +15,11 @@ import {
   CatchDirective
 } from '../directives/TryCatchDirective';
 import IteratorDirective from '../directives/IteratorDirective';
+//common
+import type { MarkupToken, MarkupChildToken, ObjectToken } from '../types';
+//local
+import type Component from './Component';
+import Parser from './Parser';
 
 /**
  * Converts a parsed component to a transpiled JS/TS source code

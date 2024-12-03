@@ -1,15 +1,16 @@
-
+//modules
 import type { FSWatcher } from 'chokidar';
-import type { Request, Response } from '@stackpress/ink/compiler';
-import type { ServerOptions, OptionIgnore } from './types';
-
-import path from 'path';
+import path from 'node:path';
 import chokidar from 'chokidar';
+//stackpress
+import type { Request, Response } from '@stackpress/ink/compiler';
 import { 
   Component, 
   DocumentBuilder,
   EventEmitter
 } from '@stackpress/ink/compiler';
+//local
+import type { ServerOptions, OptionIgnore } from './types';
 import { dependantsOf, update, errorMessage } from './helpers';
 
 const extensions = [ '.ink', '.ts', '.js', '.json', '.css' ];

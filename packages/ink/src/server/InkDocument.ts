@@ -1,4 +1,6 @@
+//common
 import Exception from '../Exception';
+//local
 import data from './data';
 import InkElement from './InkElement';
 import InkRegistry from './InkRegistry';

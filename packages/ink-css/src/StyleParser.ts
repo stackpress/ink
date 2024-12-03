@@ -1,7 +1,9 @@
-import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
+//stackpress
+import type { FileSystem } from '@stackpress/types/dist/types';
+import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import FileLoader from '@stackpress/types/dist/system/FileLoader';
+//local
 import type { ParserOptions } from './types';
-import NodeFS from '@stackpress/types/dist/filesystem/NodeFS';
-import FileLoader from '@stackpress/types/dist/filesystem/FileLoader';
 import Exception from './Exception';
 
 //ie. abc, abc-1def, abc-1def-2ghi, ...

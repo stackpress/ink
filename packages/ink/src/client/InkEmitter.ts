@@ -1,4 +1,6 @@
+//common
 import type { InkBrowserEvent } from '../types';
+//local
 import type InkComponent from './InkComponent';
 import InkRegistry from './InkRegistry';
 import InkElement from './InkElement';

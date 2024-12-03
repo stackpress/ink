@@ -1,4 +1,6 @@
+//common
 import type { MediaSize } from '../types';
+//local
 import type StyleMap from './StyleMap';
 import StyleSet from './StyleSet';
 

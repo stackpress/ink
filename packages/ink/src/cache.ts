@@ -1,3 +1,6 @@
+//modules
+import path from 'node:path';
+//local
 import type { 
   Hash, 
   InkCompiler,
@@ -6,8 +9,6 @@ import type {
 import type { Event } from './EventEmitter';
 import type Builder from './document/Builder';
 import type Manifest from './document/Manifest';
-
-import path from 'path';
 
 export default function cache(options: CacheOptions) {
   return function withCache(compiler: InkCompiler) {

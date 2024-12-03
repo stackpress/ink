@@ -1,5 +1,7 @@
+//common
 import type { InkComponentClass } from '../types';
 import type InkException from '../Exception';
+//local
 import type InkRegistry from './InkRegistry';
 import type { InkEmitter } from './InkEmitter';
 import type { InkDataMap } from './data';

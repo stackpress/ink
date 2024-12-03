@@ -1,5 +1,4 @@
 import type InkComponent from './InkComponent';
-import Exception from '../Exception';
 import data from './data';
 
 /**
@@ -18,7 +17,7 @@ export default function component(
     //if still no component
     if (!component) {
       if (!nullable) {
-        throw Exception.for('Not called within a Ink component');
+        throw new Error('Not called within a Ink component');
       }
       return null;
     }

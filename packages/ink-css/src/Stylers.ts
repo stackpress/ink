@@ -1,12 +1,13 @@
-import { MediaSize } from '@stackpress/ink/dist/types';
+//stackpress
+import type { MediaSize } from '@stackpress/ink/dist/types';
+import StyleSheet from '@stackpress/ink/dist/style/StyleSheet';
+//local
 import type { 
   RangeToken,
   Styler,
   LiteralToken, 
   ExpressionToken 
 } from './types';
-
-import StyleSheet from '@stackpress/ink/dist/style/StyleSheet';
 import StyleParser from './StyleParser';
 
 /**

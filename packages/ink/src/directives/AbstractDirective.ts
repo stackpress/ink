@@ -1,7 +1,8 @@
+//common
 import type Component from '../compiler/Component';
 import type Transpiler from '../compiler/Transpiler';
 import type { MarkupToken, NextDirective } from '../types';
-
+//local
 import DirectiveInterface from './DirectiveInterface';
 
 export default abstract class AbstractDirective implements DirectiveInterface {

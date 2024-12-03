@@ -1,4 +1,5 @@
-import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
+//stackpress
+import type { FileSystem } from '@stackpress/types/dist/types';
 import type { MediaSize } from '@stackpress/ink/dist/types';
 import type StyleMap from '@stackpress/ink/dist/style/StyleMap';
 import type StyleSheet from '@stackpress/ink/dist/style/StyleSheet';

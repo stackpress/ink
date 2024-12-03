@@ -1,11 +1,12 @@
+//common
 import type { 
   Hash, 
   AnyChild,
   CustomEventListener, 
   InkComponentClass 
 } from '../types';
-
 import InkException from '../Exception';
+//local
 import InkElement from './InkElement';
 import InkRegistry from './InkRegistry';
 import emitter from './InkEmitter';

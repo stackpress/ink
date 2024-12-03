@@ -1,11 +1,12 @@
+//stackpress
+import type { MediaSize, StyleValue } from '@stackpress/ink/dist/types';
+import StyleMap from '@stackpress/ink/dist/style/StyleMap';
+//local
 import type { 
   ExpressionToken, 
   LiteralToken,
   RangeToken
 } from './types';
-
-import type { MediaSize, StyleValue } from '@stackpress/ink/dist/types';
-import StyleMap from '@stackpress/ink/dist/style/StyleMap';
 
 
 //before and after

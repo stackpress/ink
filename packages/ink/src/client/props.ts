@@ -1,3 +1,4 @@
+//local
 import type InkComponent from './InkComponent';
 import getComponent from './component';
 import data from './data';

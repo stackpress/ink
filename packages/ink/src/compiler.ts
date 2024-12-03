@@ -1,5 +1,4 @@
-export type * from './types';
-
+//directives
 import AbstractDirective from './directives/AbstractDirective';
 import { 
   IfDirective, 
@@ -12,20 +11,35 @@ import {
   TryDirective, 
   CatchDirective 
 } from './directives/TryCatchDirective';
-
+//document
+import DocumentBuilder from './document/Builder';
+import DocumentManifest from './document/Manifest';
+import DocumentTranspiler from './document/Transpiler';
+import DocumentException from './document/Exception';
+//compiler
 import Component from './compiler/Component';
 import Lexer from './compiler/Lexer';
 import Parser from './compiler/Parser';
 import Tokenizer from './compiler/Tokenizer';
 import ComponentTranspiler from './compiler/Transpiler';
-
 import definitions, { 
   scalar, 
   data, 
   scan, 
   identifier 
 } from './compiler/definitions';
-
+//local
+import { 
+  esAliasPlugin, 
+  esComponentPlugin, 
+  esDocumentPlugin,
+  esWorkspacePlugin,
+  esInkPlugin
+} from './plugins';
+import EventEmitter, { Event as InkEvent } from './EventEmitter';
+import Exception from './Exception';
+import cache from './cache';
+import ink from './ink';
 import {
   camelize,
   capitalize,
@@ -38,22 +52,7 @@ import {
   build
 } from './helpers';
 
-import DocumentBuilder from './document/Builder';
-import DocumentManifest from './document/Manifest';
-import DocumentTranspiler from './document/Transpiler';
-import DocumentException from './document/Exception';
-import { 
-  esAliasPlugin, 
-  esComponentPlugin, 
-  esDocumentPlugin,
-  esWorkspacePlugin,
-  esInkPlugin
-} from './plugins';
-
-import EventEmitter, { Event as InkEvent } from './EventEmitter';
-import Exception from './Exception';
-import cache from './cache';
-import ink from './ink';
+export type * from './types';
 
 export {
   AbstractDirective,

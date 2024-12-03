@@ -1,5 +1,7 @@
+//modules
+import { EventEmitter, getEventListeners } from 'node:events';
+//local
 import type { InkEventMap } from './types';
-import { EventEmitter, getEventListeners } from 'events';
 
 export class Event<T> {
   //the name of the event

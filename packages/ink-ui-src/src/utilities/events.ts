@@ -1,3 +1,4 @@
+//stackpress
 import { events } from '@stackpress/ink/dist/client/InkEmitter';
 
 export function removeEvents(props: Record<string, any>) {

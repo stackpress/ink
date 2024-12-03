@@ -1,15 +1,17 @@
+//modules
 import type { PluginBuild } from 'esbuild';
-import type { UpdateOptions, Dependants } from './types';
-
-import path from 'path';
+import path from 'node:path';
 import ts from 'typescript';
 import { Project, IndentationText } from 'ts-morph';
+//stackpress
 import { 
   Component, 
   ComponentTranspiler,
   build,
   toTS
 } from '@stackpress/ink/compiler';
+//local
+import type { UpdateOptions, Dependants } from './types';
 
 export function createSourceFile(filePath: string) {
   const project = new Project({

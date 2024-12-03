@@ -1,3 +1,22 @@
+//client
+import InkField from './client/InkField';
+import InkComponent from './client/InkComponent';
+import InkRegistry from './client/InkRegistry';
+import InkElement from './client/InkElement';
+import emitter, { InkEmitter } from './client/InkEmitter';
+import component from './client/component';
+import api from './client/api';
+import data, { InkDataMap } from './client/data';
+import env from './client/env';
+import props from './client/props';
+import classnames, { classlist } from './client/classnames';
+import children, { innerHTML, innerText } from './client/children';
+import signal, { SignalRegistry } from './client/signal';
+//style
+import StyleMap, { stylemap } from './style/StyleMap';
+import StyleSet, { styleset } from './style/StyleSet';
+import StyleSheet, { stylesheet, breakpoints } from './style/StyleSheet';
+//local
 export type {
   InkComponentClass,
   RegistryIterator,
@@ -21,25 +40,7 @@ export type {
   StyleValue,
   MediaSize
 } from './types';
-
 import InkException from './Exception';
-import InkField from './client/InkField';
-import InkComponent from './client/InkComponent';
-import InkRegistry from './client/InkRegistry';
-import InkElement from './client/InkElement';
-import emitter, { InkEmitter } from './client/InkEmitter';
-import component from './client/component';
-import api from './client/api';
-import data, { InkDataMap } from './client/data';
-import env from './client/env';
-import props from './client/props';
-import classnames, { classlist } from './client/classnames';
-import children, { innerHTML, innerText } from './client/children';
-import signal, { SignalRegistry } from './client/signal';
-
-import StyleMap, { stylemap } from './style/StyleMap';
-import StyleSet, { styleset } from './style/StyleSet';
-import StyleSheet, { stylesheet, breakpoints } from './style/StyleSheet';
 
 export {
   component,

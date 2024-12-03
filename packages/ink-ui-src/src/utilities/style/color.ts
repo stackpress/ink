@@ -1,3 +1,4 @@
+//stackpress
 import type StyleSet from '@stackpress/ink/dist/style/StyleSet';
 
 export default function color(

@@ -1,19 +1,22 @@
+//modules
+import path from 'node:path';
+//stackpress
+import type { FileSystem } from '@stackpress/types/dist/types';
+import NodeFS from '@stackpress/types/dist/system/NodeFS';
+//compiler
+import Component from './compiler/Component';
+//document
+import DocumentBuilder from './document/Builder';
+import DocumentManifest from './document/Manifest';
+import DocumentException from './document/Exception';
+//local
 import type { 
   Hash,
   ComponentType, 
   InkOptions, 
   InkCompiler
 } from './types';
-
-import path from 'path';
-import FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
-import NodeFS from '@stackpress/types/dist/filesystem/NodeFS';
-
-import Component from './compiler/Component';
-import DocumentBuilder from './document/Builder';
 import EventEmitter from './EventEmitter';
-import DocumentManifest from './document/Manifest';
-import DocumentException from './document/Exception';
 import Exception from './Exception';
 
 /**

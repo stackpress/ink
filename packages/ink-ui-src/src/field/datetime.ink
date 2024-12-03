@@ -18,13 +18,13 @@
   setDefaultStyles(props, styles);
   //set the input value
   if (attributes.value) {
-    attributes.value = attributes.value instanceof Date 
-      ? attributes.value.toISOString() 
-      : new Date(attributes.value).toISOString()
-    if (isNaN(attributes.value.getTime())) {
-      delete attributes.value;
-    } else {
+    try {
+      attributes.value = attributes.value instanceof Date 
+        ? attributes.value.toISOString() 
+        : new Date(attributes.value).toISOString();
       attributes.value = attributes.value.replace('Z', '');
+    } catch(e) {
+      delete attributes.value;
     }
   }
   //get handlers

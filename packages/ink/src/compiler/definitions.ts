@@ -1,10 +1,11 @@
-import type Lexer from './Lexer';
+//common
 import type { 
   Token, 
   TokenReader, 
   DataToken, 
   IdentifierToken 
 } from '../types';
+import type Lexer from './Lexer';
 
 const definitions: Record<string, TokenReader> = {
   'whitespace': lexer => scan('_Whitespace', /^\s+/, lexer),

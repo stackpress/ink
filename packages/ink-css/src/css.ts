@@ -1,4 +1,6 @@
+//local
 import { Plugin, InkCSSOptions } from './types';
+
 export default function css(options: InkCSSOptions = {}) {
   const { brand = 'ink' } = options;
   const plugins = new Set<Plugin>();

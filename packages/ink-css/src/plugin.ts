@@ -1,16 +1,17 @@
+//stackpress
 import type { 
   InkCompiler, 
   DocumentBuilder
 } from '@stackpress/ink/compiler';
-import type { InkCSSOptions } from './types';
-
+//plugins
 import { block, inline } from './plugins/display';
 import { display, opacity, visibility } from './plugins/fouc';
 import { reset } from './plugins/reset';
 import { theme } from './plugins/theme';
 import { utilities } from './plugins/utilities';
+//local
+import type { InkCSSOptions } from './types';
 import css from './css';
-
 import { expressions, ranges, literals } from './definitions';
 import { expression, range, literal } from './Stylers';
 

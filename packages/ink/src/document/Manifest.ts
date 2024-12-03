@@ -1,9 +1,11 @@
-import type { ManifestOptions } from '../types';
-
-import EventEmitter from '../EventEmitter';
+//compiler
 import Component from '../compiler/Component';
-import Builder from './Builder';
+//common
+import type { ManifestOptions } from '../types';
+import EventEmitter from '../EventEmitter';
 import Exception from '../Exception';
+//local
+import Builder from './Builder';
 
 export default class Manifest {
   //compoent and build options

@@ -1,4 +1,4 @@
-//types
+//common
 import type { 
   Data,
   TokenReferences,
@@ -8,7 +8,6 @@ import type {
   LiteralToken, 
   IdentifierToken
 } from '../types';
-
 import Exception from '../Exception';
 
 export default class Parser {

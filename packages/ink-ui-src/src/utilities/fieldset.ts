@@ -1,8 +1,12 @@
-import type { MouseEvent, InkComponentClass } from '@stackpress/ink/dist/types';
+//stackpress
+import type { 
+  MouseEvent, 
+  InkComponentClass 
+} from '@stackpress/ink/dist/types';
 import type StyleSet from '@stackpress/ink/dist/style/StyleSet';
-
 import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
 import InkComponent from '@stackpress/ink/dist/client/InkComponent';
+//style
 import setColor from './style/color';
 import setCurve from './style/curve';
 import setPadding from './style/padding';

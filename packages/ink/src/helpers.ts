@@ -1,9 +1,10 @@
+//modules
 import type { SourceFile } from 'ts-morph';
-import type { BuildOptions } from './types';
-
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import esbuild from 'esbuild';
 import * as vm from 'vm';
+//local
+import type { BuildOptions } from './types';
 
 /**
  * Converts a string into camel format

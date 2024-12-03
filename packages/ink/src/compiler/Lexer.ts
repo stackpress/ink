@@ -1,5 +1,5 @@
+//common
 import { Token, TokenReader, TokenDefinition } from '../types';
-
 import Exception from '../Exception';
 
 export default class Lexer {

@@ -1,7 +1,8 @@
+//stackpress
 import type { Component } from '@stackpress/ink/compiler';
-import type { Plugin } from '../types';
-
 import Styleset from '@stackpress/ink/dist/style/StyleSet';
+//common
+import type { Plugin } from '../types';
 
 export function visibility(document: Component): Plugin {
   return (sheet: string, brand: string) => {

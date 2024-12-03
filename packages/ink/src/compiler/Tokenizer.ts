@@ -1,3 +1,6 @@
+//modules
+import ts from 'typescript';
+//common
 import type { 
   Token,
   IdentifierToken,
@@ -13,6 +16,11 @@ import type {
   UnknownMarkupToken,
   LiteralToken
 } from '../types';
+import Exception from '../Exception';
+//local
+import Parser from './Parser';
+import Lexer from './Lexer';
+import definitions, { data as anyData } from './definitions';
 
 type TagToken = {
   name: string,
@@ -20,12 +28,6 @@ type TagToken = {
   start: number,
   end: number
 };
-
-import ts from 'typescript';
-import Parser from './Parser';
-import Lexer from './Lexer';
-import Exception from '../Exception';
-import definitions, { data as anyData } from './definitions';
 
 const lexer = new Lexer();
 Object.keys(definitions).forEach(key => {

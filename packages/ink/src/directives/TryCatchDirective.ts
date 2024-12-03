@@ -1,7 +1,8 @@
+//common
 import type Component from '../compiler/Component';
 import type { MarkupToken, NextDirective } from '../types';
-
 import Exception from '../Exception';
+//local
 import AbstractDirective from './AbstractDirective';
 
 export class TryDirective extends AbstractDirective {

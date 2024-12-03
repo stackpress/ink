@@ -1,12 +1,14 @@
+//compiler
 import type Component from '../compiler/Component';
+//common
 import type { 
   MarkupToken, 
   NextDirective,
   PropertyToken, 
   ScriptToken
 } from '../types';
-
 import Exception from '../Exception';
+//local
 import AbstractDirective from './AbstractDirective';
 
 export class IfDirective extends AbstractDirective {

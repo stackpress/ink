@@ -1,20 +1,25 @@
-import type { IncomingMessage, ServerResponse } from 'http';
+//modules
+import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { PluginBuild } from 'esbuild';
-import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
-
-import type EventEmitter from './EventEmitter';
-import type { Event as InkEvent } from './EventEmitter';
-
-import type DocumentBuilder from './document/Builder';
-import type DocumentManifest from './document/Manifest';
-import type Component from './compiler/Component';
-import type ComponentLexer from './compiler/Lexer';
-import type ServerDocument from './server/InkDocument';
-import type ServerText from './server/InkText';
-import type ServerElement from './server/InkElement';
+//stackpress
+import type { FileSystem } from '@stackpress/types/dist/types';
+//client
 import type ClientDocument from './client/InkRegistry';
 import type ClientComponent from './client/InkComponent';
 import type ClientElement from './client/InkElement';
+//compiler
+import type Component from './compiler/Component';
+import type ComponentLexer from './compiler/Lexer';
+//document
+import type DocumentBuilder from './document/Builder';
+import type DocumentManifest from './document/Manifest';
+//server
+import type ServerDocument from './server/InkDocument';
+import type ServerText from './server/InkText';
+import type ServerElement from './server/InkElement';
+//local
+import type EventEmitter from './EventEmitter';
+import type { Event as InkEvent } from './EventEmitter';
 
 //--------------------------------------------------------------------//
 // Generic Types

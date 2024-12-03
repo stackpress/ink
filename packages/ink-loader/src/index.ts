@@ -1,13 +1,15 @@
-import type { InkOptions } from '@stackpress/ink/compiler';
-import type { WebpackLoader, LoaderFunction } from './types';
-
-import path from 'path';
+//modules
+import path from 'node:path';
 import { urlToRequest } from 'loader-utils';
+//stackpress
+import type { InkOptions } from '@stackpress/ink/compiler';
 import { 
   ComponentTranspiler, 
   Component, 
   toJS
 } from '@stackpress/ink/compiler';
+//local
+import type { WebpackLoader, LoaderFunction } from './types';
 
 const componentLoader: LoaderFunction = function () {
   const self = this as unknown as WebpackLoader;

@@ -1,6 +1,4 @@
-export type { ServerNode } from './types';
-
-import InkException from './Exception';
+//server
 import InkCollection from './server/InkCollection';
 import InkDocument from './server/InkDocument';
 import InkRegistry from './server/InkRegistry';
@@ -10,6 +8,9 @@ import InkText from './server/InkText';
 import data from './server/data';
 import env from './server/env';
 import props from './server/props';
+//local
+export type { ServerNode } from './types';
+import InkException from './Exception';
 
 export {
   data,

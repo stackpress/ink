@@ -1,3 +1,4 @@
+//stackpress
 import Styleset from '@stackpress/ink/dist/style/StyleSet';
 import { stylemap } from '@stackpress/ink/dist/style/StyleMap';
 

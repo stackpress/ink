@@ -1,7 +1,9 @@
-import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
-
-import path from 'path';
-import NodeFS from '@stackpress/types/dist/filesystem/NodeFS';
+//modules
+import path from 'node:path';
+//stackpress
+import type { FileSystem } from '@stackpress/types/dist/types';
+import NodeFS from '@stackpress/types/dist/system/NodeFS';
+//common
 import InkException from '../Exception';
 
 /**

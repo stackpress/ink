@@ -1,14 +1,16 @@
-//types
-import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
+//modules
+import path from 'node:path';
+//stackpress
+import type { FileSystem } from '@stackpress/types/dist/types';
+//compiler
+import Component from '../compiler/Component';
+//common
 import type { 
   BuilderOptions, 
   ServerDocumentClass, 
   BuildResults
 } from '../types';
-
-import path from 'path';
 import EventEmitter from '../EventEmitter';
-import Component from '../compiler/Component';
 import { load, build } from '../helpers';
 import {
   esInkPlugin,
@@ -16,6 +18,7 @@ import {
   esComponentPlugin,
   esWorkspacePlugin
 } from '../plugins';
+//local
 import Exception from './Exception';
 import Transpiler from './Transpiler';
 

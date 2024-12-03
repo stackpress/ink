@@ -1,15 +1,15 @@
-//types
-import type FileSystem from '@stackpress/types/dist/filesystem/FileSystem';
+//modules
+import path from 'node:path';
+//stackpress
+import type { FileSystem } from '@stackpress/types/dist/types';
+import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import FileLoader from '@stackpress/types/dist/system/FileLoader';
+//common
 import type { AST, ComponentType, ComponentOptions } from '../types';
-//filesystem
-import path from 'path';
-import FileLoader from '@stackpress/types/dist/filesystem/FileLoader';
-import NodeFS from '@stackpress/types/dist/filesystem/NodeFS';
-//parsers/compilers
-import Tokenizer from './Tokenizer';
-//helpers
 import Exception from '../Exception';
 import { camelize, serialize, slugify } from '../helpers';
+//local
+import Tokenizer from './Tokenizer';
 
 /**
  * The Ink Compiler

@@ -1,4 +1,10 @@
-import type { AnyChild, InkComponentClass, RegistryIterator } from '../types';
+//common
+import type { 
+  AnyChild, 
+  InkComponentClass, 
+  RegistryIterator 
+} from '../types';
+//local
 import InkComponent from './InkComponent';
 import InkElement from './InkElement';
 import api from './api';

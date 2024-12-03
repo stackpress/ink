@@ -1,4 +1,6 @@
+//common
 import type { ServerNode } from '../types';
+
 export default class InkCollection {
   //elements in the collection
   protected _elements = new Set<ServerNode>();

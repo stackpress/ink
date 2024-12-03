@@ -1,13 +1,15 @@
+//compiler
 import type Component from '../compiler/Component';
+//common
 import type { 
   MarkupToken, 
   IdentifierToken, 
   ScriptToken, 
   NextDirective 
 } from '../types';
-
 import Exception from '../Exception';
 import Parser from '../compiler/Parser';
+//local
 import AbstractDirective from './AbstractDirective';
 
 export default class IteratorDirective extends AbstractDirective {

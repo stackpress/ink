@@ -1,6 +1,11 @@
-import type { ChangeEvent, AttributeChangeEvent } from '@stackpress/ink/dist/types';
+//stackpress
+import type { 
+  ChangeEvent, 
+  AttributeChangeEvent 
+} from '@stackpress/ink/dist/types';
 import type InkField from '@stackpress/ink/dist/client/InkField';
 import StyleSet from '@stackpress/ink/dist/style/StyleSet';
+//style
 import setAlign from './style/align';
 import setColor from './style/color';
 import setDisplay from './style/display';

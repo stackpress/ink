@@ -1,4 +1,6 @@
+//local
 import data from './data';
+
 /**
  * Server props shim
  */

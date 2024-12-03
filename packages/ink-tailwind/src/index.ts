@@ -1,9 +1,13 @@
-import type { DocumentBuilder, InkCompiler } from '@stackpress/ink/compiler';
+//modules
 import type { Config } from 'tailwindcss';
-
 import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
 import tailwindcss from 'tailwindcss';
+//stackpress
+import type { 
+  DocumentBuilder, 
+  InkCompiler 
+} from '@stackpress/ink/compiler';
 
 export function tailwind(config: Config) {
   return function withTui(compiler: InkCompiler) {

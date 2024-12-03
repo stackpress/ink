@@ -17,7 +17,7 @@ const app = express();
 app.get('/ink/**', (req, res) => {
   const { fs } = compiler;
   const resource = (req.url || '/ink/index.html')
-    .substring(8)
+    .substring(5)
     .replace(/\/\//, '/'); 
   
   const file = path.join(docs, resource); 

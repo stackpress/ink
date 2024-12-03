@@ -1,12 +1,13 @@
-import { MediaSize } from '@stackpress/ink/dist/types';
+//stackpress
+import type { MediaSize } from '@stackpress/ink/dist/types';
+import { breakpoints } from '@stackpress/ink/dist/style/StyleSheet';
+//local
 import type { 
   Token, 
   ExpressionToken, 
   LiteralToken, 
   RangeToken
 } from './types';
-
-import { breakpoints } from '@stackpress/ink/dist/style/StyleSheet';
 import { 
   literal, 
   expression,

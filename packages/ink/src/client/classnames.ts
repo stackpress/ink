@@ -1,5 +1,5 @@
+//local
 import type InkComponent from './InkComponent';
-
 import getComponent from './component';
 import props from './props';
 

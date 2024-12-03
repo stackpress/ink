@@ -1,8 +1,8 @@
+//common
 import type { SignalProps, SignalObserver } from '../types';
+//local
 import type InkComponent from './InkComponent';
-
 import getComponent from './component';
-import Exception from '../Exception';
 
 /**
  * Signal registry
@@ -113,7 +113,7 @@ export default function signal<T = any>(
   //for a component that has initiated, but we should
   //still case for it...
   if (!observer) {
-    throw Exception.for('Signal state mismatch');
+    throw new Error('Signal state mismatch');
   }
   //get the property...
   //we are relying on JS single threaded nature to figure out 

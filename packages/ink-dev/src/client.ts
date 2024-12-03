@@ -1,3 +1,4 @@
+//local
 import type { ClientOptions } from './types';
 
 export default function client(id: string, options: ClientOptions = {}, wait = 0) {

@@ -1,25 +1,27 @@
-//types
+//modules
 import type { PluginBuild } from 'esbuild';
+import path from 'node:path';
+//stackpress
+import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import FileLoader from '@stackpress/types/dist/system/FileLoader';
+//compiler
+import Component from './compiler/Component';
+import ComponentTranspiler from './compiler/Transpiler';
+//document
+import DocumentTranspiler from './document/Transpiler';
+//local
 import type { 
   InkPluginOptions,
   AliasPluginOptions,
   ComponentPluginOptions,
   DocumentPluginOptions
 } from './types';
-
-import path from 'path';
-import FileSystem from '@stackpress/types/dist/filesystem/NodeFS';
-import FileLoader from '@stackpress/types/dist/filesystem/FileLoader';
-
-import Component from './compiler/Component';
-import ComponentTranspiler from './compiler/Transpiler';
-import DocumentTranspiler from './document/Transpiler';
 import { toTS } from './helpers';
 
 export function esAliasPlugin(options: AliasPluginOptions = {}) {
   const { 
     cwd = process.cwd(), 
-    fs = new FileSystem() 
+    fs = new NodeFS() 
   } = options;
   const name = 'ink-alias-plugin';
   return {
@@ -70,7 +72,7 @@ export function esComponentPlugin(options: ComponentPluginOptions = {}) {
     tsconfig, 
     extname = '.ink',
     cwd = process.cwd(),
-    fs = new FileSystem(),
+    fs = new NodeFS(),
     ...config
   } = options;
   const name = 'ink-component-plugin';
@@ -109,7 +111,7 @@ export function esDocumentPlugin(options: DocumentPluginOptions = {}) {
     tsconfig, 
     extname = '.ink',
     cwd = process.cwd(),
-    fs = new FileSystem(),
+    fs = new NodeFS(),
     ...config
   } = options;
   const name = {
@@ -200,7 +202,7 @@ export function esInkPlugin(options: InkPluginOptions = {}) {
     bindings = '{}',
     tsconfig,
     cwd = process.cwd(), 
-    fs = new FileSystem(),
+    fs = new NodeFS(),
     mode = 'server',
     extname = '.ink',
     ...config
