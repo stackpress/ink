@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "ts-mocha tests/*.test.ts"
+    "test": "nyc ts-mocha tests/*.test.ts"
   },
   "dependencies": {
     "@stackpress/types": "0.3.10",
