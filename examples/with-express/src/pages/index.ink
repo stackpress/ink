@@ -2,15 +2,72 @@
 <link rel="import" href="@/components/paragraph.ink" />
 <link rel="import" href="@/components/todo.ink" />
 <style>
-  body { 
-    background-color: #DA532C; 
-    color: #EFEFEF; 
+  :root {
+    --primary: #1a1a2e;
+    --secondary: #16213e;
+    --accent: #0f3460;
+    --text: #e94560;
   }
-  img { width: 100px; height: 100px; }
-  .title { text-align: center; }
-  .logo { text-align: center; }
-  .description { text-align: center; }
-  .list { text-align: center; }
+
+  body { 
+    background-color: var(--primary);
+    color: white;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .title { 
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .logo { 
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .logo img { 
+    width: 150px;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.1);
+  }
+
+  .description { 
+    text-align: center;
+    color: #fff;
+    max-width: 600px;
+    margin: 2rem auto;
+    line-height: 1.6;
+  }
+
+  .list { 
+    text-align: center;
+    background: var(--secondary);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  todo-item {
+    background: var(--accent);
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border-radius: 5px;
+    display: block;
+    color: white;
+    transition: transform 0.2s;
+  }
+
+  todo-item:hover {
+    transform: translateX(10px);
+  }
 </style>
 <script>
   import { env, props } from '@stackpress/ink';
