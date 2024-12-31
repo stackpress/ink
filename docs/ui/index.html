@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ink UI Documentation</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .component-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: #ffffff;
+        }
+        .component-preview {
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 1px solid #f0f0f0;
+            border-radius: 4px;
+        }
+        .code-block {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .nav-section {
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="../ink-logo.png" alt="Ink Logo" class="logo">
+        <h1>Ink UI Documentation</h1>
+    </header>
+
+    <nav class="nav-section">
+        <ul>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#elements">UI Elements</a></li>
+            <li><a href="#forms">Forms</a></li>
+            <li><a href="#formats">Formats</a></li>
+            <li class="nav-divider">Detailed Documentation</li>
+            <li><a href="components/buttons.html">Buttons</a></li>
+            <li><a href="components/forms.html">Forms</a></li>
+            <li><a href="components/layout.html">Layout</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="getting-started">
+            <h2>Getting Started</h2>
+            <p>Ink provides a modern and minimalist UI framework that
+               helps you create beautiful and responsive web applications. 
+               This documentation will guide you through the available
+               components and their usage.</p>
+        </section>
+
+        <section id="elements">
+            <h2>UI Elements</h2>
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>Buttons</h3>
+                    <div class="component-preview">
+                        <button class="primary">Primary Button</button>
+                        <button class="secondary">Secondary Button</button>
+                    </div>
+                    <div class="code-block">
+                        <pre><code>&lt;button class="primary"&gt;
+                            Primary Button&lt;/button&gt;
+&lt;button class="secondary"&gt;Secondary Button&lt;/button&gt;</code></pre>
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <h3>Text Inputs</h3>
+                    <div class="component-preview">
+                        <input type="text" placeholder="Standard input">
+                    </div>
+                    <div class="code-block">
+                        <pre><code>&lt;input type="text" 
+                            placeholder="Standard input"&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="forms">
+            <h2>Forms</h2>
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>Form Layout</h3>
+                    <div class="component-preview">
+                        <form class="ink-form">
+                            <div class="form-group">
+                                <label>Input Label</label>
+                                <input type="text">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="code-block">
+                        <pre><code>&lt;form class="ink-form"&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Input Label&lt;/label&gt;
+        &lt;input type="text"&gt;
+    &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="formats">
+            <h2>Formats</h2>
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>Typography</h3>
+                    <div class="component-preview">
+                        <h1>Heading 1</h1>
+                        <h2>Heading 2</h2>
+                        <p>Regular paragraph text</p>
+                    </div>
+                    <div class="code-block">
+                        <pre><code>&lt;h1&gt;Heading 1&lt;/h1&gt;
+&lt;h2&gt;Heading 2&lt;/h2&gt;
+&lt;p&gt;Regular paragraph text&lt;/p&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p> 2024 Ink UI Framework. All rights reserved.</p>
+    </footer>
+</body>
+</html>

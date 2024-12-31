@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ink UI - Layout Components</title>
+    <link rel="stylesheet" href="../../styles/main.css">
+    <style>
+        .component-demo {
+            padding: 2rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .demo-box {
+            padding: 1rem;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .code-example {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        .grid-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .flex-demo {
+            display: flex;
+            gap: 1rem;
+        }
+        .props-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .props-table th, .props-table td {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .props-table th {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">← Back to Documentation</a>
+        </nav>
+        <h1>Layout Components</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Grid Layout</h2>
+            <div class="component-demo">
+                <div class="grid-demo">
+                    <div class="demo-box">Column 1</div>
+                    <div class="demo-box">Column 2</div>
+                    <div class="demo-box">Column 3</div>
+                </div>
+            </div>
+            <div class="code-example">
+                <pre><code>&lt;div class="grid-demo"&gt;
+    &lt;div class="demo-box"&gt;Column 1&lt;/div&gt;
+    &lt;div class="demo-box"&gt;Column 2&lt;/div&gt;
+    &lt;div class="demo-box"&gt;Column 3&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Flex Layout</h2>
+            <div class="component-demo">
+                <div class="flex-demo">
+                    <div class="demo-box">Flex Item 1</div>
+                    <div class="demo-box">Flex Item 2</div>
+                    <div class="demo-box">Flex Item 3</div>
+                </div>
+            </div>
+            <div class="code-example">
+                <pre><code>&lt;div class="flex-demo"&gt;
+    &lt;div class="demo-box"&gt;Flex Item 1&lt;/div&gt;
+    &lt;div class="demo-box"&gt;Flex Item 2&lt;/div&gt;
+    &lt;div class="demo-box"&gt;Flex Item 3&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Container</h2>
+            <div class="component-demo">
+                <div class="container">
+                    <div class="demo-box">Contained Content</div>
+                </div>
+            </div>
+            <div class="code-example">
+                <pre><code>&lt;div class="container"&gt;
+    &lt;div class="content"&gt;Contained Content&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Layout Classes</h2>
+            <table class="props-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Description</th>
+                        <th>Properties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>container</td>
+                        <td>Centers content with max-width</td>
+                        <td>max-width: 1200px</td>
+                    </tr>
+                    <tr>
+                        <td>grid-demo</td>
+                        <td>Basic grid layout</td>
+                        <td>display: grid</td>
+                    </tr>
+                    <tr>
+                        <td>flex-demo</td>
+                        <td>Basic flex layout</td>
+                        <td>display: flex</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
