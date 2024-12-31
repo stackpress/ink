@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ink UI - Button Components</title>
+    <link rel="stylesheet" href="../../styles/main.css">
+    <style>
+        .component-demo {
+            padding: 2rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .variant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .code-example {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        .props-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .props-table th, .props-table td {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .props-table th {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">← Back to Documentation</a>
+        </nav>
+        <h1>Button Components</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Basic Button</h2>
+            <div class="component-demo">
+                <button class="primary">Primary Button</button>
+                <button class="secondary">Secondary Button</button>
+                <button class="text">Text Button</button>
+            </div>
+            <div class="code-example">
+                <pre><code>&lt;button class="primary"&gt;Primary Button&lt;/button&gt;
+&lt;button class="secondary"&gt;Secondary Button&lt;/button&gt;
+&lt;button class="text"&gt;Text Button&lt;/button&gt;</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Button Variants</h2>
+            <div class="variant-grid">
+                <div>
+                    <h3>Sizes</h3>
+                    <button class="primary small">Small</button>
+                    <button class="primary">Medium</button>
+                    <button class="primary large">Large</button>
+                </div>
+                <div>
+                    <h3>States</h3>
+                    <button class="primary">Normal</button>
+                    <button class="primary" disabled>Disabled</button>
+                    <button class="primary loading">Loading</button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Props & Customization</h2>
+            <table class="props-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Description</th>
+                        <th>Default</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>primary</td>
+                        <td>Primary action button style</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>secondary</td>
+                        <td>Secondary action button style</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>small</td>
+                        <td>Small button size</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>large</td>
+                        <td>Large button size</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
