@@ -276,10 +276,10 @@ ${l.replace("__CLIENT_DATA__",p)}`}_toNodeList(t){return typeof t=="object"&&typ
                     "build": "ts-node ./src/build.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.12"
+                    "@stackpress/ink": "0.3.14"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.12",
+                    "@stackpress/ink-dev": "0.3.14",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
