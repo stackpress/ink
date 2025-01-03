@@ -12,7 +12,7 @@ export default abstract class InkDocument {
   public abstract id(): string; 
 
   /**
-   * Returns component styles
+   * Returns document component styles
    */
   public abstract styles(): string; 
 
@@ -28,26 +28,18 @@ export default abstract class InkDocument {
     //set server props (this is so template() can read it using props())
     data.set('props', props || {});
     //set environment variables (this is so template() can read it using env())
-    data.set('env', {
-      ...(process.env || {}),
-      BUILD_ID: this.id(),
-      APP_DATA: btoa(JSON.stringify({
-        ...Object.fromEntries(data.entries()),
-        env: {
-          ...Object.fromEntries(
-            Object.entries(process.env || {}).filter(
-              entry => entry[0].startsWith('PUBLIC_')
-            )
-          ),
-          BUILD_ID: this.id()
-        }
-      }))
-    });
+    const env = Object.fromEntries(
+      Object.entries(process.env || {}).filter(
+        entry => entry[0].startsWith('PUBLIC_')
+      )
+    );
+    data.set('env', { ...env, BUILD_ID: this.id() });
     const registry = InkRegistry.registry(this.template());
-    const bindings = Array.from(registry.values()).map((element, id) => {
-      return element.props !== '{ }' ? `'${id}': ${element.props}`: '';
-    }).filter(binding => binding !== '').join(', ');
-    return `{ ${bindings} }`;
+    const bindings: Record<string, any> = {};
+    Array.from(registry.values()).forEach((element, id) => {
+      bindings[String(id)] = element.attributes;
+    })
+    return bindings;
   }
 
   /**
@@ -56,23 +48,18 @@ export default abstract class InkDocument {
   public render(props: Record<string, any> = {}) {
     //set server props (this is so template() can read it using props())
     data.set('props', props || {});
+    //set element attribute bindings.
+    //Bindings are non-string values that are binded to an element
+    //we serialize the bindings so it can be passed to the client
+    //NOTE: Binding values depend on the props
+    data.set('bindings', this.bindings(props));
     //set environment variables (this is so template() can read it using env())
-    data.set('env', {
-      ...(process.env || {}),
-      BUILD_ID: this.id(),
-      APP_DATA: btoa(JSON.stringify({
-        ...Object.fromEntries(data.entries()),
-        env: {
-          ...Object.fromEntries(
-            Object.entries(process.env || {}).filter(
-              entry => entry[0].startsWith('PUBLIC_')
-            )
-          ),
-          BUILD_ID: this.id()
-        }
-      }))
-    });
-    
+    const env = Object.fromEntries(
+      Object.entries(process.env || {}).filter(
+        entry => entry[0].startsWith('PUBLIC_')
+      )
+    );
+    data.set('env', { ...env, BUILD_ID: this.id() });
     //get the children build w/o re-initializing the variables
     const children = this.template();
     
@@ -85,8 +72,11 @@ export default abstract class InkDocument {
     if (!document.toLowerCase().startsWith('<html')) {
       throw Exception.for('Document must start with an <html> tag.');
     }
-    //return the full html
-    return `<!DOCTYPE html>\n${document}`;
+    //make the client data; here we are going to serialize the client data
+    const client = Object.fromEntries(data.entries());
+    const json = JSON.stringify(client).replace(/\n/g, '\n  ');
+    //return the document
+    return `<!DOCTYPE html>\n${document.replace('__CLIENT_DATA__', json)}`;
   }
 
   protected _toNodeList(value: any) {

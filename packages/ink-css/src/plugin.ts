@@ -40,10 +40,11 @@ export default function plugin(options: InkCSSOptions = {}) {
     //whenever a document style is built, replace directives with actual styles
     compiler.emitter.on('built-styles', async e => {
       const builder = e.params.builder as DocumentBuilder;
-      const { document } = builder;
+      const { document, transpiler } = builder;
       const contents = { 
         client: await builder.client(),
-        server: document.contents
+        server: document.contents,
+        markup: transpiler.markup
       };
       const sourceCode = e.params.sourceCode as string;
       const stylesheet = css(options)

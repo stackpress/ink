@@ -236,6 +236,7 @@ export type BuildResults = {
 // Server Types
 
 export type ServerNode = ServerElement|ServerText;
+export type Bindings = Record<string, Record<string, any>>;
 
 //--------------------------------------------------------------------//
 // Client Types
@@ -521,7 +522,6 @@ export type DocumentPluginOptions = ComponentPluginOptions;
 
 export type InkPluginOptions = FileOptions & {
   entry?: string,
-  bindings?: string,
   brand?: string,
   mode?: 'client'|'server',
   tsconfig?: string,

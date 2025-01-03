@@ -43,7 +43,7 @@ export default class InkRegistry {
     const { registered } = definition;
     //if the component being created is not a
     //registered component in customElements
-    if (!registered && !api().elements[tagname]) {
+    if (!registered && !api()?.elements[tagname]) {
       //we need to pseudo create the component instead.
       return this.createVirtualComponent(
         tagname, 

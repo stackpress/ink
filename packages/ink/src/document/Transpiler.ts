@@ -101,8 +101,11 @@ export default class Transpiler extends ComponentTranspiler {
    * render(client, props) method generated in transpile()
    * 
    * Primarily used by esInkPlugin which calls builder.client()
+   * 
+   * The server will pass both props and bindings to
+   * <script id="__CLIENT_DATA__">...</script>
    */
-  public client(bindings = '{}') {
+  public client() {
     const { imports, scripts } = this._component;
     //only components (vs templates)
     const components = this._component.components.filter(
@@ -124,11 +127,6 @@ export default class Transpiler extends ComponentTranspiler {
         'Hash' 
       ]
     });
-    //import InkException from '@stackpress/ink/dist/Exception';
-    source.addImportDeclaration({
-      moduleSpecifier: '@stackpress/ink/dist/Exception',
-      defaultImport: 'InkException'
-    });
     //import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
     source.addImportDeclaration({
       moduleSpecifier: '@stackpress/ink/dist/client/InkRegistry',
@@ -139,10 +137,10 @@ export default class Transpiler extends ComponentTranspiler {
       moduleSpecifier: '@stackpress/ink/dist/client/InkEmitter',
       defaultImport: 'emitter'
     });
-    //import __APP_DATA__ from '@stackpress/ink/dist/client/data';
+    //import data from '@stackpress/ink/dist/client/data';
     source.addImportDeclaration({
       moduleSpecifier: '@stackpress/ink/dist/client/data',
-      defaultImport: '__CLIENT_DATA__' 
+      defaultImport: 'data' 
     });
     //import Counter_abc123 from './Counter_abc123'
     registry.forEach(component => {
@@ -184,16 +182,14 @@ export default class Transpiler extends ComponentTranspiler {
         });
       }
     });
-
-    //export { InkRegistry, emitter, __CLIENT_DATA__ as data };
+    //export { InkRegistry, emitter, data };
     source.addExportDeclaration({
       namedExports: [
-        'InkException',
         'InkRegistry',
-        'emitter'
+        'emitter',
+        'data'
       ]
     });
-
     // export const components = { ... };
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
@@ -223,17 +219,6 @@ export default class Transpiler extends ComponentTranspiler {
         }`
       }]
     });
-
-    // export const data = __CLIENT_DATA__;
-    source.addVariableStatement({
-      declarationKind: VariableDeclarationKind.Const,
-      isExported: true,
-      declarations: [{
-        name: 'data',
-        initializer: '__CLIENT_DATA__'
-      }]
-    });
-
     // export const BUILD_ID = 'abc123';
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
@@ -243,31 +228,35 @@ export default class Transpiler extends ComponentTranspiler {
         initializer: `'${this._component.id}'`
       }]
     });
-
+    // emitter.once('ready', () => {});
     source.addStatements(`emitter.once('ready', () => {
-      const script = document.querySelector('script[data-app]');
-      if (!script) {
-        throw InkException.for('APP_DATA not found');
+      //extract the client from <script src="BUILD_ID">...</script>
+      const client = document.getElementById('CLIENT_DATA');
+      //if no client data, throw an error
+      if (!client) {
+        throw new Error('CLIENT_DATA not found');
       }
-      try {
-        const data = atob(script.getAttribute('data-app'));
-        window.__APP_DATA__ = JSON.parse(data);
-        Object.entries(window.__APP_DATA__).forEach(([key, value]) => {
-          __CLIENT_DATA__.set(key, value);
+      try { //to place the client data into window.__CLIENT_DATA__
+        window.__CLIENT_DATA__ = JSON.parse(client.innerText.trim());
+        //then add the client data to the app data registry
+        Object.entries(window.__CLIENT_DATA__).forEach(([key, value]) => {
+          data.set(key, value);
         });
       } catch (error) {
-        throw InkException.for('APP_DATA is not a valid JSON');
+        throw new Error('__CLIENT_DATA__ is not a valid JSON');
       }
       //set the current component
-      __CLIENT_DATA__.set('current', 'document');
+      data.set('current', 'document');
       //run the user entry script
-      ${scripts.join('\n')}
+      (() => {
+        ${scripts.join('\n')}
+      })();
       //reset the current component
-      __CLIENT_DATA__.delete('current');
-      //now serialize the props
-      //this is predicting the order rendered on the server
-      //with the order determined by doc.body.querySelectorAll
-      const __BINDINGS__: Record<string, Record<string, any>> = ${bindings};
+      data.delete('current');
+      //Now get the bindings. Bindings predict the order
+      //rendered on the server with the order determined 
+      //by doc.body.querySelectorAll
+      const bindings = data.get('bindings');
       //loop through the initial elements before js manipulation
       for (const element of document.body.querySelectorAll('*')) {
         //pull the attributes from the rendered HTML
@@ -282,9 +271,9 @@ export default class Transpiler extends ComponentTranspiler {
         //determine the id of the element by its index in the registry
         const id = String(InkRegistry.elements.size);
         //if the element has bindings
-        if (__BINDINGS__[id]) {
+        if (bindings[id]) {
           //this is where we need to add the bindings to the attributes
-          Object.assign(attributes, __BINDINGS__[id]);
+          Object.assign(attributes, bindings[id]);
         }
         //finally add the element to the registry
         InkRegistry.register(element, attributes);

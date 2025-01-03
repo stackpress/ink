@@ -19,17 +19,17 @@ const docs = path.join(__dirname, '../../../docs');
 const compiler = ink({ 
   brand: '', 
   cwd: __dirname, 
-  minify: process.env.NODE_ENV !== 'development' 
+  minify: process.env.PUBLIC_ENV !== 'development' 
 });
 //use ink css
 compiler.use(css());
 //use build cache
 compiler.use(cache({ 
-  environment: process.env.NODE_ENV,
+  environment: process.env.PUBLIC_ENV,
   buildPath: path.join(docs, 'build') 
 }));
 
-//on post markup build, cache (dev and live)
+//on post markup build, cache (dev and live) (for static sites)
 compiler.emitter.on('rendered', (event: InkEvent<string>) => {
   //extract builder and sourcecode from params
   const builder = event.params.builder as DocumentBuilder;

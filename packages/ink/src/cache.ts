@@ -4,7 +4,8 @@ import path from 'node:path';
 import type { 
   Hash, 
   InkCompiler,
-  CacheOptions
+  CacheOptions,
+  ServerDocumentClass
 } from './types';
 import type { Event } from './EventEmitter';
 import type Builder from './document/Builder';
@@ -50,30 +51,19 @@ export default function cache(options: CacheOptions) {
       const builder = event.params.builder as Builder;
       //get fs and id ie. abc123c
       const { fs, id } = builder.document;
-      //get cache file path ie. /path/to/docs/build/client/abc123c.js
+      //get cache file path ie. /path/to/docs/build/server/abc123c.js
       const cache = path.join(paths.build, 'server', `${id}.js`);
       //if production and cache file exists
       if (fs.existsSync(cache)) {
         //get the build object
-        const build = compiler.fromCache(cache);
+        const build = require(cache);
+        const Document = build.default as ServerDocumentClass;
+        const document = new Document();
         //render the document
-        const html = build.document.render(props);
+        const html = document.render(props);
         //return the cached content
         event.set(html);
       }
-    });
-
-    //on post render, cache (dev and live)
-    emitter.on('rendered', (event: Event<string>) => {
-      //extract build and builder from params
-      const builder = event.params.builder as Builder;
-      const html = event.params.html as string;
-      //get fs and id ie. abc123c
-      const { id } = builder.document;
-      //get cache file path ie. /path/to/docs/build/client/abc123c.html
-      const cache = path.join(paths.build, 'client', `${id}.html`);
-      //write the server source code to cache
-      writeFile(cache, html);
     });
 
     //on pre client build, try to use cache if live
@@ -107,37 +97,6 @@ export default function cache(options: CacheOptions) {
       writeFile(cache, sourceCode);
     });
 
-    //on pre markup build, try to use cache if live
-    emitter.on('build-markup', (event: Event<string>) => {
-      //if not live, dont retrieve from cache
-      if (environment !== 'production') {
-        return;
-      }
-      //extract builder from params
-      const builder = event.params.builder as Builder;
-      //get fs and id ie. abc123c
-      const id = builder.document.id;
-      //get cache file path ie. /path/to/docs/build/client/abc123c.html
-      const cache = path.join(paths.build, 'client', `${id}.html`);
-      //if cache file exists, send it
-      if (fs.existsSync(cache)) {
-        event.set(fs.readFileSync(cache, 'utf8'));
-      }
-    });
-
-    //on post markup build, cache (dev and live)
-    emitter.on('built-markup', (event: Event<string>) => {
-      //extract builder and sourcecode from params
-      const builder = event.params.builder as Builder;
-      const sourceCode = event.params.sourceCode as string;
-      //get fs and id ie. abc123c
-      const id = builder.document.id;
-      //get cache file path ie. /path/to/docs/build/client/abc123c.html
-      const cache = path.join(paths.build, 'client', `${id}.html`);
-      //write the client source code to cache
-      writeFile(cache, sourceCode);
-    });
-
     //on pre server build, try to use cache if live
     emitter.on('build-server', (event: Event<string>) => {
       //if not live, dont retrieve from cache
@@ -160,10 +119,12 @@ export default function cache(options: CacheOptions) {
     emitter.on('built-server', (event: Event<string>) => {
       //extract build and builder from params
       const builder = event.params.builder as Builder;
-      const sourceCode = event.params.sourceCode as string;
+      let sourceCode = event.params.sourceCode as string;
+      //add module exports to source code
+      sourceCode += `;\n;module.exports = InkAPI;`;
       //get fs and id ie. abc123c
       const { id } = builder.document;
-      //get cache file path ie. /path/to/docs/build/client/abc123c.js
+      //get cache file path ie. /path/to/docs/build/server/abc123c.js
       const cache = path.join(paths.build, 'server', `${id}.js`);
       //write the server source code to cache
       writeFile(cache, sourceCode);

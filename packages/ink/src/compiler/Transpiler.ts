@@ -267,18 +267,18 @@ export default class Transpiler {
     return attributes.properties.map(property => {
       if (property.value.type === 'Literal') {
         if (typeof property.value.value === 'string') {
-          return `'${property.key.name}': \`${property.value.value}\``;
+          return `"${property.key.name}": "${property.value.value}"`;
         }
         //null, true, false, number 
-        return `'${property.key.name}': ${property.value.value}`;
+        return `"${property.key.name}": ${property.value.value}`;
       } else if (property.value.type === 'ObjectExpression') {
-        return `'${property.key.name}': ${
+        return `"${property.key.name}": ${
           JSON.stringify(Parser.object(property.value))
             .replace(/"([a-zA-Z0-9_]+)":/g, "$1:")
             .replace(/"\${([a-zA-Z0-9_]+)}"/g, "$1")
         }`;
       } else if (property.value.type === 'ArrayExpression') {
-        return `'${property.key.name}': ${
+        return `"${property.key.name}": ${
           JSON.stringify(Parser.array(property.value))
             .replace(/"([a-zA-Z0-9_]+)":/g, "$1:")
             .replace(/"\${([a-zA-Z0-9_]+)}"/g, "$1")
@@ -287,11 +287,11 @@ export default class Transpiler {
         if (property.spread) {
           return `...${property.value.name}`;
         }
-        return `'${property.key.name}': ${
+        return `"${property.key.name}": ${
           property.value.name
         }`;
       } else if (property.value.type === 'ProgramExpression') {
-        return `'${property.key.name}': ${
+        return `"${property.key.name}": ${
           property.value.source
         }`;
       }

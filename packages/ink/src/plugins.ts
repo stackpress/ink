@@ -199,7 +199,6 @@ export function esWorkspacePlugin() {
 export function esInkPlugin(options: InkPluginOptions = {}) {
   const { 
     entry,
-    bindings = '{}',
     tsconfig,
     cwd = process.cwd(), 
     fs = new NodeFS(),
@@ -272,7 +271,7 @@ export function esInkPlugin(options: InkPluginOptions = {}) {
         });
         const transpiler = new DocumentTranspiler(document, tsconfig);
         return {
-          contents: toTS(transpiler.client(bindings)),
+          contents: toTS(transpiler.client()),
           resolveDir: path.dirname(args.path),
           loader: 'ts'
         };

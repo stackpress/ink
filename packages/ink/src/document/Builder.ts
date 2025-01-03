@@ -144,10 +144,6 @@ export default class Builder {
    * Returns the client js
    */
   public async client() {
-    //we need to rebuild the server document
-    const { document } = await this.build();
-    //in order to get the bindings
-    const bindings = document.bindings();
     //emit build-client event
     const pre = await this._emitter.waitFor<string>('build-client', { 
       builder: this 
@@ -162,7 +158,6 @@ export default class Builder {
         globalName: 'InkAPI',
         plugins: [ 
           esInkPlugin({
-            bindings,
             mode: 'client',
             entry: this._document.absolute,
             brand: this._document.brand,
@@ -217,18 +212,20 @@ export default class Builder {
   /**
    * Returns the markup
    */
-  public async markup() {
+  public async markup(props: Record<string, any> = {}) {
     //emit build-markup event
     const pre = await this._emitter.waitFor<string>('build-markup', { 
+      props,
       builder: this 
     });
     //build the styles
     const sourceCode = pre.data || (
       await this.build()
-    ).document.render();
+    ).document.render(props);
     //emit built-markup event
     const post = await this._emitter.waitFor<string>('built-markup', { 
       ...pre.params, 
+      props,
       sourceCode 
     });
     return post.data || sourceCode;
