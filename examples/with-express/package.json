@@ -7,7 +7,7 @@
     "dev": "ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink-express": "0.3.11",
+    "@stackpress/ink-express": "0.3.12",
     "express": "4.19.2"
   },
   "devDependencies": {

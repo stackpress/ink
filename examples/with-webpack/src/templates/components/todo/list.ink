@@ -2,18 +2,6 @@
   :host {
     width: 100%;
   }
-  :host section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #EFEFEF;
-    border-radius: 5px;
-    background-color: #DA532C;
-    color: #EFEFEF;
-  }
   :host ul {
     list-style: none;
     margin: 0 0 20px;
@@ -22,8 +10,9 @@
   }
 
   :host li {
-    background-color: #DA532C;
+    background-color: #CDD9E4;
     border-radius: 5px;
+    color: #222222;
     margin-bottom: 10px;
     padding: 10px;
   }

@@ -3,8 +3,8 @@
 <link rel="import" href="./components/todo.ink" />
 <style>
   :host { 
-    background-color: #DA532C; 
-    color: #EFEFEF; 
+    background-color: #CDD9E4; 
+    color: #222222; 
     display: block;
     height: 100%;
     margin: 0px;
@@ -34,7 +34,7 @@
 </script>
 <header class="title">{title}</header>
 <div class="logo">
-  <img src="/ink-logo.png" alt="Logo" />
+  <img src="/ink-icon.png" alt="Logo" />
 </div>
 <paragraph classname="description">
   {description}

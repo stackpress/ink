@@ -3,7 +3,7 @@
     background-color: #EFEFEF;
     border: none;
     border-radius: 0;
-    color: #DA532C;
+    color: #004080;
     cursor: pointer;
     font-weight: semibold;
     padding: 10px 20px;

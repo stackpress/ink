@@ -16,5 +16,5 @@
 </if>
 
 <if true={count.value < list.length}>
-  <button class="bg-white text-orange-700 px-8 py-2 rounded-md" click=add>Add TODO</button>
+  <button class="bg-white text-blue-900 px-8 py-2 rounded-md" click=add>Add TODO</button>
 </if>

@@ -11,9 +11,8 @@ const app = express();
 //set the view engine to ink
 app.set('views', path.join(__dirname, 'pages'));
 app.set('view engine', 'ink');
-
 //if production (live)
-if (process.env.NODE_ENV === 'production') {
+if (process.env.PUBLIC_ENV === 'production') {
   //let's use express' template engine feature
   app.engine('ink', view(compiler));
   //...other production settings...

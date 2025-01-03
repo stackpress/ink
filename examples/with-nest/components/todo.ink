@@ -10,7 +10,7 @@
     padding: 20px 0;
     border: 1px solid #EFEFEF;
     border-radius: 5px;
-    background-color: #E49F1A;
+    background-color: #004080;
     color: #EFEFEF;
     max-width: 400px;
   }
