@@ -390,7 +390,7 @@ ${l.replace("__CLIENT_DATA__",d)}`}_toNodeList(t){return typeof t=="object"&&typ
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.14"
+                    "@stackpress/ink": "0.3.15"
                   },
                   "devDependencies": {
                     "@types/node": "22.1.0",
@@ -609,10 +609,10 @@ ${l.replace("__CLIENT_DATA__",d)}`}_toNodeList(t){return typeof t=="object"&&typ
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.14"
+                    "@stackpress/ink": "0.3.15"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.14",
+                    "@stackpress/ink-dev": "0.3.15",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
@@ -1043,11 +1043,11 @@ ${l.replace("__CLIENT_DATA__",d)}`}_toNodeList(t){return typeof t=="object"&&typ
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.14"
+                    "@stackpress/ink": "0.3.15"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.14",
-                    "@stackpress/ink-tailwind": "0.3.14",
+                    "@stackpress/ink-dev": "0.3.15",
+                    "@stackpress/ink-tailwind": "0.3.15",
                     "@types/node": "22.1.0",
                     "autoprefixer": "10.4.20",
                     "postcss": "8.4.44",

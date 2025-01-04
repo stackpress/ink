@@ -310,8 +310,8 @@
                     "build": "webpack --mode production"
                   },
                   "devDependencies": {
-                    "@stackpress/ink": "0.3.14"
-                    "@stackpress/ink-loader": "0.3.14",
+                    "@stackpress/ink": "0.3.15"
+                    "@stackpress/ink-loader": "0.3.15",
                     "@types/node": "22.1.0",
                     "html-webpack-plugin": "5.6.0",
                     "webpack-dev-server": "5.0.4",
