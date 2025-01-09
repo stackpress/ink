@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "ts-node ./src/build.ts",
-    "start": "ts-node ./src/index.ts",
+    "start": "PUBLIC_ENV=production ts-node ./src/index.ts",
     "test": "ts-node ./src/static.ts",
     "dev": "PUBLIC_ENV=development ts-node ./src/index.ts"
   },
