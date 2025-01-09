@@ -4,8 +4,10 @@ import { VariableDeclarationKind } from 'ts-morph';
 //compiler
 import type Component from '../compiler/Component';
 import ComponentTranspiler from '../compiler/Transpiler';
+//directives
+import type DirectiveInterface from '../directives/DirectiveInterface';
 //common
-import type { MarkupToken } from '../types';
+import type { MarkupToken, MarkupChildToken } from '../types';
 
 export default class Transpiler extends ComponentTranspiler {
   /**
@@ -25,18 +27,15 @@ export default class Transpiler extends ComponentTranspiler {
     const filePath = absolute.slice(0, -extname.length);
     //create a new source file
     const { source } = this._createSourceFile(`${filePath}.ts`);
-    //import { 
-    //  InkDocument,
-    //  InkElement,  
-    //  InkRegistry
-    //} from '@stackpress/ink/server';
+    //import DOMDocument from '@stackpress/ink/dist/dom/Document';
     source.addImportDeclaration({
-      moduleSpecifier: '@stackpress/ink/server',
-      namedImports: [
-        'InkDocument',
-        'InkElement',  
-        'InkRegistry'
-      ]
+      moduleSpecifier: '@stackpress/ink/dist/dom/Document',
+      defaultImport: 'DOMDocument'
+    });
+    //import ServerDocument from '@stackpress/ink/dist/server/Document';
+    source.addImportDeclaration({
+      moduleSpecifier: '@stackpress/ink/dist/server/Document',
+      defaultImport: 'ServerDocument'
     });
     //import others from <script>
     imports.forEach(imported => {
@@ -66,10 +65,10 @@ export default class Transpiler extends ComponentTranspiler {
         });
       }
     });
-    //export default class FoobarComponent extends InkDocument
+    //export default class FoobarComponent extends ServerDocument
     const component = source.addClass({
       name: classname,
-      extends: 'InkDocument',
+      extends: 'ServerDocument',
       isDefaultExport: true
     });
     //public id()
@@ -101,9 +100,6 @@ export default class Transpiler extends ComponentTranspiler {
    * render(client, props) method generated in transpile()
    * 
    * Primarily used by esInkPlugin which calls builder.client()
-   * 
-   * The server will pass both props and bindings to
-   * <script id="__CLIENT_DATA__">...</script>
    */
   public client() {
     const { imports, scripts } = this._component;
@@ -119,27 +115,29 @@ export default class Transpiler extends ComponentTranspiler {
     )
     //create a new source file
     const { source } = this._createSourceFile('client.ts');
-    //import type { Hash } from '@stackpress/ink/client';
+    //import DOMDocument from '@stackpress/ink/dist/dom/Document';
     source.addImportDeclaration({
-      isTypeOnly: true,
-      moduleSpecifier: '@stackpress/ink/client',
-      namedImports: [ 
-        'Hash' 
-      ]
+      moduleSpecifier: '@stackpress/ink/dist/dom/Document',
+      defaultImport: 'DOMDocument'
     });
-    //import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
+    //import ClientDocument from '@stackpress/ink/dist/client/Document';
     source.addImportDeclaration({
-      moduleSpecifier: '@stackpress/ink/dist/client/InkRegistry',
-      defaultImport: 'InkRegistry'
+      moduleSpecifier: '@stackpress/ink/dist/client/Document',
+      defaultImport: 'ClientDocument'
     });
-    //import emitter from '@stackpress/ink/dist/client/InkEmitter';
+    //import ClientRegistry from '@stackpress/ink/dist/client/Registry';
     source.addImportDeclaration({
-      moduleSpecifier: '@stackpress/ink/dist/client/InkEmitter',
+      moduleSpecifier: '@stackpress/ink/dist/client/Registry',
+      defaultImport: 'ClientRegistry'
+    });
+    //import emitter from '@stackpress/ink/dist/client/Emitter';
+    source.addImportDeclaration({
+      moduleSpecifier: '@stackpress/ink/dist/client/Emitter',
       defaultImport: 'emitter'
     });
-    //import data from '@stackpress/ink/dist/client/data';
+    //import data from '@stackpress/ink/dist/client/api/data';
     source.addImportDeclaration({
-      moduleSpecifier: '@stackpress/ink/dist/client/data',
+      moduleSpecifier: '@stackpress/ink/dist/client/api/data',
       defaultImport: 'data' 
     });
     //import Counter_abc123 from './Counter_abc123'
@@ -182,15 +180,37 @@ export default class Transpiler extends ComponentTranspiler {
         });
       }
     });
-    //export { InkRegistry, emitter, data };
+
+    //export { ClientRegistry, emitter, data };
     source.addExportDeclaration({
-      namedExports: [
-        'InkRegistry',
-        'emitter',
-        'data'
-      ]
+      namedExports: [ 'ClientRegistry', 'emitter', 'data' ]
     });
-    // export const components = { ... };
+
+    //export class TemplateDocument extends ClientDocument
+    const template = source.addClass({
+      isExported: true,
+      name: 'TemplateDocument',
+      extends: 'ClientDocument'
+    });
+    //public static sync()
+    template.addMethod({
+      isStatic: true,
+      name: 'sync',
+      statements: `
+        const document = new TemplateDocument();
+        return document.sync();
+      `
+    });
+    //public template() {}
+    template.addMethod({
+      name: 'template',
+      statements: `
+        ${scripts.join('\n')}
+        return ${this.markup.trim()};
+      `.trim()
+    });
+
+    //export const components = { ... };
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
@@ -203,7 +223,7 @@ export default class Transpiler extends ComponentTranspiler {
         }`
       }]
     });
-    // export const elements = { ... };
+    //export const elements = { ... };
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
@@ -219,7 +239,8 @@ export default class Transpiler extends ComponentTranspiler {
         }`
       }]
     });
-    // export const BUILD_ID = 'abc123';
+
+    //export const BUILD_ID = 'abc123';
     source.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
@@ -228,56 +249,11 @@ export default class Transpiler extends ComponentTranspiler {
         initializer: `'${this._component.id}'`
       }]
     });
-    // emitter.once('ready', () => {});
+
     source.addStatements(`emitter.once('ready', () => {
-      //extract the client from <script src="BUILD_ID">...</script>
-      const client = document.getElementById('CLIENT_DATA');
-      //if no client data, throw an error
-      if (!client) {
-        throw new Error('CLIENT_DATA not found');
-      }
-      try { //to place the client data into window.__CLIENT_DATA__
-        window.__CLIENT_DATA__ = JSON.parse(client.innerText.trim());
-        //then add the client data to the app data registry
-        Object.entries(window.__CLIENT_DATA__).forEach(([key, value]) => {
-          data.set(key, value);
-        });
-      } catch (error) {
-        throw new Error('__CLIENT_DATA__ is not a valid JSON');
-      }
-      //set the current component
-      data.set('current', 'document');
-      //run the user entry script
-      (() => {
-        ${scripts.join('\n')}
-      })();
-      //reset the current component
-      data.delete('current');
-      //Now get the bindings. Bindings predict the order
-      //rendered on the server with the order determined 
-      //by doc.body.querySelectorAll
-      const bindings = data.get('bindings');
-      //loop through the initial elements before js manipulation
-      for (const element of document.body.querySelectorAll('*')) {
-        //pull the attributes from the rendered HTML
-        const attributes: Hash = Object.fromEntries(
-          Array.from(element.attributes).map(attribute => [ 
-            attribute.nodeName, 
-            attribute.nodeValue.length > 0
-              ? attribute.nodeValue
-              : true
-          ])
-        );
-        //determine the id of the element by its index in the registry
-        const id = String(InkRegistry.elements.size);
-        //if the element has bindings
-        if (bindings[id]) {
-          //this is where we need to add the bindings to the attributes
-          Object.assign(attributes, bindings[id]);
-        }
-        //finally add the element to the registry
-        InkRegistry.register(element, attributes);
-      }
+      //collect the server props from the template data
+      //generate the bindings and sync the client registry
+      TemplateDocument.sync();
       //after we registered all the elements, we can now register the 
       //components and let it manip the HTML further if it wants to
       for (const [ tagname, definition ] of Object.entries(elements)) {
@@ -290,6 +266,41 @@ export default class Transpiler extends ComponentTranspiler {
     });`);
 
     return source;
+  }
+
+  /**
+   * Transforms markup to JS for the template() function
+   */
+  protected _markup(
+    parent: MarkupToken|null,
+    markup: MarkupChildToken[], 
+    components: Component[]
+  ): string {
+    return "[\n" + markup.map(child => {
+      let expression = '';
+      if (child.type === 'MarkupExpression') {
+        if (this._directives.has(child.name)) {
+          const directive = this._directives.get(child.name) as DirectiveInterface;
+          return directive.markup(parent, child, components, this._markup.bind(this));
+        }
+        //syntax <div title="Some Title">...</div>
+        expression += this._markupElement(expression, parent, child, components);
+      } else if (child.type === 'Literal') {
+        if (typeof child.value === 'string') {
+          if (child.escape) {
+            expression += `DOMDocument.createText(\`${child.value}\`, true)`;
+          } else {
+            expression += `DOMDocument.createText(\`${child.value}\`, false)`;
+          }
+        //null, true, false, number 
+        } else {
+          expression += `DOMDocument.createText(String(${child.value}))`;
+        }
+      } else if (child.type === 'ProgramExpression') {
+        expression += `...this._toNodeList(${child.source})`;
+      }
+      return expression;
+    }).join(", \n") + "\n]";
   }
 
   /**
@@ -329,7 +340,7 @@ export default class Transpiler extends ComponentTranspiler {
         ? `${this._component.brand}-${token.name}`
         : token.name;
       //create the component
-      expression += `InkRegistry.createElement('${tagname}', {`;
+      expression += `DOMDocument.createElement('${tagname}', {`;
     } else {
       //check to see if the token refers to a 
       //template in the registry
@@ -350,23 +361,17 @@ export default class Transpiler extends ComponentTranspiler {
           components
         )}`;
       }
-      expression += `InkRegistry.createElement('${token.name}', {`;
+      expression += `DOMDocument.createElement('${token.name}', {`;
     }
     
     if (token.attributes && token.attributes.properties.length > 0) {
       expression += ' ' + this._markupAttributes(token.attributes);
     }
 
-    expression += ' }, \'{';
-
-    if (token.attributes && token.attributes.properties.length > 0) {
-      expression += ' ' + this._markupAttributes(token.attributes).replace(/'/g, '\\\'');
-    }
-
     if (token.kind === 'inline') {
-      expression += ' }\')';
+      expression += ' })';
     } else {
-      expression += ' }\', ';
+      expression += ' }, ';
       if (token.children) {
         expression += this._markup(token, token.children, components);
       }

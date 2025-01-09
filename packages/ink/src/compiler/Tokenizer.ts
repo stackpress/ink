@@ -557,6 +557,11 @@ export default class Tokenizer {
       //dont parse this sub script, it will be ran on the 
       //browser (not the server); treat it like a literal
       //that wont be escaped...
+
+      //check for type attribute
+      // const type = open.attributes?.properties.find(
+      //   property => property.key.name === 'type'
+      // );
       
       //get the parent
       const parent = this._stack[this._stack.length - 1];

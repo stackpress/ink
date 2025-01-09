@@ -1,5 +1,5 @@
 //local
-import type InkComponent from './InkComponent';
+import type ClientComponent from '../Component';
 import getComponent from './component';
 import data from './data';
 
@@ -10,7 +10,7 @@ import data from './data';
  */
 export default function props<
   T = Record<string, any>
->(pointer: InkComponent|'document'|null = null) {
+>(pointer: ClientComponent|'document'|null = null) {
   const component = getComponent(pointer, true);
   if (typeof component === 'string') {
     return data.get('props') || {};

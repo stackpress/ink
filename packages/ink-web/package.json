@@ -1,21 +1,21 @@
 {
   "name": "ink-web",
-  "version": "0.3.15",
+  "version": "0.3.11",
   "description": "Ink Website",
   "private": true,
   "scripts": {
     "build": "ts-node ./src/build.ts",
-    "start": "PUBLIC_ENV=production ts-node ./src/index.ts",
+    "start": "ts-node ./src/index.ts",
     "test": "ts-node ./src/static.ts",
     "dev": "PUBLIC_ENV=development ts-node ./src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.15",
+    "@stackpress/ink": "0.3.11",
     "@shoelace-style/shoelace": "2.18.0",
     "express": "4.19.2"
   },
   "devDependencies": {
-    "@stackpress/ink-dev": "0.3.15",
+    "@stackpress/ink-dev": "0.3.11",
     "@types/express": "4.17.21",
     "@types/node": "22.9.3",
     "fast-glob": "3.3.2",

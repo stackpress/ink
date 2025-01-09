@@ -1,5 +1,5 @@
 //stackpress
-import { events } from '@stackpress/ink/dist/client/InkEmitter';
+import { events } from '@stackpress/ink/dist/client/Emitter';
 
 export function removeEvents(props: Record<string, any>) {
   const attributes = { ...props };

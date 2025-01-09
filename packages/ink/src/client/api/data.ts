@@ -1,6 +1,6 @@
 declare global { 
   interface Window {
-    __CLIENT_DATA__: Record<string, any>
+    __TEMPLATE_DATA__: Record<string, any>
   }
 }
 
@@ -13,13 +13,13 @@ declare global {
 // - markup attribues (bindings)
 // - environment variables (env)
 
-export class InkDataMap {
+export class TemplateData {
   /**
    * Make sure the global data object exists
    */
   constructor() {
-    if (!window.__CLIENT_DATA__) {
-      window.__CLIENT_DATA__ = {};
+    if (!window.__TEMPLATE_DATA__) {
+      window.__TEMPLATE_DATA__ = {};
     }
   }
 
@@ -27,7 +27,7 @@ export class InkDataMap {
    * Clears all the data
    */
   clear() {
-    window.__CLIENT_DATA__ = {};
+    window.__TEMPLATE_DATA__ = {};
     return this;
   }
 
@@ -36,7 +36,7 @@ export class InkDataMap {
    */
   delete(key: string): boolean {
     if (this.has(key)) {
-      delete window.__CLIENT_DATA__[key];
+      delete window.__TEMPLATE_DATA__[key];
       return true;
     }
     return false;
@@ -45,35 +45,35 @@ export class InkDataMap {
    * Returns an array of entries
    */
   entries(): [string, any][] {
-    return Object.entries(window.__CLIENT_DATA__);
+    return Object.entries(window.__TEMPLATE_DATA__);
   }
 
   /**
    * Returns true if the key exists
    */
   has(key: string): boolean {
-    return key in window.__CLIENT_DATA__;
+    return key in window.__TEMPLATE_DATA__;
   }
 
   /**
    * Returns the value of the key
    */
   get(key: string): any {
-    return window.__CLIENT_DATA__[key];
+    return window.__TEMPLATE_DATA__[key];
   }
 
   /**
    * Returns an array of keys
    */
   keys(): string[] {
-    return Object.keys(window.__CLIENT_DATA__);
+    return Object.keys(window.__TEMPLATE_DATA__);
   }
 
   /**
    * Sets a key value pair
    */
   set(key: string, value: any) {
-    window.__CLIENT_DATA__[key] = value;
+    window.__TEMPLATE_DATA__[key] = value;
     return this;
   }
 
@@ -81,10 +81,10 @@ export class InkDataMap {
    * Returns an array of values
    */
   values(): any[] {
-    return Object.values(window.__CLIENT_DATA__);
+    return Object.values(window.__TEMPLATE_DATA__);
   }
 }
 
-const data = new InkDataMap();
+const data = new TemplateData();
 
 export default data;

@@ -27,7 +27,7 @@ describe('Ink Document Transpiler', () => {
     //     InkRegistry.createText(`ok`)
     //   ]).element
     // ]
-    expect(server).to.contain('InkRegistry.createElement(\'div\', { "title": title },');
+    expect(server).to.contain('InkRegistry.createElement(\'div\', { \'title\': title },');
     expect(server).to.contain('InkRegistry.createText(`$`, false)');
 
     const client = toTS(transpiler.client());

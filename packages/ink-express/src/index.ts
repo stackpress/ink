@@ -1,11 +1,11 @@
 //stackpress
 import type { 
-  Request,
-  Response,
-  InkCompiler
-} from '@stackpress/ink/compiler';
-import type { DevelopOptions } from '@stackpress/ink-dev';
-import { dev as develop } from '@stackpress/ink-dev';
+  Request, 
+  Response, 
+  InkCompiler 
+} from '@stackpress/ink/dist/types';
+import type { DevelopOptions } from '@stackpress/ink-dev/dist/types';
+import { dev as develop } from '@stackpress/ink-dev/dist/server';
 
 export type NextView = (err: Error | null, results: string | undefined) => void;
 

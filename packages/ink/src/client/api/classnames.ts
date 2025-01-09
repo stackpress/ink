@@ -1,9 +1,9 @@
 //local
-import type InkComponent from './InkComponent';
+import type ClientComponent from '../Component';
 import getComponent from './component';
 import props from './props';
 
-type Component = InkComponent|'body'|'head'|'document';
+type Component = ClientComponent|'body'|'head'|'document';
 
 /**
  * Get the classlist of the current component
@@ -17,13 +17,13 @@ export function classlist(pointer: Component|null = null) {
     return document.body.parentElement?.classList;
   } 
   const component = getComponent(pointer);
-  return (component as InkComponent)?.classList;
+  return (component as ClientComponent)?.classList;
 }
 
 /**
  * Get the current classnames where this is being called from
  * ie. const classes = classnames();
  */
-export default function classnames(pointer: InkComponent|null = null) {
+export default function classnames(pointer: ClientComponent|null = null) {
   return props<{'class': string}>(pointer)['class'] || '';
 }

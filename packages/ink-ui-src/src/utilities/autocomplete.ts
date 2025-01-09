@@ -4,9 +4,9 @@ import type {
   KeyboardEvent, 
   AttributeChangeEvent 
 } from '@stackpress/ink/dist/types';
-import type InkComponent from '@stackpress/ink/dist/client/InkComponent';
-import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
-import signal from '@stackpress/ink/dist/client/signal';
+import type ClientComponent from '@stackpress/ink/dist/client/Component';
+import ClientRegistry from '@stackpress/ink/dist/client/Registry';
+import signal from '@stackpress/ink/dist/client/api/signal';
 
 export type State = {
   show: boolean,
@@ -37,7 +37,7 @@ export function makeOptions(children: Node[]) {
         return option;
       }
       //get the attributes
-      const attributes = InkRegistry.get(option)?.attributes || {};
+      const attributes = ClientRegistry.get(option)?.attributes || {};
       //set value if not set
       attributes.value = attributes.value ? attributes.value 
         : option.hasAttribute('value') ? option.getAttribute('value')
@@ -49,12 +49,12 @@ export function makeOptions(children: Node[]) {
       //get the children
       const children = Array.from(option.childNodes);
       //create and return the option wrapper
-      return InkRegistry.createElement('div', attributes, children).element;
+      return ClientRegistry.createElement('div', attributes, children).element;
     });
 }
 
 export function getHandlers(
-  host: InkComponent, 
+  host: ClientComponent, 
   options: Element[],
   slot = true
 ) {
@@ -74,7 +74,7 @@ export function getHandlers(
       //get selected choice
       const option = e.currentTarget as HTMLElement;
       //get selected value
-      const value = InkRegistry.get(option)?.getAttribute('value');
+      const value = ClientRegistry.get(option)?.getAttribute('value');
       //if value is undefined, skip (or throw error)
       if (typeof value === 'undefined') return;
       //remake state
@@ -187,7 +187,7 @@ export function getHandlers(
         option.removeEventListener('click', select);
         option.addEventListener('click', select);
         //set value
-        const element = InkRegistry.get(option);
+        const element = ClientRegistry.get(option);
         if (element) {
           if (!element.hasAttribute('value')) {
             element.setAttribute('value', option.innerText.trim());
@@ -206,7 +206,7 @@ export function getHandlers(
         //if not an element, skip
         if (!(option instanceof Element)) return false;
         //get the element from the registry
-        const element = InkRegistry.get(option);
+        const element = ClientRegistry.get(option);
         //if no element, skip
         if (!element) return false;
         //now get the value attribute

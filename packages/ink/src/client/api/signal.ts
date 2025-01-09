@@ -1,7 +1,7 @@
 //common
-import type { SignalProps, SignalObserver } from '../types';
+import type { SignalProps, SignalObserver } from '../../types';
 //local
-import type InkComponent from './InkComponent';
+import type ClientComponent from '../Component';
 import getComponent from './component';
 
 /**
@@ -9,12 +9,12 @@ import getComponent from './component';
  */
 export class SignalRegistry {
   //map of components and their observer
-  protected static _observers: Map<InkComponent, SignalObserver> = new Map();
+  protected static _observers: Map<ClientComponent, SignalObserver> = new Map();
 
   /**
    * Observe a value
    */
-  public static observe<T = any>(component: InkComponent, value: T) {
+  public static observe<T = any>(component: ClientComponent, value: T) {
     const methods = {
       getter: () => property.raw as T,
       setter: (value: T) => value
@@ -75,7 +75,7 @@ export class SignalRegistry {
   /**
    * Get the observer for a component
    */
-  public static observer(component: InkComponent) {
+  public static observer(component: ClientComponent) {
     return this._observers.get(component) || null;
   }
 
@@ -95,9 +95,9 @@ export class SignalRegistry {
  */
 export default function signal<T = any>(
   value: T,
-  pointer: InkComponent|null = null
+  pointer: ClientComponent|null = null
 ) {
-  const component = getComponent(pointer) as InkComponent;
+  const component = getComponent(pointer) as ClientComponent;
   //if component is not initiated
   if (!component.initiated) {
     //then add value to observer

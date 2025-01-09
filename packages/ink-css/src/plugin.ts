@@ -1,8 +1,6 @@
 //stackpress
-import type { 
-  InkCompiler, 
-  DocumentBuilder
-} from '@stackpress/ink/compiler';
+import type { InkCompiler } from '@stackpress/ink/dist/types';
+import type DocumentBuilder from '@stackpress/ink/dist/document/Builder';
 //plugins
 import { block, inline } from './plugins/display';
 import { display, opacity, visibility } from './plugins/fouc';
@@ -40,11 +38,10 @@ export default function plugin(options: InkCSSOptions = {}) {
     //whenever a document style is built, replace directives with actual styles
     compiler.emitter.on('built-styles', async e => {
       const builder = e.params.builder as DocumentBuilder;
-      const { document, transpiler } = builder;
+      const { document } = builder;
       const contents = { 
         client: await builder.client(),
-        server: document.contents,
-        markup: transpiler.markup
+        server: document.contents
       };
       const sourceCode = e.params.sourceCode as string;
       const stylesheet = css(options)

@@ -108,23 +108,21 @@ export default class Transpiler {
     const tagname = this._component.brand 
       ? `${this._component.brand}-${this._component.tagname}`
       : this._component.tagname;
-    //determine component parent
-    const parent = field ? 'InkField' : 'InkComponent';
     //get path without extension
     //ex. /path/to/Counter.ink -> /path/to/Counter
     const extname = path.extname(absolute);
     const filePath = absolute.slice(0, -extname.length);
     //create a new source file
     const { source } = this._createSourceFile(`${filePath}.ts`);
-    //import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
+    //import ClientRegistry from '@stackpress/ink/dist/client/Registry';
     source.addImportDeclaration({
-      moduleSpecifier: '@stackpress/ink/dist/client/InkRegistry',
-      defaultImport: 'InkRegistry'
+      moduleSpecifier: '@stackpress/ink/dist/client/Registry',
+      defaultImport: 'ClientRegistry'
     });
-    //import InkComponent from '@stackpress/ink/dist/client/InkComponent';
+    //import ClientComponent from '@stackpress/ink/dist/client/Component';
     source.addImportDeclaration({
-      moduleSpecifier: `@stackpress/ink/dist/client/${parent}`,
-      defaultImport: parent
+      moduleSpecifier: `@stackpress/ink/dist/client/${field ? 'Field' : 'Component'}`,
+      defaultImport: field ? 'ClientField' : 'ClientComponent'
     });
     //import Counter from './Counter'
     this._component.components.filter(
@@ -165,7 +163,7 @@ export default class Transpiler {
     //export default class FoobarComponent extends InkComponent
     const component = source.addClass({
       name: classname,
-      extends: parent,
+      extends: field ? 'ClientField' : 'ClientComponent',
       isDefaultExport: true,
     });
     //public static id = 'abc123';
@@ -245,13 +243,13 @@ export default class Transpiler {
       } else if (child.type === 'Literal') {
         if (typeof child.value === 'string') {
           if (child.escape) {
-            expression += `InkRegistry.createText(\`${child.value}\`, true)`;
+            expression += `ClientRegistry.createText(\`${child.value}\`, true)`;
           } else {
-            expression += `InkRegistry.createText(\`${child.value}\`, false)`;
+            expression += `ClientRegistry.createText(\`${child.value}\`, false)`;
           }
         //null, true, false, number 
         } else {
-          expression += `InkRegistry.createText(String(${child.value}))`;
+          expression += `ClientRegistry.createText(String(${child.value}))`;
         }
       } else if (child.type === 'ProgramExpression') {
         expression += `...this._toNodeList(${child.source})`;
@@ -267,18 +265,18 @@ export default class Transpiler {
     return attributes.properties.map(property => {
       if (property.value.type === 'Literal') {
         if (typeof property.value.value === 'string') {
-          return `"${property.key.name}": "${property.value.value}"`;
+          return `'${property.key.name}': \`${property.value.value}\``;
         }
         //null, true, false, number 
-        return `"${property.key.name}": ${property.value.value}`;
+        return `'${property.key.name}': ${property.value.value}`;
       } else if (property.value.type === 'ObjectExpression') {
-        return `"${property.key.name}": ${
+        return `'${property.key.name}': ${
           JSON.stringify(Parser.object(property.value))
             .replace(/"([a-zA-Z0-9_]+)":/g, "$1:")
             .replace(/"\${([a-zA-Z0-9_]+)}"/g, "$1")
         }`;
       } else if (property.value.type === 'ArrayExpression') {
-        return `"${property.key.name}": ${
+        return `'${property.key.name}': ${
           JSON.stringify(Parser.array(property.value))
             .replace(/"([a-zA-Z0-9_]+)":/g, "$1:")
             .replace(/"\${([a-zA-Z0-9_]+)}"/g, "$1")
@@ -287,11 +285,11 @@ export default class Transpiler {
         if (property.spread) {
           return `...${property.value.name}`;
         }
-        return `"${property.key.name}": ${
+        return `'${property.key.name}': ${
           property.value.name
         }`;
       } else if (property.value.type === 'ProgramExpression') {
-        return `"${property.key.name}": ${
+        return `'${property.key.name}': ${
           property.value.source
         }`;
       }
@@ -335,10 +333,10 @@ export default class Transpiler {
         ? `${component.brand}-${component.tagname}`
         : component.tagname;
 
-      expression += `InkRegistry.createComponent('${tagname}', ${classname}, {`;
+      expression += `ClientRegistry.createComponent('${tagname}', ${classname}, {`;
     //this is a tag that is not a component/template
     } else {
-      expression += `InkRegistry.createElement('${token.name}', {`;
+      expression += `ClientRegistry.createElement('${token.name}', {`;
     }
     
     if (token.attributes && token.attributes.properties.length > 0) {

@@ -1,5 +1,5 @@
 //stackpress
-import type { Component } from '@stackpress/ink/compiler';
+import type Component from '@stackpress/ink/dist/compiler/Component';
 import Styleset from '@stackpress/ink/dist/style/StyleSet';
 //common
 import type { Plugin } from '../types';

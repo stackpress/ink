@@ -3,12 +3,10 @@ import type { FSWatcher } from 'chokidar';
 import path from 'node:path';
 import chokidar from 'chokidar';
 //stackpress
-import type { Request, Response } from '@stackpress/ink/compiler';
-import { 
-  Component, 
-  DocumentBuilder,
-  EventEmitter
-} from '@stackpress/ink/compiler';
+import type { Request, Response } from '@stackpress/ink/dist/types';
+import Component from '@stackpress/ink/dist/compiler/Component';
+import DocumentBuilder from '@stackpress/ink/dist/document/Builder';
+import EventEmitter from '@stackpress/ink/dist/EventEmitter';
 //local
 import type { ServerOptions, OptionIgnore } from './types';
 import { dependantsOf, update, errorMessage } from './helpers';

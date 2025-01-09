@@ -75,10 +75,10 @@ describe('Ink Document Builder', () => {
       
       // Trigger the client build process
       await builder.client();
+      
       // Verify events were emitted in the expected sequence
-      expect(events).to.deep.equal(
-        ['build-client', 'built-client']
-      );
+      expect(events).to.deep.equal
+      (['build', 'built', 'build-client', 'built-client']);
     });
 
     it('should provide event data in build events', async () => {

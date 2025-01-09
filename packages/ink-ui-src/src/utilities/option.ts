@@ -4,10 +4,10 @@ import type {
   ChangeEvent, 
   AttributeChangeEvent 
 } from '@stackpress/ink/dist/types';
-import type InkField from '@stackpress/ink/dist/client/InkField';
+import type ClientField from '@stackpress/ink/dist/client/Field';
 import type StyleSet from '@stackpress/ink/dist/style/StyleSet';
 
-export function getProps(host: InkField) {
+export function getProps(host: ClientField) {
   //get props
   const { 
     label,  error,  check,  
@@ -145,7 +145,7 @@ export function setStyles(
   }
 }
 
-export function getHandlers(host: InkField) {
+export function getHandlers(host: ClientField) {
   const { change, update, click } = host.props;
   //handlers
   const handlers = {

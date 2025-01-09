@@ -3,7 +3,7 @@ import type {
   ChangeEvent, 
   AttributeChangeEvent 
 } from '@stackpress/ink/dist/types';
-import type InkField from '@stackpress/ink/dist/client/InkField';
+import type ClientField from '@stackpress/ink/dist/client/Field';
 import StyleSet from '@stackpress/ink/dist/style/StyleSet';
 //style
 import setAlign from './style/align';
@@ -12,7 +12,7 @@ import setDisplay from './style/display';
 import setPadding from './style/padding';
 import setSize from './style/size';
 
-export function getProps(host: InkField) {
+export function getProps(host: ClientField) {
   //get props
   const { 
     change, update, 
@@ -115,7 +115,7 @@ export function setDefaultStyles(
 };
 
 export function getHandlers(
-  host: InkField, 
+  host: ClientField, 
   change?: Function, 
   update?: Function
 ) {

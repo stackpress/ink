@@ -1,7 +1,7 @@
 //local
-import InkComponent from './InkComponent';
+import ClientComponent from './Component';
 
-export default abstract class InkField extends InkComponent {
+export default abstract class ClientField extends ClientComponent {
   //associates this component with a form
   public static formAssociated = true;
   //accessor to the form internals API

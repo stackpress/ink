@@ -63,8 +63,13 @@ glob(
   );
   //get the build object
   const build = await builder.build();
+  //emit view render event
+  const pre = await compiler.emitter.waitFor<string>(
+    'render', 
+    { builder, build, props }
+  );
   //render the document
-  const html = build.document.render(props);
+  const html = pre.data || build.document.render(props);
   //emit view rendered event
   await compiler.emitter.waitFor<string>(
     'rendered', 
@@ -72,4 +77,5 @@ glob(
   );
   await builder.client();
   await builder.styles();
+  await builder.markup();
 });

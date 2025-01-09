@@ -212,20 +212,18 @@ export default class Builder {
   /**
    * Returns the markup
    */
-  public async markup(props: Record<string, any> = {}) {
+  public async markup() {
     //emit build-markup event
     const pre = await this._emitter.waitFor<string>('build-markup', { 
-      props,
       builder: this 
     });
     //build the styles
     const sourceCode = pre.data || (
       await this.build()
-    ).document.render(props);
+    ).document.render();
     //emit built-markup event
     const post = await this._emitter.waitFor<string>('built-markup', { 
       ...pre.params, 
-      props,
       sourceCode 
     });
     return post.data || sourceCode;

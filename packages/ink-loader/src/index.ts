@@ -2,12 +2,13 @@
 import path from 'node:path';
 import { urlToRequest } from 'loader-utils';
 //stackpress
-import type { InkOptions } from '@stackpress/ink/compiler';
-import { 
-  ComponentTranspiler, 
-  Component, 
-  toJS
-} from '@stackpress/ink/compiler';
+import type { InkOptions } from '@stackpress/ink/dist/types';
+import Component from '@stackpress/ink/dist/compiler/Component';
+import ComponentTranspiler from '@stackpress/ink/dist/compiler/Transpiler';
+import { toJS } from '@stackpress/ink/dist/helpers';
+
+
+
 //local
 import type { WebpackLoader, LoaderFunction } from './types';
 

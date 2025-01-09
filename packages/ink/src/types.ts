@@ -4,19 +4,19 @@ import type { PluginBuild } from 'esbuild';
 //stackpress
 import type { FileSystem } from '@stackpress/types/dist/types';
 //client
-import type ClientDocument from './client/InkRegistry';
-import type ClientComponent from './client/InkComponent';
-import type ClientElement from './client/InkElement';
+import type ClientDocument from './client/Registry';
+import type ClientComponent from './client/Component';
+import type ClientElement from './client/Element';
 //compiler
 import type Component from './compiler/Component';
 import type ComponentLexer from './compiler/Lexer';
+//dom
+import type DOMElement from './dom/Element';
 //document
 import type DocumentBuilder from './document/Builder';
 import type DocumentManifest from './document/Manifest';
 //server
-import type ServerDocument from './server/InkDocument';
-import type ServerText from './server/InkText';
-import type ServerElement from './server/InkElement';
+import type ServerDocument from './server/Document';
 //local
 import type EventEmitter from './EventEmitter';
 import type { Event as InkEvent } from './EventEmitter';
@@ -233,17 +233,35 @@ export type BuildResults = {
 };
 
 //--------------------------------------------------------------------//
-// Server Types
+// DOM Types
 
-export type ServerNode = ServerElement|ServerText;
-export type Bindings = Record<string, Record<string, any>>;
+export type DOMData = {
+  type: number,
+  name: string
+};
+
+export type DOMNodeData = DOMData & {
+  value: string
+};
+
+export type DOMElementData = DOMData & {
+  attributes: Record<string, unknown>,
+  children: (DOMElementData | DOMNodeData)[]
+};
+export interface DOMNode {
+  parent: DOMElement|null,
+  nodeType: number,
+  nodeName: string,
+  export(): DOMNodeData|DOMElementData,
+  toString(): string
+}
 
 //--------------------------------------------------------------------//
 // Client Types
 
 export type AnyChild = ClientElement|Node|string|undefined;
 
-export type InkComponentClass = Constructor<ClientComponent> & {
+export type ClientComponentClass = Constructor<ClientComponent> & {
   //ie. abc123
   id: string,
   //ie. tag-name
@@ -522,6 +540,7 @@ export type DocumentPluginOptions = ComponentPluginOptions;
 
 export type InkPluginOptions = FileOptions & {
   entry?: string,
+  bindings?: string,
   brand?: string,
   mode?: 'client'|'server',
   tsconfig?: string,

@@ -1,5 +1,6 @@
 //stackpress
-import type { Component, EventEmitter } from '@stackpress/ink/compiler';
+import type Component from '@stackpress/ink/dist/compiler/Component';
+import type EventEmitter from '@stackpress/ink/dist/EventEmitter';
 
 export type OptionIgnore = (string|RegExp|((string: string) => boolean))[];
 

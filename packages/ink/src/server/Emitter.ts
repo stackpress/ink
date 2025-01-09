@@ -1,7 +1,7 @@
 /**
  * Server emitter shim
  */
-export class InkEmitter {
+export class ServerEmitter {
   /**
    * Emits an event
    */
@@ -31,6 +31,6 @@ export class InkEmitter {
   }
 }
 
-const emitter = new InkEmitter();
+const emitter = new ServerEmitter();
 
 export default emitter;

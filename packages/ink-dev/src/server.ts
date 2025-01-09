@@ -1,7 +1,7 @@
 //modules
 import fs from 'node:fs';
 //stackpress
-import type { Request, Response } from '@stackpress/ink/compiler';
+import type { Request, Response } from '@stackpress/ink/dist/types';
 //local
 import type { DevelopOptions } from './types';
 import RefreshServer from './RefreshServer';

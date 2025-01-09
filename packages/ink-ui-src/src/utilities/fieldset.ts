@@ -1,11 +1,11 @@
 //stackpress
 import type { 
   MouseEvent, 
-  InkComponentClass 
+  ClientComponentClass 
 } from '@stackpress/ink/dist/types';
 import type StyleSet from '@stackpress/ink/dist/style/StyleSet';
-import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
-import InkComponent from '@stackpress/ink/dist/client/InkComponent';
+import ClientRegistry from '@stackpress/ink/dist/client/Registry';
+import ClientComponent from '@stackpress/ink/dist/client/Component';
 //style
 import setColor from './style/color';
 import setCurve from './style/curve';
@@ -87,15 +87,15 @@ export function cloneElement(
   prepare: Function,
   andChildren = false
 ): Node {
-  const component = node as InkComponent | HTMLElement & {
-    definition?: InkComponentClass,
+  const component = node as ClientComponent | HTMLElement & {
+    definition?: ClientComponentClass,
     props?: Record<string, any>,
     originalChildren?: Node[]
   };
   if (component.definition) {
     const children = component.originalChildren || [];
     const attributes = prepare(component);
-    return InkRegistry.createComponent(
+    return ClientRegistry.createComponent(
       component.nodeName.toLowerCase(), 
       component.definition, 
       attributes || {}, 
@@ -106,7 +106,7 @@ export function cloneElement(
   } else if (node instanceof HTMLElement) {
     const children = Array.from(node.childNodes);
     const attributes = prepare(component);
-    return InkRegistry.createElement(
+    return ClientRegistry.createElement(
       node.nodeName.toLowerCase(), 
       attributes || {}, 
       andChildren 
@@ -117,7 +117,7 @@ export function cloneElement(
   return node.cloneNode(andChildren);
 }
 
-export function getHandlers(host: InkComponent, template: Node[]) {
+export function getHandlers(host: ClientComponent, template: Node[]) {
   const { name, legend } = host.props;
   const handlers = {
     add: (e: MouseEvent<HTMLButtonElement>) => {
@@ -138,15 +138,15 @@ export function getHandlers(host: InkComponent, template: Node[]) {
       errors = errors?.constructor.name === 'Object' ? errors : {};
       const fields = template.map(
         element => cloneElement(element, (node: HTMLElement) => {
-          const component = node as InkComponent | HTMLElement & {
-            definition?: InkComponentClass,
+          const component = node as ClientComponent | HTMLElement & {
+            definition?: ClientComponentClass,
             props?: Record<string, any>,
             originalChildren?: Node[]
           };
 
           const attributes = component.definition ? component.props || {}
-            : node instanceof HTMLElement && InkRegistry.has(node)
-            ? InkRegistry.get(node)?.attributes || {}
+            : node instanceof HTMLElement && ClientRegistry.has(node)
+            ? ClientRegistry.get(node)?.attributes || {}
             : node instanceof HTMLElement
             ? Object.fromEntries(Array
               .from(node.attributes)
@@ -168,19 +168,19 @@ export function getHandlers(host: InkComponent, template: Node[]) {
           return attributes;
         }, true)
       );
-      const slot = InkRegistry.createElement(
+      const slot = ClientRegistry.createElement(
         'div', { slot: `row-${index}`}, fields
       ).element as HTMLElement;
       const title = legend ? legend.replace('%s', index + 1): undefined;
-      const remove = InkRegistry.createElement(
+      const remove = ClientRegistry.createElement(
         'a', {}, [ '&times;' ]
       ).element as HTMLElement;
       const label = legend 
-        ? InkRegistry.createElement('span', {}, [ title ]).element 
+        ? ClientRegistry.createElement('span', {}, [ title ]).element 
         : undefined;
-      const fieldset = InkRegistry.createElement('fieldset', {}, [
-        InkRegistry.createElement('legend', {}, [ label, remove ]).element,
-        InkRegistry.createElement('slot', { name: `row-${index}` }).element
+      const fieldset = ClientRegistry.createElement('fieldset', {}, [
+        ClientRegistry.createElement('legend', {}, [ label, remove ]).element,
+        ClientRegistry.createElement('slot', { name: `row-${index}` }).element
       ]).element as HTMLElement;
       remove.addEventListener('click', () => handlers.remove(fieldset, slot));
       return { fieldset, slot };
@@ -220,15 +220,15 @@ export function getHandlers(host: InkComponent, template: Node[]) {
       errors = errors?.constructor.name === 'Object' ? errors : {};
       const fields = template.map(
         element => cloneElement(element, (node: HTMLElement) => {
-          const component = node as InkComponent | HTMLElement & {
-            definition?: InkComponentClass,
+          const component = node as ClientComponent | HTMLElement & {
+            definition?: ClientComponentClass,
             props?: Record<string, any>,
             originalChildren?: Node[]
           };
 
           const attributes = component.definition ? component.props || {}
-            : node instanceof HTMLElement && InkRegistry.has(node)
-            ? InkRegistry.get(node)?.attributes || {}
+            : node instanceof HTMLElement && ClientRegistry.has(node)
+            ? ClientRegistry.get(node)?.attributes || {}
             : node instanceof HTMLElement
             ? Object.fromEntries(Array
               .from(node.attributes)
@@ -250,11 +250,11 @@ export function getHandlers(host: InkComponent, template: Node[]) {
           return attributes;
         }, true)
       );
-      const slot = InkRegistry.createElement(
+      const slot = ClientRegistry.createElement(
         'div', {}, fields
       ).element as HTMLElement;
-      const fieldset = InkRegistry.createElement('fieldset', {}, [
-        InkRegistry.createElement('slot').element
+      const fieldset = ClientRegistry.createElement('fieldset', {}, [
+        ClientRegistry.createElement('slot').element
       ]).element as HTMLElement;
       return { fieldset, slot };
     }

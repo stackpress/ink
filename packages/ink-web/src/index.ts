@@ -29,7 +29,7 @@ compiler.use(cache({
   buildPath: path.join(docs, 'build') 
 }));
 
-//on post markup build, cache (dev and live) (for static sites)
+//on post markup build, cache (dev and live)
 compiler.emitter.on('rendered', (event: InkEvent<string>) => {
   //extract builder and sourcecode from params
   const builder = event.params.builder as DocumentBuilder;
@@ -61,7 +61,7 @@ app.set('views', path.join(__dirname, 'pages'));
 app.set('view engine', 'ink');
 
 //if production (live)
-if (process.env.NODE_ENV === 'production') {
+if (process.env.PUBLIC_ENV === 'production') {
   //let's use express' template engine feature
   app.engine('ink', view(compiler));
   //...other production settings...
@@ -128,7 +128,7 @@ app.use((error: Error, req: Request, res: Response, next: Next) => {
 
     const response = exception.toResponse();
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.PUBLIC_ENV === 'production') {
       delete response.stack;
     }
     

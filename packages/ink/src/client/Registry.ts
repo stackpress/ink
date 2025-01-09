@@ -1,13 +1,13 @@
 //common
 import type { 
   AnyChild, 
-  InkComponentClass, 
+  ClientComponentClass, 
   RegistryIterator 
 } from '../types';
 //local
-import InkComponent from './InkComponent';
-import InkElement from './InkElement';
-import api from './api';
+import ClientComponent from './Component';
+import ClientElement from './Element';
+import client from './api/client';
 
 //this is used to convert HTML entities to their respective characters
 const decoder = document.createElement('textarea');
@@ -17,12 +17,12 @@ const decode = (value: string) => {
 }
 
 /**
- * A registry of all InkElement/InkComponent instances 
+ * A registry of all ClientElement/ClientComponent instances 
  * to add better attribute handling
  */
-export default class InkRegistry {
-  //A registry of all InkElement instances
-  protected static _elements = new Map<Element, InkElement>();
+export default class ClientRegistry {
+  //A registry of all ClientElement instances
+  protected static _elements = new Map<Element, ClientElement>();
 
   /**
    * Returns the registry
@@ -36,14 +36,14 @@ export default class InkRegistry {
    */
   public static createComponent(
     tagname: string,
-    definition: InkComponentClass, 
+    definition: ClientComponentClass, 
     attributes: Record<string, any> = {}, 
     children: AnyChild[] = []
   ) {
     const { registered } = definition;
     //if the component being created is not a
     //registered component in customElements
-    if (!registered && !api()?.elements[tagname]) {
+    if (!registered && !client()?.elements[tagname]) {
       //we need to pseudo create the component instead.
       return this.createVirtualComponent(
         tagname, 
@@ -61,7 +61,7 @@ export default class InkRegistry {
     const name = registered || tagname;
     //this is to avoid confusion with different tag names 
     //using the same component.
-    const component = document.createElement(name) as InkComponent;
+    const component = document.createElement(name) as ClientComponent;
     //uhh, wait for this to be registered in customElements?
     customElements.whenDefined(name).then(() => {
       customElements.upgrade(component);
@@ -77,7 +77,7 @@ export default class InkRegistry {
     //in the constructor but we need to update the attributes 
     //and children
     //try to register it
-    const element = InkRegistry.register(component, attributes);
+    const element = ClientRegistry.register(component, attributes);
     //set the attributes again to include non-string values
     element.setAttributes(attributes, true);
     //set attributes natively so it shows 
@@ -142,7 +142,7 @@ export default class InkRegistry {
    */
   public static createVirtualComponent(
     tagname: string,
-    definition: InkComponentClass, 
+    definition: ClientComponentClass, 
     attributes: Record<string, any> = {}, 
     children: AnyChild[] = []
   ) {
@@ -154,7 +154,7 @@ export default class InkRegistry {
     //inside of another component without having to register it.
     
     // Create a template for the inner component
-    const component = document.createElement(tagname) as InkComponent;
+    const component = document.createElement(tagname) as ClientComponent;
     //@ts-ignore set the component 
     component.definition = definition;
     //copy the prototype
@@ -182,8 +182,8 @@ export default class InkRegistry {
    * Clones an element, adds to registry and returns it
    */
   public static cloneElement(node: Node, andChildren = false): Node {
-    const component = node as InkComponent | HTMLElement & {
-      definition?: InkComponentClass,
+    const component = node as ClientComponent | HTMLElement & {
+      definition?: ClientComponentClass,
       props?: Record<string, any>,
       originalChildren?: Node[]
     };
@@ -219,7 +219,7 @@ export default class InkRegistry {
    * Like array filter for registry
    */
   public static filter(callback: RegistryIterator<boolean>) {
-    const elements: InkElement[] = [];
+    const elements: ClientElement[] = [];
     this._elements.forEach((ink, html) => {
       if (callback(ink, html)) {
         elements.push(ink);
@@ -262,7 +262,7 @@ export default class InkRegistry {
     andChildren = false
   ) {
     if (this.has(element)) {
-      return this.get(element) as InkElement;
+      return this.get(element) as ClientElement;
     }
     if (!attributes) {
       Array.from(element.attributes).forEach(attribute => {
@@ -272,7 +272,7 @@ export default class InkRegistry {
           : true;
       });
     }
-    const node = new InkElement(element, attributes || {});
+    const node = new ClientElement(element, attributes || {});
     this._elements.set(element, node);
     if (andChildren) {
       Array.from(element.children).forEach(child => {
@@ -293,7 +293,7 @@ export default class InkRegistry {
       .filter(child => typeof child !== 'undefined')
       .map(child => typeof child === 'string' 
         ? this.createText(child) 
-        : child instanceof InkElement
+        : child instanceof ClientElement
         ? child.element
         : child
       );

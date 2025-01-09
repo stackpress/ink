@@ -1,24 +1,34 @@
+//dom
+import DOMComment from './dom/Comment';
+import DOMDoctype from './dom/Doctype';
+import DOMDocument from './dom/Document';
+import DOMElement from './dom/Element';
+import DOMText from './dom/Text';
+import DOMNode from './dom/Node';
 //client
-import InkField from './client/InkField';
-import InkComponent from './client/InkComponent';
-import InkRegistry from './client/InkRegistry';
-import InkElement from './client/InkElement';
-import emitter, { InkEmitter } from './client/InkEmitter';
-import component from './client/component';
-import api from './client/api';
-import data, { InkDataMap } from './client/data';
-import env from './client/env';
-import props from './client/props';
-import classnames, { classlist } from './client/classnames';
-import children, { innerHTML, innerText } from './client/children';
-import signal, { SignalRegistry } from './client/signal';
+import ClientField from './client/Field';
+import ClientComponent from './client/Component';
+import ClientRegistry from './client/Registry';
+import ClientElement from './client/Element';
+import emitter, { ClientEmitter } from './client/Emitter';
+import client from './client/api/client';
+import component from './client/api/component';
+import data, { TemplateData } from './client/api/data';
+import env from './client/api/env';
+import props from './client/api/props';
+import classnames, { classlist } from './client/api/classnames';
+import children, { innerHTML, innerText } from './client/api/children';
+import signal, { SignalRegistry } from './client/api/signal';
 //style
 import StyleMap, { stylemap } from './style/StyleMap';
 import StyleSet, { styleset } from './style/StyleSet';
 import StyleSheet, { stylesheet, breakpoints } from './style/StyleSheet';
 //local
 export type {
-  InkComponentClass,
+  DOMData, 
+  DOMNodeData, 
+  DOMElementData,
+  ClientComponentClass,
   RegistryIterator,
   InkBrowserEvent,
   SignalObserver,
@@ -40,11 +50,25 @@ export type {
   StyleValue,
   MediaSize
 } from './types';
-import InkException from './Exception';
+import ClientException from './Exception';
 
 export {
+  DOMComment,
+  DOMDoctype,
+  DOMDocument,
+  DOMElement,
+  DOMText,
+  DOMNode,
+  TemplateData,
+  ClientField,
+  ClientComponent,
+  ClientRegistry,
+  ClientElement,
+  ClientEmitter,
+  ClientException,
+  SignalRegistry,
   component,
-  api,
+  client,
   data,
   env,
   props,
@@ -55,14 +79,6 @@ export {
   innerHTML,
   signal, 
   emitter,
-  InkDataMap,
-  InkField,
-  InkComponent,
-  InkRegistry,
-  InkElement,
-  InkEmitter,
-  InkException,
-  SignalRegistry,
   breakpoints,
   stylemap,
   styleset,

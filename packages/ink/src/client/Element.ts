@@ -1,10 +1,10 @@
 //local
-import InkEmitter from './InkEmitter';
+import ClientEmitter from './Emitter';
 
 /**
  * Wraps an HTML element adding advanced attribute value handling
  */
-export default class InkElement {
+export default class ClientElement {
   //the html element
   protected _element: Element;
   //the html element attributes (with any value)
@@ -103,7 +103,7 @@ export default class InkElement {
     delete this._attributes[key];
     if (!silent) {
       //emit the change event
-      InkEmitter.emit('attribute-remove', {
+      ClientEmitter.emit('attribute-remove', {
         element: this, 
         key: key, 
         previous: current
@@ -131,9 +131,9 @@ export default class InkElement {
     if (!silent) {
       //emit the change event
       if (typeof current === 'undefined') {
-        InkEmitter.emit('attribute-create', { element: this, key, value });
+        ClientEmitter.emit('attribute-create', { element: this, key, value });
       } else {
-        InkEmitter.emit('attribute-update', {
+        ClientEmitter.emit('attribute-update', {
           element: this, 
           key: key, 
           value: value,

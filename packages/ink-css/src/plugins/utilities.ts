@@ -1,5 +1,5 @@
 //stackpress
-import type { Component } from '@stackpress/ink/compiler';
+import type Component from '@stackpress/ink/dist/compiler/Component';
 //common
 import type { UtilityPluginOptions } from '../types';
 import StyleParser from '../StyleParser';

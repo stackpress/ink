@@ -1,12 +1,12 @@
 //common
 import type { InkBrowserEvent } from '../types';
 //local
-import type InkComponent from './InkComponent';
-import InkRegistry from './InkRegistry';
-import InkElement from './InkElement';
+import type ClientComponent from './Component';
+import ClientRegistry from './Registry';
+import ClientElement from './Element';
 
 //how binders should look like
-export type AttributeBinder = (element: InkElement) => void;
+export type AttributeBinder = (element: ClientElement) => void;
 
 //all browser events
 export const events = [
@@ -79,7 +79,7 @@ export const events = [
 /**
  * Browser version of Node's EventEmitter
  */
-export class InkEmitter extends EventTarget {
+export class ClientEmitter extends EventTarget {
   /**
    * Emits an event
    */
@@ -137,7 +137,7 @@ export const match = (
     //filter by elements has the attribute
     (element: Element) => {
       //get the node
-      const node = InkRegistry.get(element);
+      const node = ClientRegistry.get(element);
       const matched = node 
         && node.hasAttribute(attribute)
         && (!bind || !node.hasEvent(attribute));
@@ -148,12 +148,12 @@ export const match = (
       return matched;
     }
   //map the elements to InkElement (this is what to return)
-  ).map(element => InkRegistry.get(element)) as InkElement[];
+  ).map(element => ClientRegistry.get(element)) as ClientElement[];
 };
 
 //bind an attribute to a binder
 export function bindAttribute(name: string, bind: AttributeBinder) {
-  emitter.on('mounted', (e: InkBrowserEvent<InkComponent>) => {
+  emitter.on('mounted', (e: InkBrowserEvent<ClientComponent>) => {
     //if there is no detail, return
     if (!e.detail) return;
     //get the element
@@ -166,7 +166,7 @@ export function bindAttribute(name: string, bind: AttributeBinder) {
 
 //unbind an attribute to a binder
 export function unbindAttribute(name: string, bind: AttributeBinder) {
-  emitter.on('unmounted', (e: InkBrowserEvent<InkComponent>) => {
+  emitter.on('unmounted', (e: InkBrowserEvent<ClientComponent>) => {
     //if there is no detail, return
     if (!e.detail) return;
     //get the element
@@ -178,7 +178,7 @@ export function unbindAttribute(name: string, bind: AttributeBinder) {
 }
 
 //make a singleton
-const emitter = new InkEmitter();
+const emitter = new ClientEmitter();
 
 //initializer
 export default (() => {
