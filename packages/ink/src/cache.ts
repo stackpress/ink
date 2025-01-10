@@ -124,8 +124,10 @@ export default function cache(options: CacheOptions) {
       //extract build and builder from params
       const builder = event.params.builder as Builder;
       let sourceCode = event.params.sourceCode as string;
-      //add module exports to source code
-      sourceCode += `;\n;module.exports = InkAPI;`;
+      if (sourceCode.indexOf('module.exports = InkAPI') === -1) {
+        //add module exports to source code
+        sourceCode += `;\n;module.exports = InkAPI;`;
+      }
       //get fs and id ie. abc123c
       const { id } = builder.document;
       //get cache file path ie. /path/to/docs/build/server/abc123c.js

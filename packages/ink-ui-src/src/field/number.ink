@@ -6,7 +6,7 @@
   import setPadding from '../utilities/style/padding';
   import setSize from '../utilities/style/size';
   import { getProps, setDefaultStyles } from '../utilities/input';
-  import signal from '@stackpress/ink/dist/client/signal';
+  import signal from '@stackpress/ink/dist/client/api/signal';
   import { 
     padDecimals,
     getFormats, 

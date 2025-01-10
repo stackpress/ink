@@ -1,6 +1,6 @@
 <script observe="autocomplete,disabled,name,pattern,readonly,required,value">
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
-  import signal from '@stackpress/ink/dist/client/signal'; 
+  import signal from '@stackpress/ink/dist/client/api/signal'; 
   import { 
     getProps, 
     getHandlers,

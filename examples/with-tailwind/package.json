@@ -7,8 +7,8 @@
     "dev": "PUBLIC_ENV=development ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.16",
-    "@stackpress/ink-dev": "0.3.16"
+    "@stackpress/ink": "0.3.17",
+    "@stackpress/ink-dev": "0.3.17"
   },
   "devDependencies": {
     "@types/node": "22.9.3",

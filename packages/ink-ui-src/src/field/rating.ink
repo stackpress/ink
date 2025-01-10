@@ -11,7 +11,7 @@ span {
   import setColor from '../utilities/style/color';
   import setDisplay from '../utilities/style/display';
   import setSize from '../utilities/style/size';
-  import signal from '@stackpress/ink/dist/client/signal';
+  import signal from '@stackpress/ink/dist/client/api/signal';
   //extract props
   const { 
     name, value = 0, max = 5 

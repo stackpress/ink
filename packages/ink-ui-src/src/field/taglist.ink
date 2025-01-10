@@ -50,7 +50,7 @@
   import setDisplay from '../utilities/style/display';
   import setPadding from '../utilities/style/padding';
   import setSize from '../utilities/style/size';
-  import signal from '@stackpress/ink/dist/client/signal';
+  import signal from '@stackpress/ink/dist/client/api/signal';
   //separate component related props from field attributes
   const { 
     info,   warning,     success, 

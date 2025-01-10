@@ -44,7 +44,7 @@
   import type { ChangeEvent } from '@stackpress/ink/dist/types';
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import setDisplay from '../utilities/style/display';
-  import signal from '@stackpress/ink/dist/client/signal';
+  import signal from '@stackpress/ink/dist/client/api/signal';
   const { 
     image,
     uploading = 'Uploading...',
