@@ -1,6 +1,6 @@
 <link rel="import" type="component" href="./table/table.ink" name="table-wrapper" />
 <script>
-  import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
+  import ClientRegistry from '@stackpress/ink/dist/client/Registry';
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import Thead from './table/thead.ink';
   import Tbody from './table/tbody.ink';
@@ -111,7 +111,7 @@
   this.innerText = '';
   //append new children (these are the new things to slot)
   headers.length && this.appendChild(
-    InkRegistry.createComponent(
+    ClientRegistry.createComponent(
       'table-thead', 
       Thead, 
       {}, 
@@ -119,7 +119,7 @@
     ).element
   );
   rows.length && this.appendChild(
-    InkRegistry.createComponent(
+    ClientRegistry.createComponent(
       'table-tbody', 
       Tbody, 
       {}, 
@@ -127,7 +127,7 @@
     ).element
   );
   footers.length && this.appendChild(
-    InkRegistry.createComponent(
+    ClientRegistry.createComponent(
       'table-tfoot', 
       Tfoot, 
       {}, 

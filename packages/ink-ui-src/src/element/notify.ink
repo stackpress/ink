@@ -1,5 +1,5 @@
 <script>
-  import InkRegistry from '@stackpress/ink/dist/client/InkRegistry';
+  import ClientRegistry from '@stackpress/ink/dist/client/Registry';
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import Alert from './alert.ink';
   import Icon from './icon.ink';
@@ -11,17 +11,17 @@
       //Map:
       //<notif><icon><text><close><progress><bar></progress></notif>
       //create progress & bar
-      const bar = InkRegistry.createElement(
+      const bar = ClientRegistry.createElement(
         'div', 
         { 'class': 'bar' }
       ).element;
-      const progress = InkRegistry.createElement(
+      const progress = ClientRegistry.createElement(
         'div', 
         { 'class': 'progress' }, 
         [ bar ]
       ).element;
       //create left icon
-      const icon = InkRegistry.createComponent(
+      const icon = ClientRegistry.createComponent(
         'interface-icon', 
         Icon, 
         { 
@@ -39,7 +39,7 @@
         }
       ).element;
       //create right side close icon
-      const close = InkRegistry.createComponent(
+      const close = ClientRegistry.createComponent(
         'interface-icon', 
         Icon, 
         { 
@@ -49,7 +49,7 @@
         }
       ).element;
       //create alert notification
-      const alert = InkRegistry.createComponent(
+      const alert = ClientRegistry.createComponent(
         'interface-alert', 
         Alert,
         { 
