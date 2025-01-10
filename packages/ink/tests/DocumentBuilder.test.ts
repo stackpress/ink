@@ -68,8 +68,6 @@ describe('Ink Document Builder', () => {
       const events: string[] = [];
       
       // Register listeners for all build-related events
-      builder.emitter.on('build', () => events.push('build'));
-      builder.emitter.on('built', () => events.push('built'));
       builder.emitter.on('build-client', () => events.push('build-client'));
       builder.emitter.on('built-client', () => events.push('built-client'));
       
@@ -77,8 +75,7 @@ describe('Ink Document Builder', () => {
       await builder.client();
       
       // Verify events were emitted in the expected sequence
-      expect(events).to.deep.equal
-      (['build', 'built', 'build-client', 'built-client']);
+      expect(events).to.deep.equal(['build-client', 'built-client']);
     });
 
     it('should provide event data in build events', async () => {

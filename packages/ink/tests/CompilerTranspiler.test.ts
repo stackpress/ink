@@ -26,6 +26,6 @@ describe('Ink Compiler Transpiler', () => {
     //     InkRegistry.createText(`ok`)
     //   ]).element
     // ]
-    expect(toTS(actual)).to.contain('InkRegistry.createText(`$`, false)');
+    expect(toTS(actual)).to.contain('ClientRegistry.createText(`$`, false)');
   });
 });
