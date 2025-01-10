@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink",
-  "version": "0.3.11",
+  "version": "0.3.16",
   "description": "The reactive web component template engine.",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -33,7 +33,7 @@
     "test": "nyc ts-mocha tests/*.test.ts"
   },
   "dependencies": {
-    "@stackpress/types": "0.3.11",
+    "@stackpress/types": "0.3.16",
     "esbuild": "0.24.0",
     "ts-morph": "24.0.0",
     "typescript": "5.7.2"

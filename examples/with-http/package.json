@@ -4,11 +4,11 @@
   "description": "A simple boilerplate for building web components with Ink",
   "private": true,
   "scripts": {
-    "dev": "ts-node src/index.ts"
+    "dev": "PUBLIC_ENV=development ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.15",
-    "@stackpress/ink-dev": "0.3.15"
+    "@stackpress/ink": "0.3.16",
+    "@stackpress/ink-dev": "0.3.16"
   },
   "devDependencies": {
     "@types/node": "22.9.3",

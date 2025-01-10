@@ -4,10 +4,10 @@
   "description": "A simple boilerplate for building web components with Ink",
   "private": true,
   "scripts": {
-    "dev": "ts-node src/index.ts"
+    "dev": "PUBLIC_ENV=development ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.15",
+    "@stackpress/ink": "0.3.16",
     "restify": "11.1.0",
     "restify-router": "0.6.2"
   },

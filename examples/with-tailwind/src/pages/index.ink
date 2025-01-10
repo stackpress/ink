@@ -17,8 +17,12 @@
     <link rel="favicon" href="/favicon.ico" />
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" type="text/css" href={`/build/${BUILD_ID}.css`} />
-    <script id="CLIENT_DATA" src={`/build/${BUILD_ID}.js`}>__CLIENT_DATA__</script>
-    <script src="/dev.js"></script>
+    
+    <script data-template type="text/json">__TEMPLATE_DATA__</script>
+    <script src={`/build/${BUILD_ID}.js`}></script>
+    <if true={PUBLIC_ENV === 'development'}>
+      <script src="/dev.js"></script>
+    </if>
   </head>
   <body class="bg-blue-200 text-black text-center">
     <header class="text-3xl py-4 block font-bold">
