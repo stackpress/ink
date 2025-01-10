@@ -8,7 +8,7 @@
 </style>
 <script>
   import { env, props } from '@stackpress/ink';
-  const { BUILD_ID, APP_DATA } = env();
+  const { BUILD_ID, PUBLIC_ENV } = env();
   const { title, description, list, start } = props();
 </script>
 <html>
