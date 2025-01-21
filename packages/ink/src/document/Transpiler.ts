@@ -21,6 +21,14 @@ export default class Transpiler extends ComponentTranspiler {
       scripts, 
       styles 
     } = this._component;
+    //get all templates
+    this._component.components.filter(
+      component => component.type === 'template'
+    //add scripts from all templates to main script. This only adds to 
+    //main script once (no matter how many times the template is used)
+    ).forEach(
+      component => component.scripts.forEach(script => scripts.push(script))
+    );
     //get path without extension
     //ex. /path/to/Counter.ink -> /path/to/Counter
     const extname = path.extname(absolute);
@@ -103,6 +111,14 @@ export default class Transpiler extends ComponentTranspiler {
    */
   public client() {
     const { imports, scripts } = this._component;
+    //get all templates
+    this._component.components.filter(
+      component => component.type === 'template'
+    //add scripts from all templates to main script. This only adds to 
+    //main script once (no matter how many times the template is used)
+    ).forEach(
+      component => component.scripts.forEach(script => scripts.push(script))
+    );
     //only components (vs templates)
     const components = this._component.components.filter(
       component => component.type === 'component' 
@@ -326,6 +342,9 @@ export default class Transpiler extends ComponentTranspiler {
         //syntax <x-head />
         //NOTE: if you want scoped templates, 
         // that's the same as a light component
+        if (component.tagname === 'html-header') {
+          //console.log('component', component.tagname, component.ast.scripts);
+        }
         return expression + `...${this._markup(
           parent,
           component.ast.markup, 
