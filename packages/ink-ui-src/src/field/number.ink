@@ -95,7 +95,6 @@
   //handers
   const handlers = {
     change: (e: ChangeEvent<HTMLInputElement>) => {
-      console.log('change');
       const { value, display } = getFormatsFromInput(e.target, options);
       let { cursor, displayValue, hiddenValue } = state.value;
       const pointer = e.target.selectionStart || 0;

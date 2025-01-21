@@ -82,10 +82,10 @@
         name: key ? `${name}[${key}]` : undefined, 
         value 
       }).element;
-      const remove = InkRegistry.createElement(
+      const remove = ClientRegistry.createElement(
         'a', {}, [ '&times;' ]
       ).element as HTMLElement;
-      const fieldset = InkRegistry.createElement('fieldset', {}, [
+      const fieldset = ClientRegistry.createElement('fieldset', {}, [
         input.key,
         input.value,
         remove

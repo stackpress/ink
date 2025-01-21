@@ -69,13 +69,13 @@
       const field = this.createElement('input', {
         slot: `row-${index}`, name, value
       }).element as HTMLElement;
-      const remove = InkRegistry.createElement(
+      const remove = ClientRegistry.createElement(
         'a', {}, [ '&times;' ]
       ).element as HTMLElement;
-      const slot = InkRegistry.createElement(
+      const slot = ClientRegistry.createElement(
         'slot', { name: `row-${index}` }
       ).element as HTMLElement;
-      const fieldset = InkRegistry.createElement('fieldset', {}, [
+      const fieldset = ClientRegistry.createElement('fieldset', {}, [
         slot,
         remove
       ]).element as HTMLElement;
