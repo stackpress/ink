@@ -1,4 +1,4 @@
-name: Idea Test Suite
+name: Ink Test Suite
 on: [push]
 jobs:
   test:
