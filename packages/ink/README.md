@@ -10,7 +10,7 @@
   <a href="https://github.com/stackpress/ink/blob/main/README.md#contributing"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <br />
   <br />
-  <a href="https://stackpress.github.io/ink">Documentation</a>
+  <a href="https://stackpress.io/ink">Documentation</a>
   <br />
   <hr />
 </div>
