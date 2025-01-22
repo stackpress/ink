@@ -188,7 +188,7 @@ export function transpile(component: Component) {
   source.addFunction({
     name: '__REFRESH__',
     statements: (`
-      const { InkRegistry, components, data } = InkAPI;
+      const { ClientRegistry, components, data } = InkAPI;
       const styles = function styles() {
         return \`${styles.join('\n').trim()}\`;
       };
@@ -204,7 +204,7 @@ export function transpile(component: Component) {
       ).forEach(Component => {
         //get elements and components from registry
         const components = Array
-          .from(InkRegistry.elements.keys())
+          .from(ClientRegistry.elements.keys())
           //if the component is an instance of Counter
           .filter(element => element instanceof Component)
           //if the component part of the dom
