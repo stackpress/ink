@@ -3,7 +3,7 @@ import IteratorDirective from '../src/directives/IteratorDirective';
 import type { MarkupToken, NextDirective, MarkupChildToken } from '../src/types';
 import Component from '../src/compiler/Component';
 import Transpiler from '../src/compiler/Transpiler';
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
 
 describe('IteratorDirective', () => {
   let transpiler: Transpiler;

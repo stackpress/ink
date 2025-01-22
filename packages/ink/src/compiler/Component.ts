@@ -1,9 +1,9 @@
 //modules
 import path from 'node:path';
 //stackpress
-import type { FileSystem } from '@stackpress/types/dist/types';
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
-import FileLoader from '@stackpress/types/dist/system/FileLoader';
+import type { FileSystem } from '@stackpress/lib/dist/types';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
+import FileLoader from '@stackpress/lib/dist/system/FileLoader';
 //common
 import type { AST, ComponentType, ComponentOptions } from '../types';
 import Exception from '../Exception';

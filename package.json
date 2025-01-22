@@ -15,6 +15,7 @@
     "build:tailwind": "yarn --cwd packages/ink-tailwind build",
     "build:ui": "yarn --cwd packages/ink-ui-src build",
     "build:web": "yarn --cwd packages/ink-web build",
+    "report": "nyc yarn test && nyc report -r lcov",
     "test": "yarn test:ink && yarn test:css",
     "test:ink":"yarn --cwd packages/ink test",
     "test:css": "yarn --cwd packages/ink-css test",
@@ -29,5 +30,8 @@
     "dev:webpack": "yarn --cwd examples/with-webpack dev",
     "dev:web": "yarn --cwd packages/ink-web dev",
     "start": "yarn --cwd packages/ink-web start"
+  },
+  "devDependencies": {
+    "nyc": "17.1.0"
   }
 }

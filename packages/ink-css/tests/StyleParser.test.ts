@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { default as StyleParser, pattern } from '../src/StyleParser';
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
 import path from 'path';
 import fs from 'fs';
 

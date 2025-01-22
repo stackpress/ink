@@ -66,9 +66,15 @@
           curved: true
         }
       ).element;
+      //create message container
+      const wrapper = ClientRegistry.createElement('div', { 
+        'class': 'message'
+      }).element;
+      wrapper.innerHTML = message;
+
       alert.appendChild(close);
       alert.appendChild(icon);
-      alert.appendChild(new Text(message));
+      alert.appendChild(wrapper);
       alert.appendChild(progress);
 
       return { bar, icon, close, progress, alert };
@@ -160,4 +166,6 @@
   styles.add('.bar', 'width', '0%');
   styles.add('.bar', 'height', '100%');
   styles.add('.bar', 'background-color', 'var(--muted)');
+  //message styles
+  styles.add('.message', 'display', 'inline-block');
 </script>

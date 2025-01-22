@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as sinon from 'sinon';
 import path from 'node:path';
 import DocumentException from '../src/document/Exception';
-import type { FileSystem } from '@stackpress/types/dist/types';
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import type { FileSystem } from '@stackpress/lib/dist/types';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
 
 describe('DocumentException', () => {
   let sandbox: sinon.SinonSandbox;

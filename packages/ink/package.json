@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink",
-  "version": "0.3.17",
+  "version": "0.3.21",
   "description": "The reactive web component template engine.",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -9,9 +9,22 @@
   "repository": "stackpress/ink",
   "keywords": [
     "UI",
+    "web components",
+    "components",
     "framework",
+    "template engine",
     "templates",
-    "templating"
+    "templating",
+    "esbuild",
+    "express",
+    "fastify",
+    "hapi",
+    "http",
+    "nest",
+    "restify",
+    "tailwind",
+    "webpack",
+    "stackpress"
   ],
   "main": "index.js",
   "files": [
@@ -30,10 +43,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "nyc ts-mocha tests/*.test.ts"
+    "test": "ts-mocha tests/*.test.ts"
   },
   "dependencies": {
-    "@stackpress/types": "0.3.17",
+    "@stackpress/lib": "0.3.21",
     "esbuild": "0.24.0",
     "ts-morph": "24.0.0",
     "typescript": "5.7.2"
@@ -45,7 +58,6 @@
     "@types/sinon": "17.0.3",
     "chai": "4.5.0",
     "mocha": "10.8.2",
-    "nyc": "17.1.0",
     "sinon": "19.0.2",
     "ts-mocha": "10.0.0",
     "ts-node": "10.9.2"

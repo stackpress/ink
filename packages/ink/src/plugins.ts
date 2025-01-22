@@ -2,8 +2,8 @@
 import type { PluginBuild } from 'esbuild';
 import path from 'node:path';
 //stackpress
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
-import FileLoader from '@stackpress/types/dist/system/FileLoader';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
+import FileLoader from '@stackpress/lib/dist/system/FileLoader';
 //compiler
 import Component from './compiler/Component';
 import ComponentTranspiler from './compiler/Transpiler';

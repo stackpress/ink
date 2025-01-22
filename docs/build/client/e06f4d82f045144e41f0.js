@@ -698,7 +698,7 @@ app.engine('ink', view(compiler));`}}};var ue=class extends ss.default{static id
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.17"
+                    "@stackpress/ink": "0.3.21"
                   },
                   "devDependencies": {
                     "@types/node": "22.1.0",
@@ -917,10 +917,10 @@ app.engine('ink', view(compiler));`}}};var ue=class extends ss.default{static id
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.17"
+                    "@stackpress/ink": "0.3.21"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.17",
+                    "@stackpress/ink-dev": "0.3.21",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
@@ -1351,11 +1351,11 @@ app.engine('ink', view(compiler));`}}};var ue=class extends ss.default{static id
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.17"
+                    "@stackpress/ink": "0.3.21"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.17",
-                    "@stackpress/ink-tailwind": "0.3.17",
+                    "@stackpress/ink-dev": "0.3.21",
+                    "@stackpress/ink-tailwind": "0.3.21",
                     "@types/node": "22.1.0",
                     "autoprefixer": "10.4.20",
                     "postcss": "8.4.44",

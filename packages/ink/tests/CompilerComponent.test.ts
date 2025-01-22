@@ -2,7 +2,7 @@ import { describe, it } from 'mocha';
 import { expect } from 'chai';
 import path from 'node:path';
 import Component from '../src/compiler/Component';
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
 import type { ComponentOptions } from '../src/types';
 
 /**

@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import path from 'node:path';
 import type { Stats } from 'fs';
 import type { PluginBuild } from 'esbuild';
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
 import { 
   esAliasPlugin, 
   esComponentPlugin, 

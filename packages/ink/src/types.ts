@@ -2,7 +2,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { PluginBuild } from 'esbuild';
 //stackpress
-import type { FileSystem } from '@stackpress/types/dist/types';
+import type { FileSystem } from '@stackpress/lib/dist/types';
 //client
 import type ClientDocument from './client/Registry';
 import type ClientComponent from './client/Component';

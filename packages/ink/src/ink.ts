@@ -1,8 +1,8 @@
 //modules
 import path from 'node:path';
 //stackpress
-import type { FileSystem } from '@stackpress/types/dist/types';
-import NodeFS from '@stackpress/types/dist/system/NodeFS';
+import type { FileSystem } from '@stackpress/lib/dist/types';
+import NodeFS from '@stackpress/lib/dist/system/NodeFS';
 //compiler
 import Component from './compiler/Component';
 //document

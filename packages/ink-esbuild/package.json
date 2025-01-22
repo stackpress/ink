@@ -1,12 +1,23 @@
 {
   "name": "@stackpress/ink-esbuild",
-  "version": "0.3.17",
+  "version": "0.3.21",
   "description": "ESBuild support for the Ink markup language.",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
   "homepage": "https://github.com/stackpress/ink",
   "bugs": "https://github.com/stackpress/ink/issues",
   "repository": "stackpress/ink",
+  "keywords": [
+    "UI",
+    "web components",
+    "components",
+    "framework",
+    "template engine",
+    "templates",
+    "templating",
+    "esbuild",
+    "stackpress"
+  ],
   "main": "dist/index.js",
   "files": [
     "dist",
@@ -20,7 +31,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.17"
+    "@stackpress/ink": "0.3.21"
   },
   "devDependencies": {
     "@types/node": "22.9.3",

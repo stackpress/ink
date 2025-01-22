@@ -1,12 +1,30 @@
 {
   "name": "@stackpress/ink-dev",
-  "version": "0.3.17",
+  "version": "0.3.21",
   "description": "Ink developer mode with hot page reload",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
   "homepage": "https://github.com/stackpress/ink",
   "bugs": "https://github.com/stackpress/ink/issues",
   "repository": "stackpress/ink",
+  "keywords": [
+    "UI",
+    "web components",
+    "components",
+    "framework",
+    "template engine",
+    "templates",
+    "templating",
+    "express",
+    "fastify",
+    "hapi",
+    "http",
+    "nest",
+    "restify",
+    "tailwind",
+    "webpack",
+    "stackpress"
+  ],
   "main": "index.js",
   "files": [
     "dist",
@@ -21,7 +39,7 @@
     "build": "tsc && npx ../../node_modules/esbuild/bin/esbuild ./src/client.ts --global-name=ink_dev --format=iife --bundle --outfile=client.js"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.17",
+    "@stackpress/ink": "0.3.21",
     "chokidar": "4.0.1",
     "esbuild": "0.24.0"
   },
