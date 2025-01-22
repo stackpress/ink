@@ -5,6 +5,8 @@
   <a href="https://www.npmjs.com/package/@stackpress/ink"><img src="https://img.shields.io/npm/v/%40stackpress%2Fink.svg?style=flat" /></a>
   <a href="https://github.com/stackpress/ink/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat" /></a>
   <a href="https://github.com/stackpress/ink/commits/main/"><img src="https://img.shields.io/github/last-commit/stackpress/ink" /></a>
+  <a href="https://github.com/stackpress/ink/actions"><img src="https://img.shields.io/github/actions/workflow/status/stackpress/ink/test.yml" /></a>
+  <a href="https://coveralls.io/github/stackpress/ink?branch=main"><img src="https://coveralls.io/repos/github/stackpress/ink/badge.svg?branch=main" /></a>
   <a href="https://github.com/stackpress/ink/blob/main/README.md#contributing"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <br />
   <br />
