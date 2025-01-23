@@ -383,8 +383,8 @@ ${o.replace("__TEMPLATE_DATA__",s)}`}_toNodeList(t){return typeof t=="object"&&t
                     "build": "webpack --mode production"
                   },
                   "devDependencies": {
-                    "@stackpress/ink": "0.3.21"
-                    "@stackpress/ink-loader": "0.3.21",
+                    "@stackpress/ink": "0.3.24"
+                    "@stackpress/ink-loader": "0.3.24",
                     "@types/node": "22.1.0",
                     "html-webpack-plugin": "5.6.0",
                     "webpack-dev-server": "5.0.4",

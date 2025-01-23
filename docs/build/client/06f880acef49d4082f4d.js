@@ -513,8 +513,8 @@ var InkAPI=(()=>{var aa=Object.create;var Ie=Object.defineProperty;var sa=Object
                     "build": "webpack --mode production"
                   },
                   "devDependencies": {
-                    "@stackpress/ink": "0.3.21"
-                    "@stackpress/ink-loader": "0.3.21",
+                    "@stackpress/ink": "0.3.24"
+                    "@stackpress/ink-loader": "0.3.24",
                     "@types/node": "22.1.0",
                     "html-webpack-plugin": "5.6.0",
                     "webpack-dev-server": "5.0.4",

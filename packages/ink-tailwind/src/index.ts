@@ -37,6 +37,7 @@ export function tailwind(config: Config) {
       );
       //add the document to the content
       content.push(document.absolute);
+      //@ts-ignore - Plugin | Processor_ is not assignable to type AcceptedPlugin
       const css = postcss([ autoprefixer, tailwindcss({
         ...config,
         content: [ ...content, ...config.content as string[] ]

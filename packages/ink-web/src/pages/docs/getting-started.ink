@@ -289,7 +289,7 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.24"
+                    "@stackpress/ink": "0.3.25"
                   },
                   "devDependencies": {
                     "@types/node": "22.1.0",
@@ -546,10 +546,10 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.24"
+                    "@stackpress/ink": "0.3.25"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.24",
+                    "@stackpress/ink-dev": "0.3.25",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
@@ -1018,11 +1018,11 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.24"
+                    "@stackpress/ink": "0.3.25"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.24",
-                    "@stackpress/ink-tailwind": "0.3.24",
+                    "@stackpress/ink-dev": "0.3.25",
+                    "@stackpress/ink-tailwind": "0.3.25",
                     "@types/node": "22.1.0",
                     "autoprefixer": "10.4.20",
                     "postcss": "8.4.44",
@@ -1324,13 +1324,13 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "^0.1.8",
-                    "@stackpress/ink-express": "^0.1.8",
+                    "@stackpress/ink": "^0.1.9",
+                    "@stackpress/ink-express": "^0.1.9",
                     "express": "^4.19.2"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "^0.1.8",
-                    "@stackpress/ink-tailwind": "^0.1.8",
+                    "@stackpress/ink-dev": "^0.1.9",
+                    "@stackpress/ink-tailwind": "^0.1.9",
                     "@types/express": "^4.17.21",
                     "@types/node": "^22.5.3",
                     "autoprefixer": "^10.4.20",
