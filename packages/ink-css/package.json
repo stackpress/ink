@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-css",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "description": "Ink atomic css framework",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -29,7 +29,7 @@
     "test": "ts-mocha tests/*.test.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.25"
+    "@stackpress/ink": "0.3.26"
   },
   "devDependencies": {
     "@types/chai": "4.3.20",
