@@ -19,11 +19,11 @@ describe('Ink Compiler Transpiler', () => {
     const transpiler = new Transpiler(component, tsconfig);
     const actual = transpiler.transpile();
     // [
-    //   InkRegistry.createElement('div', { }, [
-    //     InkRegistry.createElement('span', { }, [
-    //       InkRegistry.createText(`$`)
+    //   Registry.createElement('div', { }, [
+    //     Registry.createElement('span', { }, [
+    //       Registry.createText(`$`)
     //     ]).element, 
-    //     InkRegistry.createText(`ok`)
+    //     Registry.createText(`ok`)
     //   ]).element
     // ]
     expect(toTS(actual)).to.contain('ClientRegistry.createText(`$`, false)');

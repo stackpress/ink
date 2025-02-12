@@ -20,11 +20,11 @@ describe('Ink Document Transpiler', () => {
     const server = toTS(transpiler.transpile());
     //console.log('--server--', server);
     // [
-    //   InkRegistry.createElement('div', { }, [
-    //     InkRegistry.createElement('span', { }, [
-    //       InkRegistry.createText(`$`)
+    //   Registry.createElement('div', { }, [
+    //     Registry.createElement('span', { }, [
+    //       Registry.createText(`$`)
     //     ]).element, 
-    //     InkRegistry.createText(`ok`)
+    //     Registry.createText(`ok`)
     //   ]).element
     // ]
     expect(server).to.contain('DOMDocument.createElement(\'div\', { \'title\': title },');

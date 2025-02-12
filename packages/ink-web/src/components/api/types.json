@@ -1413,13 +1413,13 @@
       "example": "this.render(); //--> '<p>...</p>'"
     }
   },
-  "InkRegistry": {
+  "ClientRegistry": {
     "elements": {
       "kind": "property",
       "list": false,
       "type": "Map<Element, InkElement>",
       "description": "Returns a map of elements used in the DOM.",
-      "example": "InkAPI.InkRegistry.elements.get(component);"
+      "example": "InkAPI.ClientRegistry.elements.get(component);"
     },
     "createComponent": {
       "kind": "function",
@@ -1455,7 +1455,7 @@
         "type": "InkElement"
       },
       "description": "Creates a InkElement from a web component class.",
-      "example": "InkAPI.InkRegistry.createComponent('fancy-button', InkComponent, { title: 'Hello' }, children);"
+      "example": "InkAPI.ClientRegistry.createComponent('fancy-button', InkComponent, { title: 'Hello' }, children);"
     },
     "createElement": {
       "kind": "function",
@@ -1485,7 +1485,7 @@
         "type": "InkElement"
       },
       "description": "Creates a InkElement from a string tag name.",
-      "example": "InkAPI.InkRegistry.createElement('a', { href: '/' }, children);"
+      "example": "InkAPI.ClientRegistry.createElement('a', { href: '/' }, children);"
     },
     "createText": {
       "kind": "function",
@@ -1503,7 +1503,7 @@
         "type": "TextNode"
       },
       "description": "Creates a TextNode from a raw string.",
-      "example": "InkAPI.InkRegistry.createText('foo');"
+      "example": "InkAPI.ClientRegistry.createText('foo');"
     },
     "get": {
       "kind": "function",
@@ -1521,7 +1521,7 @@
         "type": "InkElement"
       },
       "description": "Returns a InkElement given a DOM element.",
-      "example": "InkAPI.InkRegistry.get(element)"
+      "example": "InkAPI.ClientRegistry.get(element)"
     },
     "has": {
       "kind": "function",
@@ -1539,7 +1539,7 @@
         "type": "boolean"
       },
       "description": "Returns true if the given element exists in the registry",
-      "example": "InkAPI.InkRegistry.has(element)"
+      "example": "InkAPI.ClientRegistry.has(element)"
     },
     "map": {
       "kind": "function",
@@ -1557,7 +1557,7 @@
         "type": "T"
       },
       "description": "Like array map for registry returns an array of whatever the callback returns.",
-      "example": "InkAPI.InkRegistry.map((ink, element) => [ink, element]);"
+      "example": "InkAPI.ClientRegistry.map((ink, element) => [ink, element]);"
     },
     "register": {
       "kind": "function",
@@ -1581,7 +1581,7 @@
         "type": "InkElement"
       },
       "description": "Registers a InkElement to the registry.",
-      "example": "InkAPI.InkRegistry.register(element, { foo: 'bar' });"
+      "example": "InkAPI.ClientRegistry.register(element, { foo: 'bar' });"
     }
   },
   "InkElement": {
@@ -1830,12 +1830,12 @@
       "description": "The Ink exception class used to create custom errors.",
       "example": "throw InkAPI.InkException.for('error message');"
     },
-    "InkRegistry": {
+    "ClientRegistry": {
       "kind": "property",
       "list": false,
-      "type": "InkRegistry",
+      "type": "ClientRegistry",
       "description": "The Ink registry class used to store custom elements.",
-      "example": "new InkAPI.InkRegistry.createElement('a', { href: '/' });"
+      "example": "new InkAPI.ClientRegistry.createElement('a', { href: '/' });"
     },
     "children": {
       "kind": "function",

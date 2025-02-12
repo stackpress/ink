@@ -54,8 +54,8 @@ export default class ClientRegistry {
     }
     
     //NOTE: It's more logical to call this.crateElement()
-    //but InkComponent will error because it's not
-    //registered in InkRegistry yet. 
+    //but Component will error because it's not
+    //registered in Registry yet. 
     
     //change the tagname if the component is registered
     const name = registered || tagname;
@@ -130,7 +130,7 @@ export default class ClientRegistry {
   public static createText(value: string, escape = true) {
     //NOTE: TextNode will escape strings by default
     // if we allow escape to be false, and the string 
-    // contains HTML, then the InkRegistry count
+    // contains HTML, then the Registry count
     // will be off.. there are also some other edge 
     // cases that need to be considered before allowing
     // escape to be false...

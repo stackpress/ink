@@ -4,7 +4,7 @@ import DOMDocument from '../dom/Document';
 //api
 import data from './api/data';
 //local
-import InkRegistry from './Registry';
+import Registry from './Registry';
 
 export default abstract class ClientDocument {
   /**
@@ -70,14 +70,14 @@ export default abstract class ClientDocument {
         ])
       );
       //determine the id of the element by its index in the registry
-      const id = String(InkRegistry.elements.size);
+      const id = String(Registry.elements.size);
       //if the element has bindings
       if (bindings[id]) {
         //this is where we need to add the bindings to the attributes
         Object.assign(attributes, bindings[id]);
       }
       //finally add the element to the registry
-      InkRegistry.register(element, attributes);
+      Registry.register(element, attributes);
     }
     return bindings;
   }
@@ -101,6 +101,6 @@ export default abstract class ClientDocument {
       }
     }
 
-    return [ InkRegistry.createText(String(value)) ];
+    return [ Registry.createText(String(value)) ];
   }
 }

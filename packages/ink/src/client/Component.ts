@@ -427,7 +427,7 @@ export default abstract class ClientComponent extends HTMLElement {
   }
 
   /**
-   * This is used in InkRegistry.createComponent() to
+   * This is used in Registry.createComponent() to
    * create a virtual instance of the component. This is
    * used components that are used by other components,
    * but not registered in custom elements.

@@ -108,7 +108,7 @@
                   template() {
                     const { name } = props();
                     return () => [
-                      InkRegistry.createElement('h1', null, \`Hello \${name}\`)
+                      Registry.createElement('h1', null, \`Hello \${name}\`)
                     ]
                   }
                 }
