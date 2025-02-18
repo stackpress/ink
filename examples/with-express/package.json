@@ -7,7 +7,7 @@
     "dev": "PUBLIC_ENV=development ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink-express": "0.3.27",
+    "@stackpress/ink-express": "0.3.28",
     "express": "4.19.2"
   },
   "devDependencies": {
