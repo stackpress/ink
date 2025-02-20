@@ -7,7 +7,7 @@
     "dev": "PUBLIC_ENV=development ts-node src/index.ts"
   },
   "dependencies": {
-    "@stackpress/ink": "0.3.28",
+    "@stackpress/ink": "0.3.29",
     "koa": "2.15.3",
     "koa-router": "12.0.1",
     "koa-static": "5.0.0"
