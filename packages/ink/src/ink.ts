@@ -39,7 +39,6 @@ export default function ink(options: InkOptions = {}) {
   options.brand = typeof options.brand === 'string' 
     ? options.brand 
     : 'ink';
-
   const compiler: InkCompiler = {
     config: {
       ...options,
@@ -140,7 +139,9 @@ export default function ink(options: InkOptions = {}) {
       //update manifest in memory
       compiler.manifest.set(
         builder.document.id, 
-        builder.document.absolute
+        //save relative to cwd, instead of 
+        //absolute, so it can sync with any server
+        builder.document.relative
       );
       //get the build object
       const build = await builder.build();

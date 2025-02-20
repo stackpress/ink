@@ -207,7 +207,7 @@ export default class Component {
    * is fixed length.
    */
   public get id() {
-    return serialize(this.absolute);
+    return serialize(this.relative);
   }
 
   /**

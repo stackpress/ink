@@ -47,7 +47,6 @@ export default class Manifest {
     if (!filePath) {
       throw Exception.for(`Could not find file for %s`, id);
     }
-    
     //make a new document
     const document = new Component(filePath, this._options);
     //return a new builder
