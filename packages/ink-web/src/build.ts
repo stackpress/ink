@@ -1,11 +1,17 @@
-import type { InkEvent, DocumentBuilder } from '@stackpress/ink/compiler';
-
-import path from 'path';
+//modules
+import fs from 'node:fs';
+import path from 'node:path';
 import { globSync as glob } from 'fast-glob';
+//ink
+import type { InkEvent, DocumentBuilder } from '@stackpress/ink/compiler';
 import ink, { cache } from '@stackpress/ink/compiler';
 import { plugin } from '@stackpress/ink-css';
 
-const docs = path.resolve(__dirname, '../../../docs');
+const docs = path.resolve(
+  __dirname, 
+  '../../../docs'
+);
+
 //create ink compiler
 const compiler = ink({ 
   brand: '',
@@ -45,37 +51,51 @@ compiler.emitter.on('rendered', (event: InkEvent<string>) => {
   }
 });
 
-// first build all the templates
-glob(
-  'pages/**/*.ink', 
-  { cwd: __dirname }
-).forEach(async file => {
-  //default props
-  const props = { title: 'Ink Documentation' };
-  //ex. pages/index.ink
-  const template = path.join(__dirname, file);
-  //get builder
-  const builder = compiler.fromSource(template);
-  //update manifest in memory
-  compiler.manifest.set(
-    builder.document.id, 
-    builder.document.absolute
+//get all the templates
+const templates = glob('pages/**/*.ink', { cwd: __dirname });
+
+async function build() {
+  //loop through the templates
+  for (const file of templates) {
+    //default props
+    const props = { title: 'Ink Documentation' };
+    //ex. pages/index.ink
+    const template = path.join(__dirname, file);
+    //get builder
+    const builder = compiler.fromSource(template);
+    //update manifest in memory
+    compiler.manifest.set(
+      builder.document.id, 
+      builder.document.relative
+    );
+    //get the build object
+    const build = await builder.build();
+    //emit view render event
+    const pre = await compiler.emitter.waitFor<string>(
+      'render', 
+      { builder, build, props }
+    );
+    //render the document
+    const html = pre.data || build.document.render(props);
+    //emit view rendered event
+    await compiler.emitter.waitFor<string>(
+      'rendered', 
+      { builder, build, props, html }
+    );
+    await builder.client();
+    await builder.styles();
+    await builder.markup();
+  }
+
+  fs.writeFileSync(
+    path.join(docs, 'build', 'manifest.json'), 
+    compiler.manifest.toJson()
   );
-  //get the build object
-  const build = await builder.build();
-  //emit view render event
-  const pre = await compiler.emitter.waitFor<string>(
-    'render', 
-    { builder, build, props }
-  );
-  //render the document
-  const html = pre.data || build.document.render(props);
-  //emit view rendered event
-  await compiler.emitter.waitFor<string>(
-    'rendered', 
-    { builder, build, props, html }
-  );
-  await builder.client();
-  await builder.styles();
-  await builder.markup();
+}
+
+build().then(() => {
+  process.exit(0);
+}).catch(e => {
+  console.error(e);
+  process.exit(1);
 });

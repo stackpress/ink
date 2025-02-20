@@ -19,6 +19,7 @@
     "test": "yarn test:ink && yarn test:css",
     "test:ink":"yarn --cwd packages/ink test",
     "test:css": "yarn --cwd packages/ink-css test",
+    "test:web": "yarn --cwd packages/ink-web test",
     "dev:http": "yarn --cwd examples/with-http dev",
     "dev:express": "yarn --cwd examples/with-express dev",
     "dev:fastify": "yarn --cwd examples/with-fastify dev",
