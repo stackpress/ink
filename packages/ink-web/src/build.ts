@@ -23,7 +23,9 @@ compiler.use(plugin());
 //use cache
 compiler.use(cache({ 
   environment: 'production',
-  buildPath: path.join(docs, 'build') 
+  serverPath: path.join(docs, 'build', 'server'),
+  clientPath: path.join(docs, 'build', 'client'),
+  manifestPath: path.join(docs, 'build', 'manifest.json')
 }));
 
 //on post markup build, cache (dev and live)
