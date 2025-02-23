@@ -18,11 +18,9 @@ export default function cache(options: CacheOptions) {
     const environment = options.environment;
 
     const paths = {
-      build: options.buildPath,
-      manifest: path.join(
-        options.buildPath, 
-        options.manifestFile || 'manifest.json'
-      )
+      server: options.serverPath,
+      client: options.clientPath,
+      manifest: options.manifestPath
     };
 
     //write file helper
@@ -56,7 +54,7 @@ export default function cache(options: CacheOptions) {
       //get fs and id ie. abc123c
       const { fs, id } = builder.document;
       //get cache file path ie. /path/to/docs/build/server/abc123c.js
-      const cache = path.join(paths.build, 'server', `${id}.js`);
+      const cache = path.join(paths.server, `${id}.js`);
       //if cache file exists
       if (fs.existsSync(cache)) {
         //get the build object
@@ -81,7 +79,7 @@ export default function cache(options: CacheOptions) {
       //get fs and id ie. abc123c
       const id = builder.document.id;
       //get cache file path ie. /path/to/docs/build/client/abc123c.js
-      const cache = path.join(paths.build, 'client', `${id}.js`);
+      const cache = path.join(paths.client, `${id}.js`);
       //if cache file exists, send it
       if (fs.existsSync(cache)) {
         event.set(fs.readFileSync(cache, 'utf8'));
@@ -96,7 +94,7 @@ export default function cache(options: CacheOptions) {
       //get fs and id ie. abc123c
       const id = builder.document.id;
       //get cache file path ie. /path/to/docs/build/client/abc123c.js
-      const cache = path.join(paths.build, 'client', `${id}.js`);
+      const cache = path.join(paths.client, `${id}.js`);
       //write the client source code to cache
       writeFile(cache, sourceCode);
     });
@@ -112,7 +110,7 @@ export default function cache(options: CacheOptions) {
       //get fs and id ie. abc123c
       const id = builder.document.id;
       //get cache file path ie. /path/to/docs/build/server/abc123c.js
-      const cache = path.join(paths.build, 'server', `${id}.js`);
+      const cache = path.join(paths.server, `${id}.js`);
       //if cache file exists, send it
       if (fs.existsSync(cache)) {
         event.set(fs.readFileSync(cache, 'utf8'));
@@ -131,7 +129,7 @@ export default function cache(options: CacheOptions) {
       //get fs and id ie. abc123c
       const { id } = builder.document;
       //get cache file path ie. /path/to/docs/build/server/abc123c.js
-      const cache = path.join(paths.build, 'server', `${id}.js`);
+      const cache = path.join(paths.server, `${id}.js`);
       //write the server source code to cache
       writeFile(cache, sourceCode);
     });
@@ -147,7 +145,7 @@ export default function cache(options: CacheOptions) {
       //get fs and id ie. abc123c
       const id = builder.document.id;
       //get cache file path ie. /path/to/docs/build/client/abc123c.css
-      const cache = path.join(paths.build, 'client', `${id}.css`);
+      const cache = path.join(paths.client, `${id}.css`);
       //if cache file exists, send it
       if (fs.existsSync(cache)) {
         event.set(fs.readFileSync(cache, 'utf8'));
@@ -162,7 +160,7 @@ export default function cache(options: CacheOptions) {
       //get fs and id ie. abc123c
       const id = builder.document.id;
       //get cache file path ie. /path/to/docs/build/client/abc123c.css
-      const cache = path.join(paths.build, 'client', `${id}.css`);
+      const cache = path.join(paths.client, `${id}.css`);
       //write the client source code to cache
       writeFile(cache, sourceCode);
     });

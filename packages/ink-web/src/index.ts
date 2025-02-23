@@ -26,7 +26,9 @@ compiler.use(css());
 //use build cache
 compiler.use(cache({ 
   environment: process.env.PUBLIC_ENV,
-  buildPath: path.join(docs, 'build') 
+  serverPath: path.join(docs, 'build', 'server'),
+  clientPath: path.join(docs, 'build', 'client'),
+  manifestPath: path.join(docs, 'build', 'manifest.json')
 }));
 
 //on post markup build, cache (dev and live)
