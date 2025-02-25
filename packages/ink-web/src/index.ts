@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import type { InkEvent, DocumentBuilder } from '@stackpress/ink/compiler';
 
 import path from 'path';
 import express from 'express';
@@ -24,37 +23,12 @@ const compiler = ink({
 //use ink css
 compiler.use(css());
 //use build cache
-compiler.use(cache({ 
-  environment: process.env.PUBLIC_ENV,
-  serverPath: path.join(docs, 'build', 'server'),
-  clientPath: path.join(docs, 'build', 'client'),
-  manifestPath: path.join(docs, 'build', 'manifest.json')
-}));
-
-//on post markup build, cache (dev and live)
-compiler.emitter.on('rendered', (event: InkEvent<string>) => {
-  //extract builder and sourcecode from params
-  const builder = event.params.builder as DocumentBuilder;
-  const html = event.params.html as string;
-  //get fs and id ie. abc123c
-  const { fs, absolute } = builder.document;
-  const root = path.join(__dirname, 'pages');
-  if (absolute.startsWith(root)) {
-    const extname = path.extname(absolute);
-    const route = absolute.substring(
-      root.length + 1, 
-      absolute.length - extname.length
-    );
-    //get file path ie. /path/to/docs/client/abc123c.html
-    const cache = path.join(docs, `${route || 'index'}.html`);
-    //write the client source code to cache
-    const dirname = path.dirname(cache);
-    if (!fs.existsSync(dirname)) {
-      fs.mkdirSync(dirname, { recursive: true });
-    }
-    fs.writeFileSync(cache, html);
-  }
-});
+if (process.env.PUBLIC_ENV !== 'development') {
+  compiler.use(cache({ 
+    clientPath: path.join(docs, 'client'),
+    manifestPath: path.join(docs, 'manifest.json')
+  }));
+}
 
 //create express app
 const app = express();
@@ -63,7 +37,7 @@ app.set('views', path.join(__dirname, 'pages'));
 app.set('view engine', 'ink');
 
 //if production (live)
-if (process.env.PUBLIC_ENV === 'production') {
+if (process.env.PUBLIC_ENV !== 'development') {
   //let's use express' template engine feature
   app.engine('ink', view(compiler));
   //...other production settings...
@@ -78,7 +52,7 @@ if (process.env.PUBLIC_ENV === 'production') {
 }
 
 //routes
-app.get('/ink/build/client/:build', async (req, res) => {
+app.get('/ink/client/:build', async (req, res) => {
   //get filename ie. abc123.js
   const filename = req.params.build;
   //get asset

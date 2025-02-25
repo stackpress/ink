@@ -17,10 +17,10 @@
   <link rel="shortcut icon" type="image/png" href="/ink/favicon.png" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
   <link rel="stylesheet" type="text/css" href="/ink/styles/global.css" />
-  <link rel="stylesheet" type="text/css" href={`/ink/build/client/${env('BUILD_ID')}.css`} />
+  <link rel="stylesheet" type="text/css" href={`/ink/client/${env('BUILD_ID')}.css`} />
   
   <script data-template type="text/json">__TEMPLATE_DATA__</script>
-  <script src={`/ink/build/client/${env('BUILD_ID')}.js`}></script>
+  <script src={`/ink/client/${env('BUILD_ID')}.js`}></script>
   <if true={env('PUBLIC_ENV') === 'development'}>
     <script src="/dev.js"></script>
   </if>
