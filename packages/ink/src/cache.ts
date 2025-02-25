@@ -22,7 +22,8 @@ export default function cache(options: CacheOptions) {
       manifest: options.manifestPath
     };
     //if there's a server path
-    if (paths.server) {
+    if (typeof paths.server === 'string') {
+      const server = paths.server;
       //on pre render, try to use cache
       emitter.on('render', (event: Event<string>) => {
         //extract props and builder from params
@@ -31,7 +32,7 @@ export default function cache(options: CacheOptions) {
         //get id ie. abc123c
         const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/server/abc123c.js
-        const cache = path.join(paths.server, `${id}.js`);
+        const cache = path.join(server, `${id}.js`);
         //if cache file exists
         if (fs.existsSync(cache)) {
           //get the build object
@@ -52,7 +53,7 @@ export default function cache(options: CacheOptions) {
         //get fs and id ie. abc123c
         const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/server/abc123c.js
-        const cache = path.join(paths.server, `${id}.js`);
+        const cache = path.join(server, `${id}.js`);
         //if cache file exists, send it
         if (fs.existsSync(cache)) {
           event.set(fs.readFileSync(cache, 'utf8'));
@@ -60,7 +61,8 @@ export default function cache(options: CacheOptions) {
       });
     }
     //if there's a client path
-    if (paths.client) {
+    if (typeof paths.client === 'string') {
+      const client = paths.client;
       //on pre client build, try to use cache
       emitter.on('build-client', (event: Event<string>) => {
         //extract builder from params
@@ -68,7 +70,7 @@ export default function cache(options: CacheOptions) {
         //get fs and id ie. abc123c
         const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/client/abc123c.js
-        const cache = path.join(paths.client, `${id}.js`);
+        const cache = path.join(client, `${id}.js`);
         //if cache file exists, send it
         if (fs.existsSync(cache)) {
           event.set(fs.readFileSync(cache, 'utf8'));
@@ -82,7 +84,7 @@ export default function cache(options: CacheOptions) {
         //get fs and id ie. abc123c
         const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/client/abc123c.css
-        const cache = path.join(paths.client, `${id}.css`);
+        const cache = path.join(client, `${id}.css`);
         //if cache file exists, send it
         if (fs.existsSync(cache)) {
           event.set(fs.readFileSync(cache, 'utf8'));
@@ -90,7 +92,7 @@ export default function cache(options: CacheOptions) {
       });
     }
     //if there's a manifest
-    if (paths.manifest && fs.existsSync(paths.manifest)) {
+    if (typeof paths.manifest === 'string' && fs.existsSync(paths.manifest)) {
       //load the manifest file
       compiler.manifest.load(
         JSON.parse(fs.readFileSync(paths.manifest, 'utf-8'))
