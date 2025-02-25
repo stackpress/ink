@@ -207,7 +207,14 @@ export default class Component {
    * is fixed length.
    */
   public get id() {
-    return serialize(this.relative);
+    //get the relative path
+    let relative = this.relative;
+    //if this is a node modules
+    if (relative.includes('node_modules/')) {
+      //remove the left side of the path
+      relative = relative.split('node_modules/')[1];
+    }
+    return serialize(relative);
   }
 
   /**
@@ -306,7 +313,7 @@ export default class Component {
   }
   
   /**
-   * Returns the source code
+   * Returns the original source path
    */
   public get source() {
     return this._source;
