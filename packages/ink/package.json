@@ -29,6 +29,7 @@
   "main": "index.js",
   "files": [
     "dist",
+    "types",
     "client.d.ts",
     "client.js",
     "compiler.d.ts",
