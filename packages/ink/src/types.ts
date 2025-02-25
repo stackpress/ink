@@ -583,9 +583,9 @@ export type ManifestOptions = ComponentOptions & BuilderOptions;
 export type InkOptions = ManifestOptions;
 
 export type CacheOptions = {
-  serverPath: string,
-  clientPath: string,
-  manifestPath: string
+  serverPath?: string,
+  clientPath?: string,
+  manifestPath?: string
 };
 
 //--------------------------------------------------------------------//
