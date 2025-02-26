@@ -12,12 +12,12 @@ export function activate(context: ExtensionContext) {
   client = useBasic({
     id: 'inkLanguageServer',
     label: 'Ink Language Server',
-		language: 'ink',
-    server: server
+    language: 'ink',
+    server: server,
   });
 
   // Start the client. This will also launch the server
-  //client.activate();
+  client.activate();
 }
 
 export function deactivate() {
