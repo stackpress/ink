@@ -8,7 +8,6 @@ import type {
 } from './types';
 import type { Event } from './EventEmitter';
 import type Builder from './document/Builder';
-import { serialize } from './helpers';
 //local
 import type { CacheOptions } from './types';
 
@@ -29,10 +28,8 @@ export default function cache(options: CacheOptions) {
         //extract props and builder from params
         const props = (event.params.props || {}) as Hash;
         const builder = event.params.builder as Builder;
-        //get id ie. abc123c
-        const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/server/abc123c.js
-        const cache = path.join(server, `${id}.js`);
+        const cache = path.join(server, `${builder.document.id}.js`);
         //if cache file exists
         if (fs.existsSync(cache)) {
           //get the build object
@@ -50,10 +47,8 @@ export default function cache(options: CacheOptions) {
       emitter.on('build-server', (event: Event<string>) => {
         //extract builder from params
         const builder = event.params.builder as Builder;
-        //get fs and id ie. abc123c
-        const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/server/abc123c.js
-        const cache = path.join(server, `${id}.js`);
+        const cache = path.join(server, `${builder.document.id}.js`);
         //if cache file exists, send it
         if (fs.existsSync(cache)) {
           event.set(fs.readFileSync(cache, 'utf8'));
@@ -67,10 +62,8 @@ export default function cache(options: CacheOptions) {
       emitter.on('build-client', (event: Event<string>) => {
         //extract builder from params
         const builder = event.params.builder as Builder;
-        //get fs and id ie. abc123c
-        const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/client/abc123c.js
-        const cache = path.join(client, `${id}.js`);
+        const cache = path.join(client, `${builder.document.id}.js`);
         //if cache file exists, send it
         if (fs.existsSync(cache)) {
           event.set(fs.readFileSync(cache, 'utf8'));
@@ -81,10 +74,8 @@ export default function cache(options: CacheOptions) {
       emitter.on('build-styles', (event: Event<string>) => {
         //extract builder from params
         const builder = event.params.builder as Builder;
-        //get fs and id ie. abc123c
-        const id = serialize(builder.document.source);
         //get cache file path ie. /path/to/docs/build/client/abc123c.css
-        const cache = path.join(client, `${id}.css`);
+        const cache = path.join(client, `${builder.document.id}.css`);
         //if cache file exists, send it
         if (fs.existsSync(cache)) {
           event.set(fs.readFileSync(cache, 'utf8'));
