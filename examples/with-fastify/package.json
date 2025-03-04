@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@fastify/static": "7.0.4",
-    "@stackpress/ink": "0.3.34",
+    "@stackpress/ink": "0.3.36",
     "fastify": "4.27.0"
   },
   "devDependencies": {

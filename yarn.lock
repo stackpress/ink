@@ -1545,10 +1545,10 @@
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.3.tgz#282046f03e886e352b2d5f5da5eb755e01457f3f"
   integrity sha512-DE427ROAphMQzU4ENbliGYrBSYPXF+TtLg9S8vzeA+OF4ZKzoDdzfL8sxuMUGS/lgRhM6j1URSk9ghf7Xo1tyA==
 
-"@stackpress/lib@0.3.34":
-  version "0.3.34"
-  resolved "https://registry.yarnpkg.com/@stackpress/lib/-/lib-0.3.34.tgz#dbdb39b5b3a352bd9aed1576a2feafc23ae51299"
-  integrity sha512-ERV5SoDJncANa4h/EKPI0Hztm4L2aJ63vt8BBMCKMPBJvUgsQaQwxi5wupWQSuCYRNvT6VDc7Ze5x+ui38z8lg==
+"@stackpress/lib@0.3.36":
+  version "0.3.36"
+  resolved "https://registry.yarnpkg.com/@stackpress/lib/-/lib-0.3.36.tgz#a9fca9da6667858e50914fb24ede54cd6f5948de"
+  integrity sha512-le4nrd94058QS059w0oiySGCAbpOre6crF6rEETyls3FLotxTZDonBxmvWnXqd7s7zu1+aXjPnCxofyfrQFRog==
   dependencies:
     "@inquirer/prompts" "7.1.0"
 

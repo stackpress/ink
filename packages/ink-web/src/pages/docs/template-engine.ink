@@ -180,10 +180,10 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.3.34"
+                    "@stackpress/ink": "0.3.36"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.3.34",
+                    "@stackpress/ink-dev": "0.3.36",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
