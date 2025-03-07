@@ -1,5 +1,4 @@
 //modules
-import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { PluginBuild } from 'esbuild';
 //stackpress
 import type { FileSystem } from '@stackpress/lib/dist/types';
@@ -30,12 +29,6 @@ export type Data = Scalar|Data[]|{ [key: string]: Data };
 
 //a generic class constructor 
 export type Constructor<T> = { new (): T };
-
-//standard http request and response types
-export type Request = IncomingMessage;
-export type Response = ServerResponse<Request> & {
-  req: Request;
-};
 
 //--------------------------------------------------------------------//
 // Event Types

@@ -1,10 +1,9 @@
 //modules
 import fs from 'node:fs';
-//stackpress
-import type { Request, Response } from '@stackpress/ink/dist/types';
 //local
-import type { DevelopOptions } from './types';
-import RefreshServer from './RefreshServer';
+import type { DevelopOptions, IM, SR } from './types';
+import HttpServer from './HttpServer';
+import WhatwgServer from './WhatwgServer';
 
 export type * from './types';
 
@@ -15,9 +14,16 @@ export {
   update 
 } from './helpers';
 
-export { RefreshServer };
+export { HttpServer, WhatwgServer };
 
 export function dev(options: DevelopOptions = {}) {
+  if (options.whatwg) {
+    return whatwg(options);
+  }
+  return http(options);
+};
+
+export function http(options: DevelopOptions = {}) {
   const { 
     include, 
     ignore, 
@@ -27,7 +33,7 @@ export function dev(options: DevelopOptions = {}) {
     cwd = process.cwd(), 
     route = '/__ink_dev__' 
   } = options;
-  const refresh = new RefreshServer({ 
+  const refresh = new HttpServer({ 
     cwd, 
     emitter, 
     include, 
@@ -38,7 +44,7 @@ export function dev(options: DevelopOptions = {}) {
   refresh.watch();
   return {
     refresh,
-    router: function(req: Request, res: Response) {
+    router: function(req: IM, res: SR) {
       if (req.url) {
         const url = new URL(req.url, `http://${req.headers.host}`);
         if (url.pathname === '/dev.js') {
@@ -54,6 +60,46 @@ export function dev(options: DevelopOptions = {}) {
           refresh.wait(req, res);
           return true;
         }
+      }
+      return false;
+    }
+  };
+};
+
+export function whatwg(options: DevelopOptions = {}) {
+  const { 
+    include, 
+    ignore, 
+    emitter,
+    tsconfig,
+    extname,
+    cwd = process.cwd(), 
+    route = '/__ink_dev__' 
+  } = options;
+  const refresh = new WhatwgServer({ 
+    cwd, 
+    emitter, 
+    include, 
+    ignore,
+    tsconfig,
+    extname
+  });
+  refresh.watch();
+  return {
+    refresh,
+    router: function(req: Request) {
+      const url = new URL(req.url);
+      if (url.pathname === '/dev.js') {
+        const script = fs.readFileSync(
+          require.resolve('@stackpress/ink-dev/client.js')
+        );
+        const id = 'InkAPI.BUILD_ID';
+        const start = `;ink_dev.default(${id}, {path: '${route}'});`;
+        return new Response(script + start, {
+          headers: { 'Content-Type': 'text/javascript' }
+        });
+      } else if (url.pathname === route) {
+        return refresh.wait();
       }
       return false;
     }

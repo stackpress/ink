@@ -1,0 +1,19 @@
+{
+  "name": "with-whatwg",
+  "version": "1.0.0",
+  "description": "A simple boilerplate for building web components with Ink",
+  "private": true,
+  "scripts": {
+    "dev": "PUBLIC_ENV=development ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@stackpress/ink": "0.3.36",
+    "@stackpress/ink-dev": "0.3.36",
+    "@whatwg-node/server": "0.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.9.3",
+    "ts-node": "10.9.2",
+    "typescript": "5.7.2"
+  }
+}

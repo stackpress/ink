@@ -1,11 +1,7 @@
 //stackpress
-import type { 
-  Request, 
-  Response, 
-  InkCompiler 
-} from '@stackpress/ink/dist/types';
-import type { DevelopOptions } from '@stackpress/ink-dev/dist/types';
-import { dev as develop } from '@stackpress/ink-dev/dist/server';
+import type { InkCompiler } from '@stackpress/ink/dist/types';
+import type { IM, SR, DevelopOptions } from '@stackpress/ink-dev/dist/types';
+import { http } from '@stackpress/ink-dev';
 
 export type NextView = (err: Error | null, results: string | undefined) => void;
 
@@ -26,11 +22,11 @@ export function view(compiler: InkCompiler) {
 };
 
 export function dev(options: DevelopOptions = {}) {
-  const { refresh, router } = develop(options);
+  const { refresh, router } = http(options);
 
   return {
     refresh,
-    router: function(req: Request, res: Response, next: () => void) {
+    router: function(req: IM, res: SR, next: () => void) {
       !router(req, res) && next();
     },
     view(compiler: InkCompiler) {

@@ -3,12 +3,11 @@ import type { FSWatcher } from 'chokidar';
 import path from 'node:path';
 import chokidar from 'chokidar';
 //stackpress
-import type { Request, Response } from '@stackpress/ink/dist/types';
 import Component from '@stackpress/ink/dist/compiler/Component';
 import DocumentBuilder from '@stackpress/ink/dist/document/Builder';
 import EventEmitter from '@stackpress/ink/dist/EventEmitter';
 //local
-import type { ServerOptions, OptionIgnore } from './types';
+import type { IM, SR, ServerOptions, OptionIgnore } from './types';
 import { dependantsOf, update, errorMessage } from './helpers';
 
 const extensions = [ '.ink', '.ts', '.js', '.json', '.css' ];
@@ -36,7 +35,7 @@ export default class RefreshServer {
   //the file watcher
   protected _watcher: FSWatcher|null = null;
   //clients
-  protected _clients = new Set<Response>();
+  protected _clients = new Set<SR>();
 
   /**
    * Returns the current working directory
@@ -59,9 +58,9 @@ export default class RefreshServer {
     this._cwd = options.cwd;
     this._emitter = options.emitter || new EventEmitter();
     this._extensions = options.include || extensions;
+    this._extname = options.extname || '.ink';
     this._ignore = options.ignore || [];
     this._tsconfig = options.tsconfig;
-    this._extname = options.extname || '.ink';
   }
 
   /**
@@ -231,7 +230,7 @@ export default class RefreshServer {
   /**
    * Adds a new client to the list
    */
-  public wait(req: Request, res: Response) {
+  public wait(req: IM, res: SR) {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',          

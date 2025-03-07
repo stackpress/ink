@@ -18,7 +18,7 @@
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" type="text/css" href={`/build/${BUILD_ID}.css`} />
     
-    <script data-template type="text/json">__TEMPLATE_DATA__</script>
+    <script data-template type="application/json">__TEMPLATE_DATA__</script>
     <script src={`/build/${BUILD_ID}.js`}></script>
     <if true={PUBLIC_ENV === 'development'}>
       <script src="/dev.js"></script>

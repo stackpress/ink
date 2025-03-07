@@ -19,7 +19,7 @@
   <link rel="stylesheet" type="text/css" href="/ink/styles/global.css" />
   <link rel="stylesheet" type="text/css" href={`/ink/client/${env('BUILD_ID')}.css`} />
   
-  <script data-template type="text/json">__TEMPLATE_DATA__</script>
+  <script data-template type="application/json">__TEMPLATE_DATA__</script>
   <script src={`/ink/client/${env('BUILD_ID')}.js`}></script>
   <if true={env('PUBLIC_ENV') === 'development'}>
     <script src="/dev.js"></script>

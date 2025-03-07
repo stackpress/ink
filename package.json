@@ -29,6 +29,7 @@
     "dev:restify": "yarn --cwd examples/with-restify dev",
     "dev:tailwind": "yarn --cwd examples/with-tailwind dev",
     "dev:webpack": "yarn --cwd examples/with-webpack dev",
+    "dev:whatwg": "yarn --cwd examples/with-whatwg dev",
     "dev:web": "yarn --cwd packages/ink-web dev",
     "start": "yarn --cwd packages/ink-web start"
   },
