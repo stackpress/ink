@@ -1,7 +1,7 @@
 {
 	"name": "ink-language-server",
 	"description": "Implementation of ink language server in node.",
-	"version": "0.3.36",
+	"version": "0.4.1",
 	"author": "Chris <chris@incept.asia>",
 	"license": "MIT",
 	"repository": {
@@ -12,7 +12,7 @@
     "build": "tsc"
   },
 	"dependencies": {
-		"@stackpress/ink": "0.3.36",
+		"@stackpress/ink": "0.4.1",
     "vscode-languageserver": "8.1.0",
     "vscode-languageserver-textdocument": "1.0.8",
     "vscode-uri": "3.0.8"
