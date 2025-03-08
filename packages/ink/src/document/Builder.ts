@@ -263,7 +263,7 @@ export default class Builder {
           })
         ]
       }
-    );
+    ) + ';module.exports = InkAPI;';
     //emit build-server event
     const post = await this._emitter.waitFor<string>('built-server', { 
       ...pre.params, 
