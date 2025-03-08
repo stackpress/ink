@@ -526,7 +526,8 @@ export type AliasPluginOptions = FileOptions;
 export type ComponentPluginOptions = FileOptions & {
   brand?: string,
   tsconfig?: string,
-  extname?: string
+  extname?: string,
+  shims?: [ string|RegExp, string ][]
 };
 //options for esbuild plugin
 export type DocumentPluginOptions = ComponentPluginOptions;
@@ -537,7 +538,8 @@ export type InkPluginOptions = FileOptions & {
   brand?: string,
   mode?: 'client'|'server',
   tsconfig?: string,
-  extname?: string
+  extname?: string,
+  shims?: [ string|RegExp, string ][]
 };
 
 //options for the component class

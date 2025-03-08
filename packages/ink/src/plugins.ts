@@ -112,6 +112,7 @@ export function esDocumentPlugin(options: DocumentPluginOptions = {}) {
     extname = '.ink',
     cwd = process.cwd(),
     fs = new NodeFS(),
+    shims = [],
     ...config
   } = options;
   const name = {
@@ -139,6 +140,10 @@ export function esDocumentPlugin(options: DocumentPluginOptions = {}) {
             { ...config, fs, cwd, type: 'document' }
           );
           const transpiler = new DocumentTranspiler(document, tsconfig);
+          //add shims to transpiler
+          for (const [ key, value ] of shims) {
+            transpiler.shim(key, value);
+          }
           return {
             contents: toTS(transpiler.transpile()),
             loader: 'ts'
@@ -164,6 +169,10 @@ export function esDocumentPlugin(options: DocumentPluginOptions = {}) {
             { ...config, fs, cwd, type: 'document' }
           );
           const transpiler = new DocumentTranspiler(document, tsconfig);
+          //add shims to transpiler
+          for (const [ key, value ] of shims) {
+            transpiler.shim(key, value);
+          }
           return {
             contents: toTS(transpiler.client()),
             loader: 'ts'
@@ -204,6 +213,7 @@ export function esInkPlugin(options: InkPluginOptions = {}) {
     fs = new NodeFS(),
     mode = 'server',
     extname = '.ink',
+    shims = [],
     ...config
   } = options;
   const loader = new FileLoader(fs, cwd);
@@ -252,6 +262,10 @@ export function esInkPlugin(options: InkPluginOptions = {}) {
           type: 'document' 
         });
         const transpiler = new DocumentTranspiler(document, tsconfig);
+        //add shims to transpiler
+        for (const [ key, value ] of shims) {
+          transpiler.shim(key, value);
+        }
         return {
           contents: toTS(transpiler.transpile()),
           resolveDir: path.dirname(args.path),
@@ -270,6 +284,10 @@ export function esInkPlugin(options: InkPluginOptions = {}) {
           type: 'document' 
         });
         const transpiler = new DocumentTranspiler(document, tsconfig);
+        //add shims to transpiler
+        for (const [ key, value ] of shims) {
+          transpiler.shim(key, value);
+        }
         return {
           contents: toTS(transpiler.client()),
           resolveDir: path.dirname(args.path),

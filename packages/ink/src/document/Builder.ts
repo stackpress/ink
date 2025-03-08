@@ -55,7 +55,12 @@ export default class Builder {
   protected _extname = '.ink';
   //whether to minify the code
   protected _minify: boolean;
-  //transpiler
+  //shims need to be passed down to esbuild...
+  protected _shims: [ string|RegExp, string ][];
+  //transpiler 
+  // TODO: document transpiler is not being used here
+  // so we need to figure out whether if it's okay to
+  // remove this or not (it can be externally used...)
   protected _transpiler: Transpiler;
   //the file loader
   //the location of the tsconfig file
@@ -109,8 +114,9 @@ export default class Builder {
     } = options;
 
     this._emitter = emitter;
-    this._minify = minify;
     this._extname = extname;
+    this._minify = minify;
+    this._shims = shims;
 
     //generated values
     this._tsconfig = tsconfig;
@@ -170,7 +176,8 @@ export default class Builder {
             cwd: this._document.cwd,
             fs: this._document.fs,
             tsconfig: this._tsconfig,
-            extname: this._extname
+            extname: this._extname,
+            shims: this._shims
           })
         ]
       }
@@ -259,7 +266,8 @@ export default class Builder {
             cwd: this._document.cwd,
             fs: this._document.fs,
             tsconfig: this._tsconfig,
-            extname: this._extname
+            extname: this._extname,
+            shims: this._shims
           })
         ]
       }
