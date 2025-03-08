@@ -544,6 +544,7 @@ export type InkPluginOptions = FileOptions & {
 export type ComponentOptions = FileOptions & {
   name?: string,
   brand?: string,
+  extname?: string,
   type?: ComponentType
 };
 

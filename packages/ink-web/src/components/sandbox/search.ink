@@ -1,13 +1,13 @@
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table.ink" name="table-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/head.ink" name="table-head" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/row.ink" name="table-row" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/col.ink" name="table-col" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/alert.ink" name="element-alert" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/icon.ink" name="element-icon" />
-<link rel="import" type="component" href="@stackpress/ink-ui/format/overflow.ink" name="format-overflow" />
-<link rel="import" type="component" href="@stackpress/ink-ui/format/image.ink" name="format-image" />
-<link rel="import" type="component" href="@stackpress/ink-ui/format/yesno.ink" name="format-yesno" />
-<link rel="import" type="component" href="@stackpress/ink-ui/format/date.ink" name="format-date" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table" name="table-layout" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/head" name="table-head" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/row" name="table-row" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/col" name="table-col" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/alert" name="element-alert" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/icon" name="element-icon" />
+<link rel="import" type="component" href="@stackpress/ink-ui/format/overflow" name="format-overflow" />
+<link rel="import" type="component" href="@stackpress/ink-ui/format/image" name="format-image" />
+<link rel="import" type="component" href="@stackpress/ink-ui/format/yesno" name="format-yesno" />
+<link rel="import" type="component" href="@stackpress/ink-ui/format/date" name="format-date" />
 <script>
   const { rows = [], none = 'No results found.' } = this.props;
 </script>

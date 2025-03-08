@@ -1,4 +1,4 @@
-<link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="form-button" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/button" name="form-button" />
 <script>
   const { action } = this.props;
 </script>

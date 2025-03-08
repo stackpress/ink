@@ -1,4 +1,4 @@
-<link rel="import" type="component" href="@/components/ide/code.ink" name="api-ide-code" />
+<link rel="import" type="component" href="@/components/ide/code" name="api-ide-code" />
 <script>
   import { signal, props, classlist } from '@stackpress/ink';
   import types from './types.json';

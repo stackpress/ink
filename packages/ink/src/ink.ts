@@ -35,6 +35,7 @@ export default function ink(options: InkOptions = {}) {
   options.cwd = options.cwd || process.cwd();
   options.fs = options.fs || new NodeFS();
   options.emitter = options.emitter || new EventEmitter();
+  options.extname = options.extname || '.ink';
   options.type = options.type || 'document';
   options.shims = options.shims || [];
   options.brand = typeof options.brand === 'string' 
@@ -46,6 +47,7 @@ export default function ink(options: InkOptions = {}) {
       brand: options.brand as string,
       cwd: options.cwd as string,
       emitter: options.emitter as EventEmitter,
+      extname: options.extname as string,
       fs: options.fs as FileSystem,
       type: options.type as ComponentType,
       shims: options.shims as [ string|RegExp, string ][]

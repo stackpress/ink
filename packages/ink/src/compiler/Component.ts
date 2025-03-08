@@ -26,6 +26,8 @@ export default class Component {
   protected _components: Component[]|undefined;
   //current working directory
   protected _cwd: string;
+  //the default extname for components without an extension
+  protected _extname: string;
   //filesystem to use
   protected _fs: FileSystem;
   //the name of the component
@@ -118,6 +120,7 @@ export default class Component {
         return new Component(component.source.value, {
           brand: this._brand,
           cwd: this._cwd,
+          extname: this._extname,
           fs: this._fs,
           name: name,
           type: type
@@ -371,21 +374,25 @@ export default class Component {
       : 'ink';
     //current working directory
     this._cwd = options.cwd || process.cwd();
+    this._extname = options.extname || '.ink';
     //filesystem to use
     this._fs = options.fs || new NodeFS();
     //file loader helper
     this._loader = new FileLoader(this._fs, this._cwd);
     //the name of the component
+    const extname = path.extname(source);
     this._name = options.name || path.basename(
       source, 
-      path.extname(source)
+      extname
     );
     //ex. /path/to/component.ink
     //ex. ./path/to/component.ink
     //ex. ../path/to/component.ink
     //ex. @/path/to/component.ink
     //ex. path/to/component.ink
-    this._source = source;
+    this._source = extname.length > 0 
+      ? source
+      : `${source}${this._extname}`;
     //the component type
     this._type = options.type || 'component';
     //parent component
