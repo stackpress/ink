@@ -1,5 +1,5 @@
-<link rel="import" href="./todo/add.ink" />
-<link rel="import" href="./todo/list.ink" />
+<link rel="import" href="./todo/add" />
+<link rel="import" href="./todo/list" />
 <style>
   :host section {
     display: flex;

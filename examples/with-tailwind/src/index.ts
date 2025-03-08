@@ -1,7 +1,7 @@
 import path from 'path';
 import http from 'http';
 import ink from '@stackpress/ink/compiler';
-import { dev } from '@stackpress/ink-dev';
+import { http as dev } from '@stackpress/ink-dev';
 import { tailwind } from '@stackpress/ink-tailwind';
 
 const assets = path.resolve(__dirname, '../public');

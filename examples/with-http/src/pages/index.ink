@@ -1,6 +1,6 @@
-<link rel="import" href="@/components/header.ink" />
-<link rel="import" href="@/components/paragraph.ink" />
-<link rel="import" href="@/components/todo.ink" />
+<link rel="import" href="@/components/header" />
+<link rel="import" href="@/components/paragraph" />
+<link rel="import" href="@/components/todo" />
 <style>
   body { 
     background-color: #CDD9E4; 
