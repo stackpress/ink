@@ -10,6 +10,13 @@ import type DirectiveInterface from '../directives/DirectiveInterface';
 import type { MarkupToken, MarkupChildToken } from '../types';
 
 export default class Transpiler extends ComponentTranspiler {
+  //shims replace client imports to server imports
+  public readonly shims = new Map<string|RegExp, string>([
+    [ '@stackpress/ink/client', '@stackpress/ink/server' ],
+    [ '@stackpress/ink/dist/client', '@stackpress/ink/dist/server' ],
+    [ /^@stackpress\/ink$/, '@stackpress/ink/server' ]
+  ]);
+
   /**
    * Generates document code to be used on the server
    */
@@ -47,11 +54,14 @@ export default class Transpiler extends ComponentTranspiler {
     });
     //import others from <script>
     imports.forEach(imported => {
-      const specifier = imported.source
-        //replace client with server
-        .replaceAll('@stackpress/ink/client', '@stackpress/ink/server')
-        .replaceAll('@stackpress/ink/dist/client', '@stackpress/ink/dist/server')
-        .replace(/^@stackpress\/ink$/, '@stackpress/ink/server');
+      let specifier = imported.source;
+      for (const [ key, value ] of this.shims) {
+        if (typeof key === 'string') {
+          specifier = specifier.replaceAll(key, value);
+        } else {
+          specifier = specifier.replace(key, value);
+        }
+      }
       if (imported.default && imported.names) {
         source.addImportDeclaration({
           isTypeOnly: imported.typeOnly,
@@ -282,6 +292,13 @@ export default class Transpiler extends ComponentTranspiler {
     });`);
 
     return source;
+  }
+
+  /**
+   * Adds or replaces a shim
+   */
+  public shim(key: string|RegExp, value: string) {
+    this.shims.set(key, value);
   }
 
   /**

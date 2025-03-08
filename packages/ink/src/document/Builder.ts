@@ -104,7 +104,8 @@ export default class Builder {
       emitter = new EventEmitter(),
       minify = true, 
       extname = '.ink',
-      tsconfig = path.resolve(__dirname, '../../tsconfig.json')
+      tsconfig = path.resolve(__dirname, '../../tsconfig.json'),
+      shims = []
     } = options;
 
     this._emitter = emitter;
@@ -119,6 +120,11 @@ export default class Builder {
       this._document, 
       this._tsconfig
     );
+
+    //add shims to transpiler
+    for (const [ key, value ] of shims) {
+      this._transpiler.shim(key, value);
+    }
   }
 
   /**

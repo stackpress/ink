@@ -36,6 +36,7 @@ export default function ink(options: InkOptions = {}) {
   options.fs = options.fs || new NodeFS();
   options.emitter = options.emitter || new EventEmitter();
   options.type = options.type || 'document';
+  options.shims = options.shims || [];
   options.brand = typeof options.brand === 'string' 
     ? options.brand 
     : 'ink';
@@ -46,7 +47,8 @@ export default function ink(options: InkOptions = {}) {
       cwd: options.cwd as string,
       emitter: options.emitter as EventEmitter,
       fs: options.fs as FileSystem,
-      type: options.type as ComponentType
+      type: options.type as ComponentType,
+      shims: options.shims as [ string|RegExp, string ][]
     },
     emitter: options.emitter,
     fs: options.fs as FileSystem,

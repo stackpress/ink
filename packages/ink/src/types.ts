@@ -552,7 +552,8 @@ export type BuilderOptions = {
   minify?: boolean,
   tsconfig?: string,
   emitter?: EventEmitter
-  extname?: string
+  extname?: string,
+  shims?: [ string|RegExp, string ][],
 };
 
 //options for static Builder.build()
