@@ -1,6 +1,6 @@
 {
   "name": "@stackpress/ink-esbuild",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "ESBuild support for the Ink markup language.",
   "license": "Apache-2.0",
   "author": "Chris <chris@incept.asia>",
@@ -31,7 +31,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@stackpress/ink": "0.4.4"
+    "@stackpress/ink": "0.4.5"
   },
   "devDependencies": {
     "@types/node": "22.9.3",
