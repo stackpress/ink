@@ -889,7 +889,7 @@
   import setDisplay from '../utilities/style/display';
   //extract props
   const { 
-    value = '',
+    value = '', height = 200,
     //flags
     history,   font,       size,       format, 
     paragraph, blockquote, style,      color, 
@@ -957,6 +957,7 @@
       if (dir) buttonList.push(['dir', 'dir_ltr', 'dir_rtl']);
 
       const editor = suneditor.create(textarea, {
+        height: Number(height) || undefined,
         plugins: plugins,
         buttonList: buttonList.length > 1 ? buttonList: [],
         value: value
