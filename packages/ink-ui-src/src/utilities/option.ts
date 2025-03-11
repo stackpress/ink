@@ -1,9 +1,5 @@
 //stackpress
-import type { 
-  MouseEvent, 
-  ChangeEvent, 
-  AttributeChangeEvent 
-} from '@stackpress/ink/dist/types';
+import type { MouseEvent, ChangeEvent } from '@stackpress/ink/dist/types';
 import type ClientField from '@stackpress/ink/dist/client/Field';
 import type StyleSet from '@stackpress/ink/dist/style/StyleSet';
 
@@ -145,25 +141,18 @@ export function setStyles(
   }
 }
 
-export function getHandlers(host: ClientField) {
-  const { change, update, click } = host.props;
+export function getHandlers(
+  host: ClientField, 
+  click: Function,
+  change: Function, 
+  update: Function, 
+  flag = true
+) {
+  const name = host.props.name || '';
+  const value = host.props.value || '';
   //handlers
   const handlers = {
-    /**
-     * On mount, set the form value
-     */
-    mount() {
-      const { name, value, checked } = host.props;
-      if (!name) return;
-      if (checked && typeof value === 'string') {
-        host.field.setFormValue(value);
-      }
-    },
     click(e: MouseEvent<HTMLInputElement>) {
-      const input = e.target as HTMLInputElement;
-      if (input.checked) {
-        host.removeAttribute('checked');
-      }
       click && click(e);
     },
     /**
@@ -172,131 +161,61 @@ export function getHandlers(host: ClientField) {
      * THEN: Update the component attribute
      */
     change(e: ChangeEvent<HTMLInputElement>) {
+      //this is the light input element
+      const input = host.querySelector('input') as HTMLInputElement;
+      //this is the checked status from the shadow input element
       const checked = e.target.checked;
-      if (host.getAttribute('checked') !== checked) {
+      if (checked) {
         host.setAttribute('checked', checked);
-        //this will call the attributechange event
-        //which will call handlers.attribute
-        //which will call change and update events
+        input.setAttribute('checked', 'checked');
       } else {
-        change && change(e);
-        update && update(e.target.checked ? e.target.value: '');
+        host.removeAttribute('checked');
+        input.removeAttribute('checked');
       }
+      change && change(e);
+      update && update(checked ? value: '');
+      if (!flag) handlers.uncheckAll();
     },
-    /**
-     * CASE: someone or some script changes 
-     * the component attribute manually
-     * THEN: Update the inner input element
-     * THEN: Call change and update callbacks
-     */
-    attribute(e: AttributeChangeEvent) {
-      //accepts: checked,disabled,name,readonly,required,value
-      const { action, name, value, target } = e.detail;
-      const input = target.shadowRoot?.querySelector('input');
-      if (!input) return;
-      switch (action) {
-        case 'add':
-        case 'update':
-          handlers.set(input, name, value);
-          break;
-        case 'remove':
-          handlers.remove(input, name);
-          break;
-      }
-    },
-    /**
-     * Updates the inner input element.
-     * Sends the value to the form.
-     */
-    set(input: HTMLInputElement, name: string, value: string) {
-      input.setAttribute(name, value);
-      if (name === 'checked') {
-        //set checked
-        input.checked = true;
-        //look for other checked inputs and uncheck them
-        handlers.uncheck(input);
-        //update form value
-        host.field.setFormValue(input.value);
-        //emit change event
-        handlers.emit(input, input.value);
-      } else if (name === 'value') {
-        //if checked
-        if (input.checked) {
-          //update form value
-          host.field.setFormValue(value);
-          //emit change event
-          handlers.emit(input, value);
-        }
-      } else if (name === 'disabled') {
-        //set disabled
-        input.disabled = true;
-        //if checked
-        if (input.checked) {
-          //update form value
-          host.field.setFormValue(null);
-          //emit change event
-          handlers.emit(input, '');
-        }
-      }
-    },
-    /**
-     * Updates the inner input element.
-     * Sends the value to the form.
-     */
-    remove(input: HTMLInputElement, name: string) {
-      input.removeAttribute(name);
-      if (name === 'checked') {
-        //set unchecked
-        input.checked = false;
-        //update form value
-        host.field.setFormValue(null);
-        //emit change event
-        handlers.emit(input, '');
-      } else if (name === 'disabled') {
-        input.disabled = false;
-        //if checked
-        if (input.checked) {
-          //update form value
-          host.field.setFormValue(input.value);
-          //emit change event
-          handlers.emit(input, input.value);
-        }
-      }
-    },
-    emit(input: HTMLInputElement, value: string) {
-      const event = new Event('change', { 
-        bubbles: true, 
-        cancelable: true,
-      });
-      Object.defineProperty(event, 'target', {
-        writable: false, 
-        value: input
-      });
-      change && change(event);
-      update && update(value);
-    },
-    uncheck(input: HTMLInputElement) {
-      if (input.getAttribute('type') !== 'radio') return;
-      const name = input.getAttribute('name') as string|null;
-      if (!name) return;
-      const items = host.field.form 
-        ? host.field.form.elements.namedItem(name)
+    uncheckAll() {
+      //this is the light input element
+      const input = host.querySelector('input') as HTMLInputElement;
+      const items = input.form 
+        ? input.form.elements.namedItem(name)
         : document.querySelectorAll(`[name="${name}"]`);
       const elements = items instanceof NodeList 
         ? Array.from(items) 
         : [items];
       if (!elements) return;
       for (const element of elements) {
-        if (element === host) continue;
-        if (element instanceof HTMLInputElement) {
-          element.checked = false;
-          element.removeAttribute('checked');
-        } else if (element instanceof HTMLElement) {
-          element.removeAttribute('checked');
+        if (element === input 
+          || element === host
+          || element?.parentElement === host
+        ) continue;
+        if (element instanceof HTMLInputElement 
+          || element instanceof HTMLElement
+        ) {
+          handlers.uncheck(element);
+        }
+      }
+    },
+    uncheck(element: HTMLInputElement|HTMLElement) {
+      if (element instanceof HTMLInputElement) {
+        element.checked = false;
+      }
+      element.removeAttribute('checked');
+      if (element?.parentElement) {
+        const parent = element.parentElement;
+        parent.removeAttribute('checked');
+        if (parent.shadowRoot) {
+          const shadow = parent.shadowRoot;
+          const input = shadow.querySelector('input');
+          if (input) {
+            input.checked = false;
+            input.removeAttribute('checked');
+          }
         }
       }
     }
   };
-  host.on('attributechange', handlers.attribute);
   return handlers;
 };

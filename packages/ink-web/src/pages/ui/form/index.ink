@@ -78,7 +78,7 @@
           <h1 class="tx-primary tx-upper tx-30 py-20">
             {_('Form')}
           </h1>
-          <form method="get" action="/ink/ui/form/index.html">
+          <form method="post">
             <section class="flex flex-wrap gap-10">
               <div class="basis-third-10 lg-basis-half-10 md-basis-full">
                 <div class="bg-t-3 h-120 flex flex-center">

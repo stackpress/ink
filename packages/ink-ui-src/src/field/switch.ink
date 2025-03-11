@@ -1,79 +1,79 @@
 <style>
-:host {
-  display: inline-block;
-}
+  :host {
+    display: inline-block;
+  }
 
-label {
-  position: relative;
-  margin: 0;
-}
+  label {
+    position: relative;
+    margin: 0;
+  }
 
-span {
-  display: inline-block;
-  font-weight: normal;
-  line-height: 20px;
-  margin: 0 4px;
-  min-height: 24px;
-  min-width: 18px;
-  position: relative;
-}
+  span {
+    display: inline-block;
+    font-weight: normal;
+    line-height: 20px;
+    margin: 0 4px;
+    min-height: 24px;
+    min-width: 18px;
+    position: relative;
+  }
 
-span::before {
-  font-family: Arial, Helvetica, sans-serif;
-  border-style: solid;
-  border-width: 1px;
-  box-shadow: inset 0px 2px 2px 0px rgba(0, 0, 0, .2);
-  color: #999999;
-  display: inline-block;
-  font-weight: bold;
-  height: 20px;
-  margin-right: 8px;
-  overflow: hidden;
-  padding: 0;
-  position: relative;
-  text-align: left;
-  text-indent: -19px;
-  top: 5px;
-  transition: text-indent .4s ease;
-  width: 52px;
-}
+  span::before {
+    font-family: Arial, Helvetica, sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: inset 0px 2px 2px 0px rgba(0, 0, 0, .2);
+    color: #999999;
+    display: inline-block;
+    font-weight: bold;
+    height: 20px;
+    margin-right: 8px;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    text-align: left;
+    text-indent: -19px;
+    top: 5px;
+    transition: text-indent .4s ease;
+    width: 52px;
+  }
 
-span::after {
-  -webkit-box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, .3);
-  -webkit-transition: left .4s ease;
-  box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, .3);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 10px;
-  font-weight: lighter;
-  left: -3px;
-  line-height: 20px;
-  height: 22px;
-  padding: 0;
-  position: absolute;
-  text-align: center;
-  text-shadow: -1px 0px 0 rgba(0, 0, 0, 0.15);
-  top: 4px;
-  transition: left .4s ease;
-  width: 22px;
-}
+  span::after {
+    -webkit-box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, .3);
+    -webkit-transition: left .4s ease;
+    box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, .3);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: lighter;
+    left: -3px;
+    line-height: 20px;
+    height: 22px;
+    padding: 0;
+    position: absolute;
+    text-align: center;
+    text-shadow: -1px 0px 0 rgba(0, 0, 0, 0.15);
+    top: 4px;
+    transition: left .4s ease;
+    width: 22px;
+  }
 
-input {
-  cursor: pointer;
-  height: 25px;
-  opacity: 0;
-  position: absolute;
-  width: 55px;
-}
+  input {
+    cursor: pointer;
+    height: 25px;
+    opacity: 0;
+    position: absolute;
+    width: 55px;
+  }
 
-input:checked + span::before {
-  text-indent: 9px;
-}
+  input:checked + span::before {
+    text-indent: 9px;
+  }
 
-input:checked + span::after {
-  left: 34px;
-}
+  input:checked + span::after {
+    left: 34px;
+  }
 </style>
-<script form observe="checked,disabled,name,readonly,required,value">
+<script>
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import { getHandlers } from '../utilities/option';
   //get props
@@ -81,11 +81,10 @@ input:checked + span::after {
     error,  rounded, onoff,
     yesno,  checkex, sunmoon,
     ridge,  smooth,  blue,
-    orange, green,   change,
-    update, label = '',
-    //we dont need these
-    'class': _, style,
-    ...attributes 
+    orange, green,   label = '',
+    name,   value,   checked,
+    //event handlers
+    change, update,  click,   
   } = this.props;
   //override default styles
   const styles = new StyleSet();
@@ -170,13 +169,18 @@ input:checked + span::after {
   }
   
   //handlers
-  const handlers = getHandlers(this, change, update);
+  const handlers = getHandlers(this, click, change, update);
 </script>
-<label mount={handlers.mount}>
-  <input 
-    {...attributes} 
-    type="checkbox" 
-    change={handlers.change}
-  />
-  <span >{label}</span>
-</label>
+<template type="light">
+  <input type="checkbox" name={name} value={value} checked={checked} />
+</template>
+<template type="shadow">
+  <label>
+    <input 
+      type="checkbox" 
+      change={handlers.change}
+      checked={checked}
+    />
+    <span>{label}</span>
+  </label>
+</template>

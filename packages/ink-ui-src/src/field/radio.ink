@@ -1,9 +1,15 @@
-<script form observe="checked,disabled,name,readonly,required,value">
+<script>
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import setDisplay from '../utilities/style/display';
   import { getProps, setStyles, getHandlers } from '../utilities/option';
   //get ptops
-  const { label = '', change, update, attributes } = getProps(this);
+  const { 
+    label = '', name, value, checked,
+    //event handlers
+    click,  change, update,
+    //input elements
+    attributes
+  } = getProps(this);
   //override default styles
   const styles = new StyleSet();
   this.styles = () => styles.toString();
@@ -12,14 +18,18 @@
   //set option styles
   setStyles(this.props, styles, 'circle');
   //handlers
-  const handlers = getHandlers(this, change, update);
+  const handlers = getHandlers(this, click, change, update, false);
 </script>
-<label mount={handlers.mount}>
-  <input 
-    {...attributes} 
-    type="radio" 
-    change={handlers.change} 
-    click={handlers.click} 
-  />
-  <span>{label}</span>
-</label>
+<template type="light">
+  <input type="radio" {...attributes} />
+</template>
+<template type="shadow">
+  <label>
+    <input 
+      type="radio" 
+      change={handlers.change} 
+      checked={attributes.checked} 
+    />
+    <span>{label}</span>
+  </label>
+</template>

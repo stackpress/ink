@@ -20,15 +20,6 @@ const compiler = ink({
   cwd: __dirname, 
   minify: process.env.PUBLIC_ENV !== 'development' 
 });
-//use ink css
-compiler.use(css());
-//use build cache
-if (process.env.PUBLIC_ENV !== 'development') {
-  compiler.use(cache({ 
-    clientPath: path.join(docs, 'client'),
-    manifestPath: path.join(docs, 'manifest.json')
-  }));
-}
 
 //create express app
 const app = express();
@@ -90,7 +81,22 @@ app.get('/ink/**', (req, res) => {
   res.status(404).end('Not Found');
 });
 
-//error handling
+app.post('/ink/**', express.urlencoded({ extended: true }), (req, res) => {
+  res.setHeader('Content-Type', 'text/plain')
+  res.write('you posted:\n')
+  res.end(String(JSON.stringify(req.body, null, 2)))
+});
+
+//use ink css
+compiler.use(css());
+//use build cache
+if (process.env.PUBLIC_ENV !== 'development') {
+  compiler.use(cache({ 
+    clientPath: path.join(docs, 'client'),
+    manifestPath: path.join(docs, 'manifest.json')
+  }));
+}
+//use error handling
 app.use((error: Error, req: Request, res: Response, next: Next) => {
   if (error) {
     const exception = error instanceof Exception ? error 
