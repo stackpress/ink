@@ -1,28 +1,28 @@
-<link rel="import" type="template" href="@/components/html/head" name="html-head" />
-<link rel="import" type="template" href="@/components/html/header" name="html-header" />
-<link rel="import" type="template" href="@/components/html/aside" name="html-aside" />
-<link rel="import" type="component" href="@/components/api/docs" name="api-docs" />
-<link rel="import" type="component" href="@/components/i18n/translate" name="i18n-translate" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel" name="panel-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table" name="table-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/head" name="table-head" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/foot" name="table-foot" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/row" name="table-row" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/col" name="table-col" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/button" name="element-button" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/control" name="element-control" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/input" name="element-input" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/textarea" name="element-textarea" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/alert" name="element-alert" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/tab" name="element-tab" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/icon" name="element-icon" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/badge" name="element-badge" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/loader" name="element-loader" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/tooltip" name="element-tip" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/pager" name="element-pager" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/crumbs" name="element-crumbs" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/progress" name="element-progress" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/notify" name="element-notify" />
+<link rel="import" type="template" href="@/components/html/head.ink" name="html-head" />
+<link rel="import" type="template" href="@/components/html/header.ink" name="html-header" />
+<link rel="import" type="template" href="@/components/html/aside.ink" name="html-aside" />
+<link rel="import" type="component" href="@/components/api/docs.ink" name="api-docs" />
+<link rel="import" type="component" href="@/components/i18n/translate.ink" name="i18n-translate" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel.ink" name="panel-layout" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table.ink" name="table-layout" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/head.ink" name="table-head" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/foot.ink" name="table-foot" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/row.ink" name="table-row" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/col.ink" name="table-col" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="element-button" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/control.ink" name="element-control" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/input.ink" name="element-input" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/textarea.ink" name="element-textarea" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/alert.ink" name="element-alert" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/tab.ink" name="element-tab" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/icon.ink" name="element-icon" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/badge.ink" name="element-badge" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/loader.ink" name="element-loader" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/tooltip.ink" name="element-tip" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/pager.ink" name="element-pager" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/crumbs.ink" name="element-crumbs" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/progress.ink" name="element-progress" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/notify.ink" name="element-notify" />
 <style>
   @ink theme;
   @ink reset;
@@ -34,7 +34,7 @@
   import { _ } from '@/components/i18n';
 
   const url = '/ink/panel.html';
-  const title = _('Ink UI - Web Components Meets Atomic Styles.');
+  const title = _('Ink UI - Components');
   const description = _('Ink UI atomically generates CSS styles and provides out of box web components.');
   
   const toggle = () => {
@@ -65,7 +65,7 @@
                 </element-alert>
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/alert.html"
               >
                 Alerts
@@ -76,7 +76,7 @@
                 <element-badge warning curved class="mb-10">999</element-badge>
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/badge.html"
               >
                 Badges
@@ -96,12 +96,13 @@
                 />
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/crumbs.html"
               >
                 Crumbs
               </a>
             </div>
+            
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
               <div class="bg-t-3 h-120 flex flex-center">
                 <element-icon name="info-circle" class="tx-info" />
@@ -110,7 +111,7 @@
                 <element-icon name="check-circle" class="tx-success" />
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/icon.html"
               >
                 Icons
@@ -124,7 +125,7 @@
                 <element-loader error dashed thickness={10} size={10} speed={1500} />
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/loader.html"
               >
                 Loaders
@@ -138,7 +139,7 @@
                 </element-alert>
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/notify.html"
               >
                 Notify
@@ -165,10 +166,10 @@
                 />
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/pager.html"
               >
-                Pagers
+                Pager
               </a>
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
@@ -181,7 +182,7 @@
                 </div>
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/panel.html"
               >
                 Panels
@@ -192,7 +193,7 @@
                 <element-progress width={50} info class="bg-muted rounded tx-13 h-20 tx-lh-20 w-full-20" />
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/progress.html"
               >
                 Progress Bars
@@ -230,7 +231,7 @@
                 </element-tab>
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/tab.html"
               >
                 Tabs
@@ -264,14 +265,16 @@
                 </table-layout>
               </div>
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/table.html"
               >
                 Tables
               </a>
             </div>
             <div class="basis-third-10 lg-basis-half-10 md-basis-full">
+             
               <div class="bg-t-3 h-120 flex flex-center">
+               <div class="tx-center"> Hover me! </div>
                 <element-tip 
                   background-info 
                   curved 
@@ -279,9 +282,11 @@
                   left="50" 
                   padding="5"
                 >This is the first and last name</element-tip>
+                
               </div>
+                
               <a 
-                class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                 href="/ink/ui/components/tooltip.html"
               >
                 Tooltips

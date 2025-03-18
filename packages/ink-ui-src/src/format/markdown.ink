@@ -1,7 +1,7 @@
 <script>
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import setDisplay from '../utilities/style/display';
-  import marked from 'marked';
+  import {marked} from 'marked';
   import purify from 'dompurify';
   //extract props
   const { value } = this.props;

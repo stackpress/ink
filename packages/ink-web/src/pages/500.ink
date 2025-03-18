@@ -1,14 +1,14 @@
-<link rel="import" type="template" href="@/components/html/head" name="html-head" />
-<link rel="import" type="template" href="@/components/html/header" name="html-header" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel" name="panel-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table" name="table-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/head" name="table-head" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/row" name="table-row" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/col" name="table-col" />
-<link rel="import" type="component" href="@/components/ide/app" name="ide-app" />
-<link rel="import" type="component" href="@/components/ide/code" name="ide-code" />
-<link rel="import" type="component" href="@/components/ide/preview" name="ide-preview" />
-<link rel="import" type="component" href="@/components/i18n/translate" name="i18n-translate" />
+<link rel="import" type="template" href="@/components/html/head.ink" name="html-head" />
+<link rel="import" type="template" href="@/components/html/header.ink" name="html-header" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel.ink" name="panel-layout" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table.ink" name="table-layout" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/head.ink" name="table-head" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/row.ink" name="table-row" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/table/col.ink" name="table-col" />
+<link rel="import" type="component" href="@/components/ide/app.ink" name="ide-app" />
+<link rel="import" type="component" href="@/components/ide/code.ink" name="ide-code" />
+<link rel="import" type="component" href="@/components/ide/preview.ink" name="ide-preview" />
+<link rel="import" type="component" href="@/components/i18n/translate.ink" name="i18n-translate" />
 <style>
   @ink theme;
   @ink reset;

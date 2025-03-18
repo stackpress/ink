@@ -1,4 +1,7 @@
 <script>
+
+// NEW COUNTRY.ink SOURCE FOR HIDING THE COUNTRY FLAG
+
   import StyleSet from '@stackpress/ink/dist/style/StyleSet';
   import setBold from '../utilities/style/bold';
   import setColor from '../utilities/style/color';
@@ -9,7 +12,8 @@
   const { value } = this.props;
   //sub-props (box size, text size)
   let { flag, text } = this.propsTree;
-  if (!flag && text !== false) {
+  // Only set defaults if flag is undefined (not explicitly false), preserve flag={false}
+  if (flag === undefined && text !== false) {
     flag = {};
     text = true;
   }

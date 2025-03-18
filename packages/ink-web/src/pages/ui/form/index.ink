@@ -1,38 +1,38 @@
-<link rel="import" type="template" href="@/components/html/head" name="html-head" />
-<link rel="import" type="template" href="@/components/html/header" name="html-header" />
-<link rel="import" type="template" href="@/components/html/aside" name="html-aside" />
-<link rel="import" type="component" href="@/components/api/docs" name="api-docs" />
-<link rel="import" type="component" href="@/components/i18n/translate" name="i18n-translate" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel" name="panel-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/button" name="form-button" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/control" name="form-control" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/fieldset" name="form-fieldset" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/color" name="field-color" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/checkbox" name="field-checkbox" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/country" name="field-country" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/currency" name="field-currency" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/date" name="field-date" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/datetime" name="field-datetime" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/editor" name="field-editor" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/file" name="field-file" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/filelist" name="field-filelist" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/input" name="field-input" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/markdown" name="field-markdown" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/mask" name="field-mask" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/metadata" name="field-metadata" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/number" name="field-number" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/password" name="field-password" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/radio" name="field-radio" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/range" name="field-range" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/rating" name="field-rating" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/select" name="field-select" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/slug" name="field-slug" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/switch" name="field-switch" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/textarea" name="field-textarea" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/taglist" name="field-taglist" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/textlist" name="field-textlist" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/time" name="field-time" />
-<link rel="import" type="component" href="@stackpress/ink-ui/field/wysiwyg" name="field-wysiwyg" />
+<link rel="import" type="template" href="@/components/html/head.ink" name="html-head" />
+<link rel="import" type="template" href="@/components/html/header.ink" name="html-header" />
+<link rel="import" type="template" href="@/components/html/aside.ink" name="html-aside" />
+<link rel="import" type="component" href="@/components/api/docs.ink" name="api-docs" />
+<link rel="import" type="component" href="@/components/i18n/translate.ink" name="i18n-translate" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel.ink" name="panel-layout" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="form-button"/>
+<link rel="import" type="component" href="@stackpress/ink-ui/form/control.ink" name="form-control" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/fieldset.ink" name="form-fieldset" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/color.ink" name="field-color" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/checkbox.ink" name="field-checkbox" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/country.ink" name="field-country" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/currency.ink" name="field-currency" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/date.ink" name="field-date" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/datetime.ink" name="field-datetime" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/editor.ink" name="field-editor" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/file.ink" name="field-file" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/filelist.ink" name="field-filelist" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/input.ink" name="field-input" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/markdown.ink" name="field-markdown" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/mask.ink" name="field-mask" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/metadata.ink" name="field-metadata" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/number.ink" name="field-number" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/password.ink" name="field-password" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/radio.ink" name="field-radio" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/range.ink" name="field-range" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/rating.ink" name="field-rating" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/select.ink" name="field-select" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/slug.ink" name="field-slug" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/switch.ink" name="field-switch" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/textarea.ink" name="field-textarea" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/taglist.ink" name="field-taglist" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/textlist.ink" name="field-textlist" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/time.ink" name="field-time" />
+<link rel="import" type="component" href="@stackpress/ink-ui/field/wysiwyg.ink" name="field-wysiwyg" />
 <style>
   @ink theme;
   @ink reset;
@@ -44,7 +44,7 @@
   import { _ } from '@/components/i18n';
 
   const url = '/ink/panel.html';
-  const title = _('Ink UI - Web Components Meets Atomic Styles.');
+  const title = _('Ink UI - Forms and Fields');
   const description = _('Ink UI atomically generates CSS styles and provides out of box web components.');
 
   const toggle = () => {
@@ -76,9 +76,9 @@
       <main>
         <api-docs>
           <h1 class="tx-primary tx-upper tx-30 py-20">
-            {_('Form')}
+            {_('Forms')}
           </h1>
-          <form method="post">
+          <form method="get" action="/ink/ui/form/index.html">
             <section class="flex flex-wrap gap-10">
               <div class="basis-third-10 lg-basis-half-10 md-basis-full">
                 <div class="bg-t-3 h-120 flex flex-center">
@@ -90,7 +90,7 @@
                   </form-button>
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                   href="/ink/ui/form/button.html"
                 >
                   Buttons
@@ -103,7 +103,7 @@
                   </form-control>
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                   href="/ink/ui/form/control.html"
                 >
                   Control
@@ -116,7 +116,7 @@
                   </form-fieldset>
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
                   href="/ink/ui/form/fieldset.html"
                 >
                   Fieldset
@@ -139,8 +139,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/checkbox.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/checkbox.html"
                 >
                   Checkbox
                 </a>
@@ -150,8 +150,8 @@
                   <field-color name="color" placeholder="Enter color" />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/color.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/color.html"
                 >
                   Color
                 </a>
@@ -175,8 +175,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/country.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/country.html"
                 >
                   Country
                 </a>
@@ -200,8 +200,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/currency.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/currency.html"
                 >
                   Currency
                 </a>
@@ -216,8 +216,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/date.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/date.html"
                 >
                   Date
                 </a>
@@ -232,8 +232,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/datetime.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/datetime.html"
                 >
                   Datetime
                 </a>
@@ -250,8 +250,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/editor.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/editor.html"
                 >
                   Editor
                 </a>
@@ -266,8 +266,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/file.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/file.html"
                 >
                   File
                 </a>
@@ -283,8 +283,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/filelist.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/filelist.html"
                 >
                   Filelist
                 </a>
@@ -298,19 +298,10 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/input.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/input.html"
                 >
                   Input
-                </a>
-              </div>
-              <div class="basis-third-10 lg-basis-half-10 md-basis-full">
-                <div class="bg-t-3 h-120 flex flex-center"></div>
-                <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/knob.html"
-                >
-                  Knob
                 </a>
               </div>
               <div class="basis-third-10 lg-basis-half-10 md-basis-full">
@@ -324,8 +315,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/markdown.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/markdown.html"
                 >
                   Markdown
                 </a>
@@ -335,8 +326,8 @@
                   <field-mask mask="999-999-9999" placeholder="999-999-9999" />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/mask.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/mask.html"
                 >
                   Mask
                 </a>
@@ -352,8 +343,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/metadata.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/metadata.html"
                 >
                   Metadata
                 </a>
@@ -370,8 +361,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/number.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/number.html"
                 >
                   Number
                 </a>
@@ -385,8 +376,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/password.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/password.html"
                 >
                   Password
                 </a>
@@ -411,8 +402,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/radio.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/radio.html"
                 >
                   Radio
                 </a>
@@ -422,8 +413,8 @@
                   <field-range name="range" min="0" max="100" step="10" value="0" />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/range.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/range.html"
                 >
                   Range
                 </a>
@@ -438,8 +429,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/rating.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/rating.html"
                 >
                   Rating
                 </a>
@@ -471,8 +462,8 @@
                   </field-select>
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/select.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/select.html"
                 >
                   Select
                 </a>
@@ -487,8 +478,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/slug.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/slug.html"
                 >
                   Slug
                 </a>
@@ -504,8 +495,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/switch.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/switch.html"
                 >
                   Switch
                 </a>
@@ -518,8 +509,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/taglist.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/taglist.html"
                 >
                   Taglist
                 </a>
@@ -533,8 +524,8 @@
                   >Some Text</field-textarea>
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/textarea.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/textarea.html"
                 >
                   Textarea
                 </a>
@@ -549,8 +540,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/textlist.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/textlist.html"
                 >
                   Textlist
                 </a>
@@ -565,8 +556,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/time.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/time.html"
                 >
                   Time
                 </a>
@@ -583,8 +574,8 @@
                   />
                 </div>
                 <a 
-                  class="block tx-center tx-white p-10 b-solid b-t-3 b-1" 
-                  href="/ink/ui/form/wysiwyg.html"
+                  class="block tx-center tx-primary p-10 b-solid b-t-3 b-1" 
+                  href="/ink/ui/field/wysiwyg.html"
                 >
                   WYSIWYG
                 </a>

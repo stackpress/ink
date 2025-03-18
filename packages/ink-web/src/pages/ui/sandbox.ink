@@ -1,8 +1,8 @@
-<link rel="import" type="template" href="@/components/html/head" name="html-head" />
-<link rel="import" type="component" href="@stackpress/ink-ui/form/button" name="form-button" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/icon" name="element-icon" />
-<link rel="import" type="component" href="@/components/sandbox/app" name="admin-app" />
-<link rel="import" type="component" href="@/components/sandbox/filters" name="profile-filters" />
+<link rel="import" type="template" href="@/components/html/head.ink" name="html-head" />
+<link rel="import" type="component" href="@stackpress/ink-ui/form/button.ink" name="form-button" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/icon.ink" name="element-icon" />
+<link rel="import" type="component" href="@/components/sandbox/app.ink" name="admin-app" />
+<link rel="import" type="component" href="@/components/sandbox/filters.ink" name="profile-filters" />
 <style>
   @ink theme;
   @ink reset;

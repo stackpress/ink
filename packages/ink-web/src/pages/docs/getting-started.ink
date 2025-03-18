@@ -1,18 +1,18 @@
-<link rel="import" type="template" href="@/components/html/head" name="html-head" />
-<link rel="import" type="template" href="@/components/html/header" name="html-header" />
-<link rel="import" type="template" href="@/components/html/aside" name="html-aside" />
-<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel" name="panel-layout" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/alert" name="element-alert" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/icon" name="element-icon" />
-<link rel="import" type="component" href="@stackpress/ink-ui/element/tab" name="element-tab" />
-<link rel="import" type="component" href="@/components/api/docs" name="api-docs" />
-<link rel="import" type="component" href="@/components/api/ui" name="api-ui" />
-<link rel="import" type="component" href="@/components/ide/app/head" name="app-head" />
-<link rel="import" type="component" href="@/components/ide/app/left" name="app-left" />
-<link rel="import" type="component" href="@/components/ide/app/main" name="app-main" />
-<link rel="import" type="component" href="@/components/ide/app" name="ide-app" />
-<link rel="import" type="component" href="@/components/ide/code" name="ide-code" />
-<link rel="import" type="component" href="@/components/i18n/translate" name="i18n-translate" />
+<link rel="import" type="template" href="@/components/html/head.ink" name="html-head" />
+<link rel="import" type="template" href="@/components/html/header.ink" name="html-header" />
+<link rel="import" type="template" href="@/components/html/aside.ink" name="html-aside" />
+<link rel="import" type="component" href="@stackpress/ink-ui/layout/panel.ink" name="panel-layout" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/alert.ink" name="element-alert" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/icon.ink" name="element-icon" />
+<link rel="import" type="component" href="@stackpress/ink-ui/element/tab.ink" name="element-tab" />
+<link rel="import" type="component" href="@/components/api/docs.ink" name="api-docs" />
+<link rel="import" type="component" href="@/components/api/ui.ink" name="api-ui" />
+<link rel="import" type="component" href="@/components/ide/app/head.ink" name="app-head" />
+<link rel="import" type="component" href="@/components/ide/app/left.ink" name="app-left" />
+<link rel="import" type="component" href="@/components/ide/app/main.ink" name="app-main" />
+<link rel="import" type="component" href="@/components/ide/app.ink" name="ide-app" />
+<link rel="import" type="component" href="@/components/ide/code.ink" name="ide-code" />
+<link rel="import" type="component" href="@/components/i18n/translate.ink" name="i18n-translate" />
 <style>
   @ink theme;
   @ink reset;
@@ -289,7 +289,7 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.4.6"
+                    "@stackpress/ink": "0.3.30"
                   },
                   "devDependencies": {
                     "@types/node": "22.1.0",
@@ -546,10 +546,10 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.4.6"
+                    "@stackpress/ink": "0.3.30"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.4.6",
+                    "@stackpress/ink-dev": "0.3.30",
                     "@types/node": "22.1.0",
                     "ts-node": "10.9.2",
                     "typescript": "5.5.4"
@@ -1018,11 +1018,11 @@
                     "dev": "ts-node ./src/index.ts"
                   },
                   "dependencies": {
-                    "@stackpress/ink": "0.4.6"
+                    "@stackpress/ink": "0.3.30"
                   },
                   "devDependencies": {
-                    "@stackpress/ink-dev": "0.4.6",
-                    "@stackpress/ink-tailwind": "0.4.6",
+                    "@stackpress/ink-dev": "0.3.30",
+                    "@stackpress/ink-tailwind": "0.3.30",
                     "@types/node": "22.1.0",
                     "autoprefixer": "10.4.20",
                     "postcss": "8.4.44",
